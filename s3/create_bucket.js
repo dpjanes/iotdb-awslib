@@ -28,7 +28,7 @@ const create_bucket = (_self, done) => {
     assert.ok(_.is.String(self.bucket), "s3.create_bucket: self.bucket must be a String");
 
     self.s3.createBucket({
-        Bucket: "consensas-test1",
+        Bucket: self.bucket,
     }, (error, data) => {
         if (error) {
             return done(error);
