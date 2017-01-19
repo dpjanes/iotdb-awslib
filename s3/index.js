@@ -17,6 +17,7 @@ module.exports = Object.assign(
     require("./initialize"),
     require("./list_objects"),
     require("./list_buckets"),
+    require("./parse_path"),
     require("./exists"),
     require("./upload_document"),
     require("./upload_json"),

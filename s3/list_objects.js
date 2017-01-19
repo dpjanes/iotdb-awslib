@@ -17,7 +17,6 @@ const assert = require("assert");
 const AWS = require("aws-sdk");
 const Q = require("q");
 
-const normalize_path = require("../helpers/normalize_path");
 const split = s => s.split("/").filter(s => s.length)
 
 /**
@@ -30,11 +29,11 @@ const list_objects = (_self, done) => {
 
     assert.ok(self.s3, `${method}: self.s3 is required`);
     assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`);
-    assert.ok(_.is.String(self.path) || !self.path, `${method}: self.path must be a String or Null`);
+    assert.ok(_.is.String(self.key) || !self.key, `${method}: self.key must be a String or Null`);
 
     let prefix = "";
-    if (self.path) {
-        prefix = normalize_path(self.path)
+    if (self.key) {
+        prefix = self.key;
         if (prefix.length) {
             prefix += "/";
         }

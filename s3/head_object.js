@@ -17,8 +17,6 @@ const assert = require("assert");
 const AWS = require("aws-sdk");
 const Q = require("q");
 
-const normalize_path = require("../helpers/normalize_path");
-
 /**
  *  Accepts: 
  *  Produces:
@@ -29,11 +27,11 @@ const head_object = (_self, done) => {
 
     assert.ok(self.s3, `${method}: self.s3 is required`);
     assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`);
-    assert.ok(_.is.String(self.path) || !self.path, `${method}: self.path must be a String or Null`);
+    assert.ok(_.is.String(self.key) || !self.key, `${method}: self.key must be a String or Null`);
 
     self.s3.headObject({
         Bucket: self.bucket,
-        Key: normalize_path(self.path),
+        Key: self.key,
     }, (error, data) => {
         if (error) {
             return done(error);

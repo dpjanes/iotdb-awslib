@@ -18,8 +18,6 @@ const AWS = require("aws-sdk");
 const Q = require("q");
 const mime = require("mime");
 
-const normalize_path = require("../helpers/normalize_path");
-
 /**
  *  Accepts: 
  *  Produces:
@@ -30,15 +28,15 @@ const upload_document = (_self, done) => {
 
     assert.ok(self.s3, `${method}: self.s3 is required`);
     assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`);
-    assert.ok(_.is.String(self.path), `${method}: self.path must be a String`);
+    assert.ok(_.is.String(self.key), `${method}: self.key must be a String`);
     assert.ok(_.is.String(self.media_type) || !self.media_type, `${method}: self.media_type must be a String or Null`);
     assert.ok(_.is.String(self.document) || _.is.Buffer(self.document), `${method}: self.document must be a String or Buffer`);
 
     self.s3.upload({
         Bucket: self.bucket,
-        Key: normalize_path(self.path),
+        Key: self.key,
         Body: self.document,
-        ContentType: self.media_type || mime.lookup(self.path) || "application/octet-stream",
+        ContentType: self.media_type || mime.lookup(self.key) || "application/octet-stream",
     }, (error, data) => {
         if (error) {
             return done(error);
