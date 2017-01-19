@@ -1,5 +1,5 @@
 /**
- *  s3/list.js
+ *  s3/list_objects.js
  *
  *  David Janes
  *  IOTDB
@@ -24,11 +24,11 @@ const split = s => s.split("/").filter(s => s.length)
  *  Accepts: 
  *  Produces:
  */
-const list = (_self, done) => {
+const list_objects = (_self, done) => {
    const self = _.d.clone.shallow(_self);
 
-    assert.ok(self.s3, "s3.list: self.s3 is required");
-    assert.ok(_.is.String(self.bucket), "s3.list: self.bucket must be a String");
+    assert.ok(self.s3, "s3.list_objects: self.s3 is required");
+    assert.ok(_.is.String(self.bucket), "s3.list_objects: self.bucket must be a String");
     assert.ok(_.is.String(self.path) || !self.path, "s3.upload_document: self.path must be a String or Null");
 
     let prefix = "";
@@ -47,7 +47,7 @@ const list = (_self, done) => {
             return done(error);
         }
 
-        assert(!data.IsTruncated, "s3.list: if you get this, complete implementation of this function!");
+        assert(!data.IsTruncated, "s3.list_objects: if you get this, complete implementation of this function!");
 
         const level = split(prefix).length + 1;
 
@@ -66,4 +66,4 @@ const list = (_self, done) => {
 /**
  *  API
  */
-exports.list = Q.denodeify(list);
+exports.list_objects = Q.denodeify(list_objects);
