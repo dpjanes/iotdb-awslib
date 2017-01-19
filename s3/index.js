@@ -13,9 +13,11 @@
 module.exports = Object.assign(
     {},
     require("./create_bucket"),
+    require("./head_object"),
     require("./initialize"),
     require("./list_objects"),
     require("./list_buckets"),
+    require("./exists"),
     require("./upload_document"),
     require("./upload_json"),
     {}
