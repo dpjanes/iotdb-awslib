@@ -22,9 +22,10 @@ const Q = require("q");
  *  Produces:
  */
 const list_buckets = (_self, done) => {
-   const self = _.d.clone.shallow(_self);
+    const self = _.d.clone.shallow(_self);
+    const method = "s3.list_buckets";
 
-    assert.ok(self.s3, "s3.list_buckets: self.s3 is required");
+    assert.ok(self.s3, `${method}: self.s3 is required`);
 
     self.s3.listBuckets({
     }, (error, data) => {

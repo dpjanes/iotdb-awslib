@@ -22,10 +22,11 @@ const Q = require("q");
  *  Produces:
  */
 const create_bucket = (_self, done) => {
-   const self = _.d.clone.shallow(_self);
+    const self = _.d.clone.shallow(_self);
+    const method = "s3.create_bucket";
 
-    assert.ok(self.s3, "s3.create_bucket: self.s3 is required");
-    assert.ok(_.is.String(self.bucket), "s3.create_bucket: self.bucket must be a String");
+    assert.ok(self.s3, `${method}: self.s3 is required`);
+    assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`);
 
     self.s3.createBucket({
         Bucket: self.bucket,

@@ -22,9 +22,10 @@ const Q = require("q");
  *  Produces:
  */
 const initialize = (_self, done) => {
-   const self = _.d.clone.shallow(_self);
+    const self = _.d.clone.shallow(_self);
+    const method = "s3.initialize";
 
-    assert.ok(self.AWS, "s3.initialize: self.AWS is required");
+    assert.ok(self.AWS, `${method}: self.AWS is required`);
 
     self.AWS.config.apiVersions = {
         s3: self.AWS.config.apiVersions || '2006-03-01',

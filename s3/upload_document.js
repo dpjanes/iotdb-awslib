@@ -25,13 +25,14 @@ const normalize_path = require("../helpers/normalize_path");
  *  Produces:
  */
 const upload_document = (_self, done) => {
-   const self = _.d.clone.shallow(_self);
+    const self = _.d.clone.shallow(_self);
+    const method = "s3.upload_document";
 
-    assert.ok(self.s3, "s3.upload_document: self.s3 is required");
-    assert.ok(_.is.String(self.bucket), "s3.upload_document: self.bucket must be a String");
-    assert.ok(_.is.String(self.path), "s3.upload_document: self.path must be a String");
-    assert.ok(_.is.String(self.media_type) || !self.media_type, "s3.upload_document: self.media_type must be a String or Null");
-    assert.ok(_.is.String(self.document) || _.is.Buffer(self.document), "s3.upload_document: self.document must be a String or Buffer");
+    assert.ok(self.s3, `${method}: self.s3 is required`);
+    assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`);
+    assert.ok(_.is.String(self.path), `${method}: self.path must be a String`);
+    assert.ok(_.is.String(self.media_type) || !self.media_type, `${method}: self.media_type must be a String or Null`);
+    assert.ok(_.is.String(self.document) || _.is.Buffer(self.document), `${method}: self.document must be a String or Buffer`);
 
     self.s3.upload({
         Bucket: self.bucket,

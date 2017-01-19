@@ -25,11 +25,12 @@ const split = s => s.split("/").filter(s => s.length)
  *  Produces:
  */
 const list_objects = (_self, done) => {
-   const self = _.d.clone.shallow(_self);
+    const self = _.d.clone.shallow(_self);
+    const method = "s3.list_objects";
 
-    assert.ok(self.s3, "s3.list_objects: self.s3 is required");
-    assert.ok(_.is.String(self.bucket), "s3.list_objects: self.bucket must be a String");
-    assert.ok(_.is.String(self.path) || !self.path, "s3.upload_document: self.path must be a String or Null");
+    assert.ok(self.s3, `${method}: self.s3 is required`);
+    assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`);
+    assert.ok(_.is.String(self.path) || !self.path, `${method}: self.path must be a String or Null`);
 
     let prefix = "";
     if (self.path) {
