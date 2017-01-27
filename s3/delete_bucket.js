@@ -20,6 +20,9 @@ const Q = require("q");
 /**
  *  Accepts: 
  *  Produces:
+ *
+ *  Delete a Bucket. If the Bucket does not exist,
+ *  no error will be reported.
  */
 const delete_bucket = (_self, done) => {
     const self = _.d.clone.shallow(_self);
@@ -31,13 +34,17 @@ const delete_bucket = (_self, done) => {
     self.s3.deleteBucket({
         Bucket: self.bucket,
     }, (error, data) => {
-        if (error) {
-            return done(error);
-        }
-
         self.aws_result = data;
 
-        done(null, self);
+        if (!error) {
+            return done(null, self);
+        }
+
+        if (error.statusCode === 404) {
+            return done(null, self);
+        }
+
+        return done(error);
     });
 }
 
