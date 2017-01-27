@@ -12,13 +12,17 @@
 
 module.exports = Object.assign(
     {},
+    require("./bucket_exists"),
     require("./create_bucket"),
+    require("./delete_bucket"),
+    require("./delete_object"),
+    require("./get_object"),
     require("./head_object"),
     require("./initialize"),
-    require("./list_objects"),
     require("./list_buckets"),
+    require("./list_objects"),
+    require("./object_exists"),
     require("./parse_path"),
-    require("./exists"),
     require("./upload_document"),
     require("./upload_json"),
     {}

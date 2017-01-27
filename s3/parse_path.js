@@ -26,7 +26,6 @@ const parse_path = (_self, done) => {
     const self = _.d.clone.shallow(_self);
     const method = "s3.parse_path";
 
-    assert.ok(self.AWS, `${method}: self.AWS is required`);
     assert.ok(_.is.String(self.path), `${method}: self.path must be a String`);
 
     const urlp = url.parse(self.path)

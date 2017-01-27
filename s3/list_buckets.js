@@ -34,7 +34,7 @@ const list_buckets = (_self, done) => {
         }
 
         self.buckets = data.Buckets.map(bd => bd.Name);
-        self.aws.result = data;
+        self.aws_result = data;
 
         done(null, self);
     });

@@ -1,5 +1,5 @@
 /**
- *  s3/create_bucket.js
+ *  s3/bucket_exists.js
  *
  *  David Janes
  *  IOTDB
@@ -21,28 +21,31 @@ const Q = require("q");
  *  Accepts: 
  *  Produces:
  */
-const create_bucket = (_self, done) => {
+const bucket_exists = (_self, done) => {
     const self = _.d.clone.shallow(_self);
-    const method = "s3.create_bucket";
+    const method = "s3.bucket_exists";
 
     assert.ok(self.s3, `${method}: self.s3 is required`);
     assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`);
 
-    self.s3.createBucket({
+    self.s3.getBucketLocation({
         Bucket: self.bucket,
     }, (error, data) => {
-        if (error) {
-            return done(error);
+        if (!error) {
+            self.exists = true;
+            return done(null, self);
         }
 
-        self.bucket_url = `s3:/${data.Location}/`;
-        self.aws_result = data;
+        if (error.statusCode === 404) {
+            self.exists = false;
+            return done(null, self);
+        }
 
-        done(null, self);
+        return done(error);
     });
 }
 
 /**
  *  API
  */
-exports.create_bucket = Q.denodeify(create_bucket);
+exports.bucket_exists = Q.denodeify(bucket_exists);

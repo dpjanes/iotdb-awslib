@@ -37,6 +37,7 @@ const upload_document = (_self, done) => {
         Key: self.key,
         Body: self.document,
         ContentType: self.media_type || mime.lookup(self.key) || "application/octet-stream",
+        ContentEncoding: self.encoding || null,
     }, (error, data) => {
         if (error) {
             return done(error);

@@ -1,9 +1,9 @@
 /**
- *  s3/exists.js
+ *  s3/delete_bucket.js
  *
  *  David Janes
  *  IOTDB
- *  2017-01-18
+ *  2017-01-27
  *
  *  Copyright (2013-2017) David Janes
  */
@@ -21,33 +21,27 @@ const Q = require("q");
  *  Accepts: 
  *  Produces:
  */
-const exists = (_self, done) => {
+const delete_bucket = (_self, done) => {
     const self = _.d.clone.shallow(_self);
-    const method = "s3.exists";
+    const method = "s3.delete_bucket";
 
     assert.ok(self.s3, `${method}: self.s3 is required`);
     assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`);
-    assert.ok(_.is.String(self.key), `${method}: self.key must be a String`);
 
-    self.s3.headObject({
+    self.s3.deleteBucket({
         Bucket: self.bucket,
-        Key: self.key,
     }, (error, data) => {
-        if (!error) {
-            self.exists = true;
-            return done(null, self);
+        if (error) {
+            return done(error);
         }
 
-        if (error.statusCode === 404) {
-            self.exists = false;
-            return done(null, self);
-        }
+        self.aws_result = data;
 
-        return done(error);
+        done(null, self);
     });
 }
 
 /**
  *  API
  */
-exports.exists = Q.denodeify(exists);
+exports.delete_bucket = Q.denodeify(delete_bucket);
