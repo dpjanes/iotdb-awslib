@@ -4,9 +4,9 @@
         "url": "https://github.com/dpjanes/iotdb-awslib/issues"
     }, 
     "dependencies": {
-        "aws-sdk": "~2.7.24", 
-        "iotdb-errors": "~3.0.2", 
-        "iotdb-helpers": "~3.0.20"
+        "aws-sdk": "~2.9.0", 
+        "iotdb-errors": "~3.0.3", 
+        "iotdb-helpers": "~3.0.21"
     }, 
     "description": "IOTDB AWS Promise Functions", 
     "devDependencies": {
@@ -25,10 +25,10 @@
     "name": "iotdb-awslib", 
     "repository": {
         "type": "git", 
-        "url": "git+https://github.com/dpjanes/iotdb-awslib.git"
+        "url": "https://github.com/dpjanes/iotdb-awslib"
     }, 
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     }, 
-    "version": "1.0.0"
+    "version": "1.0.1"
 }
