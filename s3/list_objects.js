@@ -39,8 +39,6 @@ const list_objects = (_self, done) => {
         }
     }
 
-    console.log("HERE:XXX", prefix);
-
     self.s3.listObjectsV2({
         Bucket: self.bucket,
         Prefix: prefix,
@@ -49,24 +47,14 @@ const list_objects = (_self, done) => {
             return done(error);
         }
 
-        console.log("HERE:YYY", data.Contents);
-
         assert(!data.IsTruncated, "s3.list_objects: if you get this, complete implementation of this function!");
 
         const level = split(prefix).length + 1;
 
-        self.paths = data.Contents.map(cd => cd.Key)
+        self.paths = _.uniq(data.Contents.map(cd => cd.Key)
             .filter(name => split(name).length >= level)
             .map(name => split(name).slice(0, level).join("/"))
-
-
-        self.files = self.paths
-            .filter(name => !name.endsWith("/"))
-        self.folders = self.paths
-            .filter(name => name.endsWith("/"))
-            .map(name => name.replace(/\/$/, ""))
-
-        console.log("HERE:ZZZ", self.paths)
+            .sort())
 
         done(null, self);
     });
