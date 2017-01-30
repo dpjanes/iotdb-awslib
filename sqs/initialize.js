@@ -26,7 +26,6 @@ const initialize = (_self, done) => {
     const method = "sqs.initialize";
 
     assert.ok(self.AWS, `${method}: self.AWS is required`);
-    assert.ok(_.is.String(self.queue), `${method}: self.queue must be a string`);
 
     self.AWS.config.apiVersions = {
         s3: self.AWS.config.apiVersions || '2012-11-05',

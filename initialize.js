@@ -25,12 +25,17 @@ const initialize = (_self, done) => {
     const self = _.d.clone.shallow(_self);
 
     const profile = _.d.first(self, "/aws/profile")
-    if (!_.is.Empty(profile)) {
+    if (profile) {
         const credentials = new AWS.SharedIniFileCredentials({
             profile: profile,
         });
 
         AWS.config.credentials = credentials;
+    }
+
+    const region = _.d.first(self, "/aws/region")
+    if (region) {
+        AWS.config.region = region;
     }
 
     self.AWS = AWS;
