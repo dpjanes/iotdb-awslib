@@ -1,5 +1,5 @@
 /**
- *  sqs/get_queue_url.js
+ *  sqs/delete_message.js
  *
  *  David Janes
  *  IOTDB
@@ -21,21 +21,21 @@ const Q = require("q");
  *  Accepts: 
  *  Produces:
  */
-const get_queue_url = (_self, done) => {
+const delete_message = (_self, done) => {
     const self = _.d.clone.shallow(_self);
-    const method = "sqs.get_queue_url";
+    const method = "sqs.delete_message";
 
     assert.ok(self.sqs, `${method}: self.sqs is required`);
-    assert.ok(_.is.String(self.queue_name), `${method}: self.queue_name must be a String`);
+    assert.ok(self.message, `${method}: self.message is required`);
+    assert.ok(_.is.String(self.queue_url), `${method}: self.queue_url must be a String`);
 
-    self.sqs.getQueueUrl({
-        QueueName: self.queue_name,
+    self.sqs.deleteMessage({
+        QueueUrl: self.queue_url,
+        ReceiptHandle: self.message.ReceiptHandle,
     }, (error, data) => {
         if (error) {
             return done(error);
         }
-
-        self.queue_url = data.QueueUrl;
 
         return done(null, self);
     });
@@ -44,4 +44,4 @@ const get_queue_url = (_self, done) => {
 /**
  *  API
  */
-exports.get_queue_url = Q.denodeify(get_queue_url);
+exports.delete_message = Q.denodeify(delete_message);

@@ -15,5 +15,6 @@ module.exports = Object.assign(
     require("./initialize"),
     require("./list_queues"),
     require("./get_queue_url"),
+    require("./send_json"),
     {}
 );

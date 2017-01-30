@@ -60,3 +60,17 @@ if (action("get-queue-url")) {
         .then(_self => console.log("+", "ok", _self.queue_url))
         .catch(error => console.log("#", _.error.message(error)))
 }
+
+if (action("send-json")) {
+    Q({
+        aws: awsd,
+        queue_name: "test1",
+        json: { "a": "Message" },
+    })
+        .then(aws.initialize)
+        .then(aws.sqs.initialize)
+        .then(aws.sqs.get_queue_url)
+        .then(aws.sqs.send_json)
+        .then(_self => console.log("+", "ok", _self.queue_url))
+        .catch(error => console.log("#", _.error.message(error)))
+}
