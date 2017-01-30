@@ -13,3 +13,4 @@
 exports.initialize = require("./initialize").initialize;
 
 exports.s3 = require("./s3");
+exports.sqs = require("./sqs");
