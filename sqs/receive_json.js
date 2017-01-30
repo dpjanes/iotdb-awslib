@@ -1,0 +1,68 @@
+/**
+ *  sqs/receive_json.js
+ *
+ *  David Janes
+ *  IOTDB
+ *  2017-01-30
+ *
+ *  Copyright (2013-2017) David Janes
+ */
+
+"use strict";
+
+const _ = require("iotdb-helpers");
+
+const assert = require("assert");
+
+const AWS = require("aws-sdk");
+const Q = require("q");
+
+/**
+ *  Accepts: 
+ *  Produces:
+ */
+const receive_json = (_self, done) => {
+    const self = _.d.clone.shallow(_self);
+    const method = "sqs.receive_json";
+
+    const delete_message = require("./delete_message").delete_message;
+
+    assert.ok(self.sqs, `${method}: self.sqs is required`);
+    assert.ok(_.is.String(self.queue_url), `${method}: self.queue_url must be a String`);
+
+    self.sqs.receiveMessage({
+        QueueUrl: self.queue_url,
+        MaxNumberOfMessages: 1,
+        WaitTimeSeconds: 15,
+    }, (error, data) => {
+        if (error) {
+            return done(error);
+        }
+
+        self.message = null;
+        self.json = null;
+
+        if (data.Messages) {
+            self.message = data.Messages[0];
+
+            try {
+                self.json = JSON.parse(self.message.Body);
+            } catch (x) {
+                self.message = null;
+
+                self.sqs.deleteMessage({
+                    QueueUrl: self.queue_url,
+                    ReceiptHandle: data.Messages[0].ReceiptHandle,
+                }, (error, data) => {
+                })
+            }
+        }
+
+        return done(null, self);
+    });
+}
+
+/**
+ *  API
+ */
+exports.receive_json = Q.denodeify(receive_json);

@@ -65,12 +65,35 @@ if (action("send-json")) {
     Q({
         aws: awsd,
         queue_name: "test1",
-        json: { "a": "Message" },
+        json: _.timestamp.add({ "a": "Message" }),
     })
         .then(aws.initialize)
         .then(aws.sqs.initialize)
         .then(aws.sqs.get_queue_url)
         .then(aws.sqs.send_json)
+        .then(_self => console.log("+", "ok", _self.queue_url))
+        .catch(error => console.log("#", _.error.message(error)))
+}
+
+if (action("process-json")) {
+    Q({
+        aws: awsd,
+        queue_name: "test1",
+        handle_message: Q.denodeify((_self, done) => {
+            console.log("+", "MESSAGE", JSON.stringify(_self.json, null, 2));
+            done(null, _self);
+        }),
+        handle_error: error => {
+            console.log("#", "error", _.error.message(error));
+        },
+        handle_failure: error => {
+            console.log("#", "FAILURE", _.error.message(error));
+        },
+    })
+        .then(aws.initialize)
+        .then(aws.sqs.initialize)
+        .then(aws.sqs.get_queue_url)
+        .then(aws.sqs.process_json)
         .then(_self => console.log("+", "ok", _self.queue_url))
         .catch(error => console.log("#", _.error.message(error)))
 }

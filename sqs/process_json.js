@@ -25,10 +25,12 @@ const process_json = (_self, done) => {
     const self = _.d.clone.shallow(_self);
     const method = "sqs.process_json";
 
+    const receive_message = require("./receive_message").receive_message;
+    const receive_json = require("./receive_json").receive_json;
+    const delete_message = require("./delete_message").delete_message;
+
     assert.ok(self.sqs, `${method}: self.sqs is required`);
-    assert.ok(_.is.JSON(self.json), `${method}: self.json must be a JSONable Object`);
     assert.ok(_.is.String(self.queue_url), `${method}: self.queue_url must be a String`);
-    assert.ok(_.is.Integer(self.max_messages) || !self.delay, `${method}: self.max_messages must be a Integer or Null`);
 
     assert.ok(_.is.Function(self.handle_error) || !self.handle_error, `${method}: self.handle_error must be a Function or Null`);
     assert.ok(_.is.Function(self.handle_failure) || !self.handle_failure, `${method}: self.handle_failure must be a Function or Null`);
@@ -36,34 +38,29 @@ const process_json = (_self, done) => {
 
     self.handle_error = self.handle_error || _.noop;
     self.handle_failure = self.handle_failure || _.noop;
+    self.message = null;
 
     done(null, self);
 
-    while (true) {
-        self.sqs.receiveMessage({
-            QueueUrl: self.queue_url,
-            MaxNumberOfMessages: self.max_messages || 1,
-        }, (error, data) => {
-            if (error) {
-                console.log("#", "queue flaked out", self.queue_url);
-                break;
-            }
-
-            data.Messages.forEach(message => {
-                const message_self = _.d.clone.shallow(_self);
-                message_self.json = JSON.parse(message.Body);
-                message_self.message_id = message.MessageId;
-
-                Q(message)
+    const _do_one = () => {
+        Q(self)
+            .then(receive_json)
+            .then(message_self => {
+                Q(message_self)
                     .then(self.handle_message)
-                    .then(() => {
-                    })
-                    .catch(self.handle_failure)
-            })
+                    .catch(self.handle_error)
+                    .done(() => {
+                        Q(message_self)
+                            .then(delete_message);
 
-             ReceiptHandle: data.Messages[0].ReceiptHandle
-        }
-    })
+                        process.nextTick(_do_one)
+                    })
+                        
+            })
+            .catch(self.handle_failure)
+    }
+
+    _do_one();
 }
 
 /**

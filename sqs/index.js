@@ -16,5 +16,10 @@ module.exports = Object.assign(
     require("./list_queues"),
     require("./get_queue_url"),
     require("./send_json"),
+    require("./receive_messages"),
+    require("./receive_message"),
+    require("./receive_json"),
+    require("./delete_message"),
+    require("./process_json"),
     {}
 );
