@@ -115,6 +115,21 @@ if (action("list-objects")) {
         .catch(error => console.log("#", _.error.message(error)))
 }
 
+// list files
+if (action("list-objects-recursive")) {
+    Q({
+        aws: awsd,
+        bucket: "consensas-test1",
+        key: "eLyccgRz",
+        recursive: true,
+    })
+        .then(aws.initialize)
+        .then(aws.s3.initialize)
+        .then(aws.s3.list_objects)
+        .then(_self => console.log("+", "ok", _self.paths))
+        .catch(error => console.log("#", _.error.message(error)))
+}
+
 // head files
 if (action("head-object")) {
     Q({

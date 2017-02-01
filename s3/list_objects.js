@@ -20,8 +20,8 @@ const Q = require("q");
 const split = s => s.split("/").filter(s => s.length)
 
 /**
- *  Accepts: 
- *  Produces:
+ *  Accepts: self.bucket, self.key, self.recursive (optional)
+ *  Produces: self.paths
  */
 const list_objects = (_self, done) => {
     const self = _.d.clone.shallow(_self);
@@ -53,7 +53,7 @@ const list_objects = (_self, done) => {
 
         self.paths = _.uniq(data.Contents.map(cd => cd.Key)
             .filter(name => split(name).length >= level)
-            .map(name => split(name).slice(0, level).join("/"))
+            .map(name => self.recursive ? name : split(name).slice(0, level).join("/"))
             .sort())
 
         done(null, self);
