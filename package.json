@@ -6,7 +6,7 @@
     "dependencies": {
         "aws-sdk": "~2.9.0", 
         "iotdb-errors": "~3.0.3", 
-        "iotdb-helpers": "~3.0.21"
+        "iotdb-helpers": "~3.0.24"
     }, 
     "description": "IOTDB AWS Promise Functions", 
     "devDependencies": {
@@ -30,5 +30,5 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     }, 
-    "version": "1.0.1"
+    "version": "1.0.2"
 }
