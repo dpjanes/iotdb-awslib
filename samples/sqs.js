@@ -65,7 +65,7 @@ if (action("send-json")) {
     Q({
         aws: awsd,
         queue_name: "test1",
-        json: _.timestamp.add({ "a": "Message" }),
+        json: _.timestamp.add({ "a": "Message", "ledger_id": "urn:iotdb:ledger:ZBm22eUo" }),
     })
         .then(aws.initialize)
         .then(aws.sqs.initialize)

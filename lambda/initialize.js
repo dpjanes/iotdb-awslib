@@ -1,9 +1,9 @@
 /**
- *  sqs/initialize.js
+ *  lambda/initialize.js
  *
  *  David Janes
  *  IOTDB
- *  2017-01-30
+ *  2017-02-04
  *
  *  Copyright (2013-2017) David Janes
  */
@@ -28,10 +28,10 @@ const initialize = (_self, done) => {
     assert.ok(self.AWS, `${method}: self.AWS is required`);
 
     self.AWS.config.apiVersions = {
-        sqs: self.AWS.config.apiVersions || '2012-11-05',
+        lambda: self.AWS.config.apiVersions || '2015-03-31',
     };
 
-    self.sqs = new AWS.SQS();
+    self.lambda = new AWS.Lambda();
 
     done(null, self);
 }

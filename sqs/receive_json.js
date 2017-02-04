@@ -29,11 +29,12 @@ const receive_json = (_self, done) => {
 
     assert.ok(self.sqs, `${method}: self.sqs is required`);
     assert.ok(_.is.String(self.queue_url), `${method}: self.queue_url must be a String`);
+    assert.ok(_.is.Number(self.timeout) || !self.timeout, `${method}: self.timeout must be a Number or Null`);
 
     self.sqs.receiveMessage({
         QueueUrl: self.queue_url,
         MaxNumberOfMessages: 1,
-        WaitTimeSeconds: 15,
+        WaitTimeSeconds: _.is.Number(self.timeout) ? self.timeout : 15,
     }, (error, data) => {
         if (error) {
             return done(error);
