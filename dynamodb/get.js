@@ -1,5 +1,5 @@
 /**
- *  dynamodb/delete_table.js
+ *  dynamodb/get.js
  *
  *  David Janes
  *  IOTDB
@@ -21,18 +21,25 @@ const Q = require("q");
  *  Accepts: 
  *  Produces:
  */
-const delete_table = (_self, done) => {
+const get = (_self, done) => {
     const self = _.d.clone.shallow(_self);
-    const method = "dynamodb.delete_table";
+    const method = "dynamodb.get";
 
-    assert.ok(self.dynamodb, `${method}: self.dynamodb is required`);
+    assert.ok(self.dynamodb_client, `${method}: self.dynamodb is required`);
     assert.ok(_.is.String(self.table_name), `${method}: self.table_name must be a String`);
+    assert.ok(_.is.JSON(self.query), `${method}: self.query must be a JSON-like object`);
 
-    self.dynamodb.deleteTable({
+    self.dynamodb_client.get({
         TableName: self.table_name,
+        Key: self.query,
     }, (error, data) => {
         if (error) {
             return done(error);
+        }
+
+        self.json = null;
+        if (data.Item) {
+            self.json = data.Item;
         }
 
         self.aws_result = data;
@@ -44,4 +51,4 @@ const delete_table = (_self, done) => {
 /**
  *  API
  */
-exports.delete_table = Q.denodeify(delete_table);
+exports.get = Q.denodeify(get);

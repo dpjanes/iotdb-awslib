@@ -16,5 +16,9 @@ module.exports = Object.assign(
     require("./create_table"),
     require("./delete_table"),
     require("./wait_table_exists"),
+    require("./put"),
+    require("./get"),
+    require("./query_simple"),
+    require("./scan_simple"),
     {}
 );

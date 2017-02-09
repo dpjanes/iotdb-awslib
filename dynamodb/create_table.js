@@ -17,16 +17,7 @@ const assert = require("assert");
 const AWS = require("aws-sdk");
 const Q = require("q");
 
-const _key_name = key => key.replace(/^[#!]/, "")
-const _key_type = key => {
-    if (key.match(/^#/)) {
-        return "N";
-    } else if (key.match(/^!/)) {
-        return "B";
-    } else {
-        return "S";
-    }
-}
+const util = require("./util");
 
 /**
  *  Accepts: 
@@ -38,7 +29,7 @@ const create_table = (_self, done) => {
 
     assert.ok(self.dynamodb, `${method}: self.dynamodb is required`);
     assert.ok(_.is.String(self.table_name), `${method}: self.table_name must be a String`);
-    assert.ok(_.is.String(self.primary_key), `${method}: self.primary_key must be a String`);
+    assert.ok(_.is.String(self.partition_key), `${method}: self.partition_key must be a String`);
     assert.ok(_.is.String(self.sort_key) || !self.sort_key, `${method}: self.sort_key must be a String or Null`);
     assert.ok(_.is.Array.of.String(self.sort_keys) || !self.sort_keys, `${method}: self.sort_keys must be an Array of String or Null`);
 
@@ -53,25 +44,25 @@ const create_table = (_self, done) => {
     };
 
     initd.KeySchema.push({
-        AttributeName: _key_name(self.primary_key),
+        AttributeName: util.key_name(self.partition_key),
         KeyType: "HASH",
     })
 
     initd.AttributeDefinitions.push({
-        AttributeName: _key_name(self.primary_key),
-        AttributeType: _key_type(self.primary_key),
+        AttributeName: util.key_name(self.partition_key),
+        AttributeType: util.key_type(self.partition_key),
     })
 
     const sort_keys = self.sort_keys ? self.sort_keys : self.sort_key ? [ self.sort_key ] : [];
     sort_keys.forEach(sort_key => {
         initd.KeySchema.push({
-            AttributeName: _key_name(sort_key),
+            AttributeName: util.key_name(sort_key),
             KeyType: "RANGE",
         })
 
         initd.AttributeDefinitions.push({
-            AttributeName: _key_name(sort_key),
-            AttributeType: _key_type(sort_key),
+            AttributeName: util.key_name(sort_key),
+            AttributeType: util.key_type(sort_key),
         })
     })
 

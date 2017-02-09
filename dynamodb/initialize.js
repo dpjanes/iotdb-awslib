@@ -32,6 +32,7 @@ const initialize = (_self, done) => {
     };
 
     self.dynamodb = new AWS.DynamoDB();
+    self.dynamodb_client = new AWS.DynamoDB.DocumentClient();
 
     done(null, self);
 }

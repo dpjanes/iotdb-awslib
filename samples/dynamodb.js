@@ -42,7 +42,7 @@ if (action("create-table")) {
     Q({
         aws: awsd,
         table_name: "movies",
-        primary_key: "#year",
+        partition_key: "#year",
         sort_key: "title",
         write_capacity_units: 10,
     })
@@ -57,7 +57,7 @@ if (action("create-table-wait")) {
     Q({
         aws: awsd,
         table_name: "movies",
-        primary_key: "#year",
+        partition_key: "#year",
         sort_key: "title",
         write_capacity_units: 10,
     })
@@ -78,6 +78,72 @@ if (action("delete-table")) {
         .then(aws.dynamodb.initialize)
         .then(aws.dynamodb.delete_table)
         .then(_self => console.log("+", "ok"))
+        .catch(error => console.log("#", _.error.message(error)))
+}
+
+if (action("put")) {
+    Q({
+        aws: awsd,
+        table_name: "movies",
+        json: {
+            year: 1999,
+            title: "The Matrix",
+            info: "choose the red or the blue pill",
+        },
+    })
+        .then(aws.initialize)
+        .then(aws.dynamodb.initialize)
+        .then(aws.dynamodb.put)
+        .then(_self => console.log("+", "ok"))
+        .catch(error => console.log("#", _.error.message(error)))
+}
+
+
+if (action("get")) {
+    Q({
+        aws: awsd,
+        table_name: "movies",
+        query: {
+            year: 1999,
+            title: "The Matrix",
+        },
+    })
+        .then(aws.initialize)
+        .then(aws.dynamodb.initialize)
+        .then(aws.dynamodb.get)
+        .then(_self => console.log("+", "ok", _self.json))
+        .catch(error => console.log("#", _.error.message(error)))
+}
+
+if (action("query-simple")) {
+    Q({
+        aws: awsd,
+        table_name: "movies",
+        query: {
+            year: 1999,
+            title: "The Matrix",
+        },
+    })
+        .then(aws.initialize)
+        .then(aws.dynamodb.initialize)
+        .then(aws.dynamodb.query_simple)
+        .then(_self => console.log("+", "ok", _self.jsons))
+        .catch(error => console.log("#", _.error.message(error)))
+}
+
+if (action("scan-simple")) {
+    Q({
+        aws: awsd,
+        table_name: "movies",
+        query: {
+            title: "The Matrix",
+        },
+        keys: [ "title", "#year" ],
+    })
+        .then(aws.initialize)
+        .then(aws.dynamodb.initialize)
+        .then(aws.dynamodb.scan_simple)
+        .then(_self => console.log("+", "ok", _self.jsons))
         .catch(error => console.log("#", _.error.message(error)))
 }
 

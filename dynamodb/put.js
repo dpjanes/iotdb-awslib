@@ -1,5 +1,5 @@
 /**
- *  dynamodb/delete_table.js
+ *  dynamodb/put.js
  *
  *  David Janes
  *  IOTDB
@@ -21,15 +21,17 @@ const Q = require("q");
  *  Accepts: 
  *  Produces:
  */
-const delete_table = (_self, done) => {
+const put = (_self, done) => {
     const self = _.d.clone.shallow(_self);
-    const method = "dynamodb.delete_table";
+    const method = "dynamodb.put";
 
-    assert.ok(self.dynamodb, `${method}: self.dynamodb is required`);
+    assert.ok(self.dynamodb_client, `${method}: self.dynamodb is required`);
     assert.ok(_.is.String(self.table_name), `${method}: self.table_name must be a String`);
+    assert.ok(_.is.JSON(self.json), `${method}: self.json must be a JSON-like object`);
 
-    self.dynamodb.deleteTable({
-        TableName: self.table_name,
+    self.dynamodb_client.put({
+        TableName : self.table_name,
+        Item: self.json,
     }, (error, data) => {
         if (error) {
             return done(error);
@@ -44,4 +46,4 @@ const delete_table = (_self, done) => {
 /**
  *  API
  */
-exports.delete_table = Q.denodeify(delete_table);
+exports.put = Q.denodeify(put);
