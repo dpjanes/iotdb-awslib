@@ -20,5 +20,6 @@ module.exports = Object.assign(
     require("./get"),
     require("./query_simple"),
     require("./scan_simple"),
+    require("./delete_item"),
     {}
 );
