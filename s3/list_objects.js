@@ -51,10 +51,13 @@ const list_objects = (_self, done) => {
 
         const level = split(prefix).length + 1;
 
+        // XXX - need to add bucket prefix?
         self.paths = _.uniq(data.Contents.map(cd => cd.Key)
             .filter(name => split(name).length >= level)
             .map(name => self.recursive ? name : split(name).slice(0, level).join("/"))
             .sort())
+
+        self.keys = self.paths;
 
         done(null, self);
     });

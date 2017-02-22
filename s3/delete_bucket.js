@@ -31,19 +31,24 @@ const delete_bucket = (_self, done) => {
     assert.ok(self.s3, `${method}: self.s3 is required`);
     assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`);
 
+    console.log("DELETE BUCKET");
+
     self.s3.deleteBucket({
         Bucket: self.bucket,
     }, (error, data) => {
         self.aws_result = data;
 
         if (!error) {
+            console.log("-", method, "deleted bucket:", self.bucket);
             return done(null, self);
         }
 
         if (error.statusCode === 404) {
+            console.log("-", method, "bucket already deleted:", self.bucket);
             return done(null, self);
         }
 
+        console.log("#", method, "cannot delete bucket:", self.bucket, _.error.message(error));
         return done(error);
     });
 }

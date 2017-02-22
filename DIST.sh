@@ -37,6 +37,8 @@ echo "=================="
         package.json \
         index.js initialize.js \
         s3/*.js \
+        dynamodb/*.js \
+        lambda/*.js \
         sqs/*.js \
         |
     ( cd "${NPM_DST}" && tar xvf - && npm publish ) || exit 1
