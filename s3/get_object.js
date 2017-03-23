@@ -50,7 +50,7 @@ const get_object = (_self, done) => {
         assert(self.document, `${method}: self.document should have been produced by now`);
 
         if (data.ContentType) {
-            self.media_type = data.ContentType;
+            self.document_media_type = data.ContentType;
         }
 
         done(null, self);

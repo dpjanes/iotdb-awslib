@@ -29,15 +29,16 @@ const upload_document = (_self, done) => {
     assert.ok(self.s3, `${method}: self.s3 is required`);
     assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`);
     assert.ok(_.is.String(self.key), `${method}: self.key must be a String`);
-    assert.ok(_.is.String(self.media_type) || !self.media_type, `${method}: self.media_type must be a String or Null`);
     assert.ok(_.is.String(self.document) || _.is.Buffer(self.document), `${method}: self.document must be a String or Buffer`);
+    assert.ok(_.is.String(self.document_media_type) || !self.document_media_type, `${method}: self.document_media_type must be a String or Null`);
+    assert.ok(_.is.String(self.document_encoding) || !self.document_encoding, `${method}: self.document_encoding must be a String or Null`);
 
     self.s3.upload({
         Bucket: self.bucket,
         Key: self.key,
         Body: self.document,
-        ContentType: self.media_type || mime.lookup(self.key) || "application/octet-stream",
-        ContentEncoding: self.encoding || null,
+        ContentType: self.document_media_type || mime.lookup(self.key) || "application/octet-stream",
+        ContentEncoding: self.document_encoding || null,
     }, (error, data) => {
         if (error) {
             return done(error);

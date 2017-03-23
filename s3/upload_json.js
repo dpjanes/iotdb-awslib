@@ -28,14 +28,14 @@ const upload_json = (_self, done) => {
     assert.ok(self.s3, `${method}: self.s3 is required`);
     assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`);
     assert.ok(_.is.String(self.key), `${method}: self.key must be a String`);
-    assert.ok(_.is.String(self.media_type) || !self.media_type, `${method}: self.media_type must be a String or Null`);
+    assert.ok(_.is.String(self.document_media_type) || !self.document_media_type, `${method}: self.document_media_type must be a String or Null`);
     assert.ok(_.is.JSON(self.json), `${method}: self.json must be a JSON document`);
 
     self.s3.upload({
         Bucket: self.bucket,
         Key: self.key,
         Body: JSON.stringify(self.json, null, 2),
-        ContentType: self.media_type || "application/json",
+        ContentType: self.document_media_type || "application/json",
     }, (error, data) => {
         if (error) {
             return done(error);

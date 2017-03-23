@@ -40,7 +40,7 @@ const head_object = (_self, done) => {
         self.aws_result = data;
 
         if (data.ContentType) {
-            self.media_type = data.ContentType;
+            self.document_media_type = data.ContentType;
         }
 
         done(null, self);
