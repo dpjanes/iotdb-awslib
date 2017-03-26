@@ -13,6 +13,7 @@
 module.exports = Object.assign(
     {},
     require("./initialize"),
+    require("./all"),
     require("./create_table"),
     require("./delete_table"),
     require("./wait_table_exists"),
