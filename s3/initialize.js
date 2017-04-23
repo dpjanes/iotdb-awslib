@@ -27,11 +27,9 @@ const initialize = (_self, done) => {
 
     assert.ok(self.AWS, `${method}: self.AWS is required`);
 
-    self.AWS.config.apiVersions = {
-        s3: self.AWS.config.apiVersions || '2006-03-01',
-    };
-
-    self.s3 = new AWS.S3();
+    self.s3 = new AWS.S3({
+        apiVersion: '2006-03-01',
+    });
 
     done(null, self);
 }

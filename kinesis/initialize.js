@@ -1,9 +1,9 @@
 /**
- *  lambda/initialize.js
+ *  kinesis/initialize.js
  *
  *  David Janes
  *  IOTDB
- *  2017-02-04
+ *  2017-04-23
  *
  *  Copyright (2013-2017) David Janes
  */
@@ -18,17 +18,17 @@ const AWS = require("aws-sdk");
 const Q = require("q");
 
 /**
- *  Accepts: 
+ *  Accepts: N/
  *  Produces:
  */
 const initialize = (_self, done) => {
     const self = _.d.clone.shallow(_self);
-    const method = "sqs.initialize";
+    const method = "kinesis.initialize";
 
     assert.ok(self.AWS, `${method}: self.AWS is required`);
 
-    self.lambda = new AWS.Lambda({
-        apiVersion: '2015-03-31',
+    self.kinesis = new AWS.Kinesis({
+        apiVersion: '2013-12-02',
     });
 
     done(null, self);

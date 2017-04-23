@@ -27,11 +27,9 @@ const initialize = (_self, done) => {
 
     assert.ok(self.AWS, `${method}: self.AWS is required`);
 
-    self.AWS.config.apiVersions = {
-        dynamodb: self.AWS.config.apiVersions || "2012-08-10",
-    };
-
-    self.dynamodb = new AWS.DynamoDB();
+    self.dynamodb = new AWS.DynamoDB({
+        apiVersion: "2012-08-10",
+    });
     self.dynamodb_client = new AWS.DynamoDB.DocumentClient();
 
     done(null, self);

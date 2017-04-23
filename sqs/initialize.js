@@ -27,11 +27,9 @@ const initialize = (_self, done) => {
 
     assert.ok(self.AWS, `${method}: self.AWS is required`);
 
-    self.AWS.config.apiVersions = {
-        sqs: self.AWS.config.apiVersions || '2012-11-05',
-    };
-
-    self.sqs = new AWS.SQS();
+    self.sqs = new AWS.SQS({
+        apiVersion: '2012-11-05',
+    });
 
     done(null, self);
 }
