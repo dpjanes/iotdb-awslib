@@ -41,8 +41,18 @@ const get_object = (_self, done) => {
 
         if (_.is.String(data.Body)) {
             self.document = data.Body;
+
+            if (data.ContentEncoding) {
+                self.document_encoding = data.ContentEncoding;
+            }
         } else if (_.is.Buffer(data.Body)) {
-            self.document = data.Body.toString(data.ContentEncoding);
+            if (data.ContentEncoding) {
+                self.document = data.Body.toString(data.ContentEncoding);
+                self.document_encoding = data.ContentEncoding;
+            } else {
+                self.document = data.Body;
+                self.document_encoding = null;
+            }
         } else {
             assert(false, `${method}: don't know how to deal with Body of type: ${typeof data.Body}`);
         }
