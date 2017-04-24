@@ -29,14 +29,13 @@ const send_json = (_self, done) => {
     assert.ok(_.is.String(self.stream_name), `${method}: self.stream_name is required`);
     assert.ok(_.is.String(self.partition_key), `${method}: self.partition_key is required`);
 
-
     self.kinesis.putRecord({
         Data: JSON.stringify(self.json, null, 0),
         PartitionKey: self.partition_key,
         StreamName: self.stream_name,
     }, (error, data) => {
         if (error) {
-            return error(error);
+            return done(error);
         }
 
         done(null, self);
