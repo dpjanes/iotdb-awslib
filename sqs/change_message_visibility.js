@@ -26,9 +26,12 @@ const change_message_visibility = (_self, done) => {
     const method = "sqs.change_message_visibility";
 
     assert.ok(self.sqs, `${method}: self.sqs is required`);
-    assert.ok(self.message, `${method}: self.message is required`);
     assert.ok(_.is.String(self.queue_url), `${method}: self.queue_url must be a String`);
     assert.ok(_.is.Number(self.timeout), `${method}: self.timeout must be a Number`);
+
+    if (!self.message) {
+        return done(null, self);
+    }
 
     self.sqs.changeMessageVisibility({
         QueueUrl: self.queue_url,

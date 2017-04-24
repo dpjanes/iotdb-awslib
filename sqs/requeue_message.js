@@ -29,8 +29,11 @@ const requeue_message = (_self, done) => {
     const method = "sqs.requeue_message";
 
     assert.ok(self.sqs, `${method}: self.sqs is required`);
-    assert.ok(self.message, `${method}: self.message is required`);
     assert.ok(_.is.String(self.queue_url), `${method}: self.queue_url must be a String`);
+
+    if (!self.message) {
+        return done(null, self);
+    }
 
     self.sqs.changeMessageVisibility({
         QueueUrl: self.queue_url,

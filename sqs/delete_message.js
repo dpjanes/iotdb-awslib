@@ -26,8 +26,11 @@ const delete_message = (_self, done) => {
     const method = "sqs.delete_message";
 
     assert.ok(self.sqs, `${method}: self.sqs is required`);
-    assert.ok(self.message, `${method}: self.message is required`);
     assert.ok(_.is.String(self.queue_url), `${method}: self.queue_url must be a String`);
+
+    if (!self.message) {
+        return done(null, self);
+    }
 
     self.sqs.deleteMessage({
         QueueUrl: self.queue_url,
