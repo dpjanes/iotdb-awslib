@@ -1,0 +1,69 @@
+/**
+ *  test_s3.js
+ *
+ *  David Janes
+ *  IOTDB
+ *  2017-01-18
+ *
+ *  Copyright (2013-2017) David Janes
+ */
+
+"use strict";
+
+const _ = require("iotdb-helpers");
+
+const assert = require("assert");
+
+const AWS = require("aws-sdk");
+const Q = require("q");
+const minimist = require('minimist');
+
+const aws = require("../index");
+const awsd = {
+    profile: "consensas",
+}
+
+const ad = minimist(process.argv.slice(2));
+
+const action = (name) => ad._.indexOf(name) > -1;
+
+if (1) {
+    Q({
+        awsd: awsd,
+    })
+        .then(aws.initialize)
+        .then(aws.s3.initialize)
+        .then(aws.s3.list_buckets)
+        .then(_self => {
+            console.log("BUCKETS", _self.buckets);
+            _self.buckets
+                .filter(bucket => bucket.startsWith("ledger-"))
+                .forEach(bucket => {
+                    console.log(bucket);
+
+                    Q(_self)
+                        
+                        .then(sd => _.d.add(sd, "bucket", bucket))
+                        .then(aws.s3.list_objects)
+                        .then(sd => {
+                            console.log("PATHS", sd.paths);
+                            sd.paths.forEach(path => {
+                                console.log(bucket, path)
+                                Q(_self)
+                                    .then(sd => _.d.add(sd, "key", path))
+                                    .then(sd => _.d.add(sd, "bucket", bucket))
+                                    // .then(aws.s3.parse_path)
+                                    .then(aws.s3.delete_object)
+                                    .catch(error => console.log("#", _.error.message(error)))
+                            })
+                        })
+                        .catch(error => console.log("#", _.error.message(error)))
+
+                    Q(_self)
+                        .then(sd => _.d.add(sd, "bucket", bucket))
+                        .then(aws.s3.delete_bucket)
+                        .catch(error => console.log("#", _.error.message(error)))
+                })
+        })
+        .catch(error => console.log("#", _.error.message(error)))
+}
