@@ -18,24 +18,25 @@ const AWS = require("aws-sdk");
 const Q = require("q");
 
 /**
- *  Accepts: 
- *  Produces:
+ *  Accepts: self.awsd
+ *  Produces: self.AWS
  */
 const initialize = (_self, done) => {
     const self = _.d.clone.shallow(_self);
+    const method = "initialize"
 
-    const profile = _.d.first(self, "/aws/profile")
-    if (profile) {
-        const credentials = new AWS.SharedIniFileCredentials({
+    assert.ok(self.awsd, `${method}: self.awsd expected`)
+
+    if (self.awsd.accessKeyId && self.awsd.secretAccessKey) {
+        AWS.config.credentials = new AWS.Credentials(self.awsd.accessKeyId, self.awsd.secretAccessKey);
+    } else if (self.awsd.profile) {
+        AWS.config.credentials = new AWS.SharedIniFileCredentials({
             profile: profile,
         });
-
-        AWS.config.credentials = credentials;
     }
 
-    const region = _.d.first(self, "/aws/region")
-    if (region) {
-        AWS.config.region = region;
+    if (self.awsd.region) {
+        AWS.config.region = self.awsd.region;
     }
 
     self.AWS = AWS;

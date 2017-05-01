@@ -30,7 +30,7 @@ const action = (name) => ad._.indexOf(name) > -1;
 
 if (action("initialize")) {
     Q({
-        aws: awsd,
+        awsd: awsd,
     })
         .then(aws.initialize)
         .then(aws.dynamodb.initialize)

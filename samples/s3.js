@@ -30,7 +30,7 @@ const action = (name) => ad._.indexOf(name) > -1;
 // create bucket
 if (action("create-bucket")) {
     Q({
-        aws: awsd,
+        awsd: awsd,
         bucket: "consensas-test1",
     })
         .then(aws.initialize)

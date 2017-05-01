@@ -39,6 +39,7 @@ echo "=================="
         s3/*.js \
         dynamodb/*.js \
         lambda/*.js \
+        kinesis/*.js \
         sqs/*.js \
         |
     ( cd "${NPM_DST}" && tar xvf - && npm publish ) || exit 1
