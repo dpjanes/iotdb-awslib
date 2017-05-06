@@ -21,7 +21,7 @@ const Q = require("q");
  *  Accepts: 
  *  Produces:
  *
- *  Delete all the objects within a Bucket. 
+ *  Delete all the objects within a Bucket under self.key
  *  Obviously very dangerous.
  */
 const delete_bucket_objects = (_self, done) => {
@@ -37,6 +37,7 @@ const delete_bucket_objects = (_self, done) => {
 
     assert.ok(self.s3, `${method}: self.s3 is required`);
     assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`);
+    assert.ok(_.is.String(self.key), `${method}: self.key must be a String`);
 
     const counter = _.counter(error => {
         if (error) {

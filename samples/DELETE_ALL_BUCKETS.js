@@ -35,32 +35,15 @@ if (1) {
         .then(aws.s3.initialize)
         .then(aws.s3.list_buckets)
         .then(_self => {
-            console.log("BUCKETS", _self.buckets);
             _self.buckets
                 .filter(bucket => bucket.startsWith("ledger-"))
                 .forEach(bucket => {
-                    console.log(bucket);
-
-                    Q(_self)
-                        
-                        .then(sd => _.d.add(sd, "bucket", bucket))
-                        .then(aws.s3.list_objects)
-                        .then(sd => {
-                            console.log("PATHS", sd.paths);
-                            sd.paths.forEach(path => {
-                                console.log(bucket, path)
-                                Q(_self)
-                                    .then(sd => _.d.add(sd, "key", path))
-                                    .then(sd => _.d.add(sd, "bucket", bucket))
-                                    // .then(aws.s3.parse_path)
-                                    .then(aws.s3.delete_object)
-                                    .catch(error => console.log("#", _.error.message(error)))
-                            })
-                        })
-                        .catch(error => console.log("#", _.error.message(error)))
+                    console.log("+", "delete bucket and everything in it", bucket);
 
                     Q(_self)
                         .then(sd => _.d.add(sd, "bucket", bucket))
+                        .then(sd => _.d.add(sd, "key", ""))
+                        .then(aws.s3.delete_bucket_objects)
                         .then(aws.s3.delete_bucket)
                         .catch(error => console.log("#", _.error.message(error)))
                 })

@@ -34,7 +34,7 @@ const list_objects = (_self, done) => {
     let prefix = "";
     if (self.key) {
         prefix = self.key;
-        if (prefix.length) {
+        if (prefix.match(/[^\/]$/)) {
             prefix += "/";
         }
     }

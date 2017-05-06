@@ -31,7 +31,7 @@ const initialize = (_self, done) => {
         AWS.config.credentials = new AWS.Credentials(self.awsd.accessKeyId, self.awsd.secretAccessKey);
     } else if (self.awsd.profile) {
         AWS.config.credentials = new AWS.SharedIniFileCredentials({
-            profile: profile,
+            profile: self.awsd.profile,
         });
     }
 
