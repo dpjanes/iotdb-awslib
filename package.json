@@ -4,8 +4,9 @@
         "url": "https://github.com/dpjanes/iotdb-awslib/issues"
     }, 
     "dependencies": {
-        "aws-sdk": "~2.49.0", 
-        "iotdb-errors": "~3.0.4", 
+        "aws-sdk": "~2.58.0", 
+        "bluebird-q": "~2.1.1", 
+        "iotdb-errors": "~3.0.5", 
         "iotdb-helpers": "~3.0.31"
     }, 
     "description": "IOTDB AWS Promise Functions", 
@@ -13,7 +14,7 @@
         "grunt": "~1.0.1", 
         "grunt-contrib-jshint": "~1.1.0", 
         "grunt-contrib-nodeunit": "~1.0.0", 
-        "grunt-contrib-uglify": "~2.3.0", 
+        "grunt-contrib-uglify": "~3.0.1", 
         "grunt-contrib-watch": "~1.0.0", 
         "grunt-jsbeautifier": "~0.2.13", 
         "jshint-stylish": "~2.2.1", 
@@ -30,5 +31,5 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     }, 
-    "version": "1.0.17"
+    "version": "1.0.18"
 }
