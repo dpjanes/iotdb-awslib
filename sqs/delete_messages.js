@@ -14,7 +14,7 @@ const _ = require("iotdb-helpers");
 
 const assert = require("assert");
 
-const Q = require("q");
+const Q = require("bluebird-q");
 const async = require("async");
 
 /**

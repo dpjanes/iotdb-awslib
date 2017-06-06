@@ -15,7 +15,7 @@ const _ = require("iotdb-helpers");
 const assert = require("assert");
 
 const AWS = require("aws-sdk");
-const Q = require("q");
+const Q = require("bluebird-q");
 
 const util = require("./util");
 
@@ -27,8 +27,11 @@ const query_simple = (_self, done) => {
     const self = _.d.clone.shallow(_self);
     const method = "dynamodb.query_simple";
 
+    console.log("HERE:B")
+
     assert.ok(self.dynamodb_client, `${method}: self.dynamodb is required`);
     assert.ok(_.is.String(self.table_name), `${method}: self.table_name must be a String`);
+    assert.ok(_.is.String(self.index_name) || _.is.Nullish(self.index_name), `${method}: self.table_name must be a String or Nyll`);
     assert.ok(_.is.JSON(self.query), `${method}: self.query must be a JSON-like object`);
     assert.ok(_.is.Array.of.String(self.query_attributes) || !self.query_attributes, 
         `${method}: self.query_attributes must be Null or an Array of String`);
@@ -66,6 +69,14 @@ const query_simple = (_self, done) => {
         ProjectionExpression: ProjectionExpression,
         Limit: self.query_limit ? self.query_limit : null,
     };
+
+    if (!_.is.Nullish(self.scan_index_forward)) {
+        initd.ScanIndexForward = self.scan_index_forward ? true : false;
+    }
+
+    if (!_.is.Nullish(self.index_name)) {
+        initd.IndexName = self.index_name;
+    }
 
     self.dynamodb_client.query(initd, (error, data) => {
         if (error) {

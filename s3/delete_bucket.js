@@ -15,7 +15,9 @@ const _ = require("iotdb-helpers");
 const assert = require("assert");
 
 const AWS = require("aws-sdk");
-const Q = require("q");
+const Q = require("bluebird-q");
+
+const logger = require("../logger")(__filename);
 
 /**
  *  Accepts: 
@@ -31,7 +33,10 @@ const delete_bucket = (_self, done) => {
     assert.ok(self.s3, `${method}: self.s3 is required`);
     assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`);
 
-    console.log("DELETE BUCKET");
+    logger.warn({
+        method: method,
+        bucket: self.bucket,
+    }, "DELETE BUCKET");
 
     self.s3.deleteBucket({
         Bucket: self.bucket,

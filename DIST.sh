@@ -35,7 +35,7 @@ echo "=================="
         --exclude "yy*" \
         README.md LICENSE \
         package.json \
-        index.js initialize.js \
+        index.js initialize.js logger.js \
         s3/*.js \
         dynamodb/*.js \
         lambda/*.js \

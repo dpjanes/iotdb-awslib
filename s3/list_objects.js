@@ -15,7 +15,7 @@ const _ = require("iotdb-helpers");
 const assert = require("assert");
 
 const AWS = require("aws-sdk");
-const Q = require("q");
+const Q = require("bluebird-q");
 
 const split = s => s.split("/").filter(s => s.length)
 
