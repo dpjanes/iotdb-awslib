@@ -4,7 +4,7 @@
         "url": "https://github.com/dpjanes/iotdb-awslib/issues"
     }, 
     "dependencies": {
-        "aws-sdk": "~2.62.0", 
+        "aws-sdk": "~2.63.0", 
         "bluebird-q": "~2.1.1", 
         "iotdb-errors": "~3.0.5", 
         "iotdb-helpers": "~3.0.32"
@@ -31,5 +31,5 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     }, 
-    "version": "1.0.20"
+    "version": "1.0.21"
 }
