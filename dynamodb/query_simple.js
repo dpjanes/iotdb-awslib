@@ -27,8 +27,6 @@ const query_simple = (_self, done) => {
     const self = _.d.clone.shallow(_self);
     const method = "dynamodb.query_simple";
 
-    console.log("HERE:B")
-
     assert.ok(self.dynamodb_client, `${method}: self.dynamodb is required`);
     assert.ok(_.is.String(self.table_name), `${method}: self.table_name must be a String`);
     assert.ok(_.is.String(self.index_name) || _.is.Nullish(self.index_name), `${method}: self.table_name must be a String or Nyll`);
