@@ -1,5 +1,5 @@
 /**
- *  s3-cat.js
+ *  s3-ls.js
  *
  *  David Janes
  *  IOTDB
@@ -26,7 +26,7 @@ const awsd = {
 }
 
 const ad = minimist(process.argv.slice(2), {
-    boolean: [ "download", "json", ],
+    binary: [ "download", "json", ],
 });
 
 const action = (name) => ad._.indexOf(name) > -1;
@@ -39,20 +39,11 @@ ad._.forEach(s3_path => {
         .then(aws.initialize)
         .then(aws.s3.initialize)
         .then(aws.s3.parse_path)
-        .then(aws.s3.get_object)
+        .then(aws.s3.list_objects)
         .then(_sd => {
-            // console.log(_sd)
-            if (ad.download) {
-                const name = path.basename(s3_path)
-                fs.writeFileSync(name, _sd.document)
-
-                console.log("+", "downloaded:", name)
-            } else if (ad.json) {
-                process.stdout.write(JSON.stringify(JSON.parse(_sd.document), null, 2))
-                process.stdout.write("\n")
-            } else {
-                process.stdout.write(_sd.document)
-            }
+            _sd.paths.forEach(s3_path2 => {
+                console.log(`s3://${_sd.bucket}/${s3_path2}`)
+            })
         })
         .catch(error => {
             console.log("#", _.error.message(error))

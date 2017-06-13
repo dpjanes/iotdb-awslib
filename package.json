@@ -1,5 +1,9 @@
 {
     "author": "David Janes <davidjanes@davidjanes.com>", 
+    "bin": {
+        "s3-cat.js": "./bin/s3-cat.js",
+        "s3-ls.js": "./bin/s3-ls.js"
+    },
     "bugs": {
         "url": "https://github.com/dpjanes/iotdb-awslib/issues"
     }, 
