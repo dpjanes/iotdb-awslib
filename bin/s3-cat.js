@@ -48,8 +48,9 @@ ad._.forEach(s3_path => {
 
                 console.log("+", "downloaded:", name)
             } else if (ad.json) {
+                process.stdout.write(JSON.stringify(JSON.parse(_sd.document), null, 2))
             } else {
-                console.log("+", _sd.document.length)
+                process.stdout.write(_sd.document)
             }
         })
         .catch(error => {
