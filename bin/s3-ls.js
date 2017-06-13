@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /**
  *  s3-ls.js
  *
