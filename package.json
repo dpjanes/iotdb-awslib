@@ -1,14 +1,14 @@
 {
     "author": "David Janes <davidjanes@davidjanes.com>", 
     "bin": {
-        "s3-cat.js": "./bin/s3-cat.js",
+        "s3-cat.js": "./bin/s3-cat.js", 
         "s3-ls.js": "./bin/s3-ls.js"
-    },
+    }, 
     "bugs": {
         "url": "https://github.com/dpjanes/iotdb-awslib/issues"
     }, 
     "dependencies": {
-        "aws-sdk": "~2.63.0", 
+        "aws-sdk": "~2.69.0", 
         "bluebird-q": "~2.1.1", 
         "iotdb-errors": "~3.0.5", 
         "iotdb-helpers": "~3.0.32"
@@ -35,5 +35,5 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     }, 
-    "version": "1.0.21"
+    "version": "1.0.22"
 }
