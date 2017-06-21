@@ -39,8 +39,8 @@ const pop = (_self, done) => {
         }
 
         self.json = null;
-        if (data.Item) {
-            self.json = data.Item;
+        if (data.Attributes) {
+            self.json = data.Attributes;
         }
 
         self.aws_result = data;

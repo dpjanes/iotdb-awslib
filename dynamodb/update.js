@@ -36,7 +36,6 @@ const update = (_self, done) => {
         Key: self.query,
         Item: self.json,
     }, (error, data) => {
-        console.log(error, self.query, self.json, data);
         if (error) {
             return done(error);
         }
