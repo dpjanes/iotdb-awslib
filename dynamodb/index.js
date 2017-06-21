@@ -20,6 +20,7 @@ module.exports = Object.assign(
     require("./put"),
     require("./replace"),
     require("./get"),
+    require("./pop"),
     require("./query_simple"),
     require("./scan_simple"),
     require("./delete"),
