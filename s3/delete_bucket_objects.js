@@ -41,11 +41,11 @@ const delete_bucket_objects = (_self, done) => {
     assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`);
     assert.ok(_.is.String(self.key), `${method}: self.key must be a String`);
 
-    logger.warn({
+    logger.info({
         method: method,
         bucket: self.bucket,
         key: self.key,
-    }, "DELETE BUCKET OBJECTS");
+    }, "delete bucket objects");
 
     const counter = _.counter(error => {
         if (error) {
@@ -71,11 +71,22 @@ const delete_bucket_objects = (_self, done) => {
                 Q(sd)
                     .then(aws.s3.delete_object)
                     .then(() => {
-                        console.log("-", method, "deleted", sd.bucket, sd.key);
+                        logger.info({
+                            method: method,
+                            bucket: sd.bucket,
+                            key: sd.key,
+                        }, "deleted bucket object")
+
                         counter.decrement();
                     })
                     .catch(error => {
-                        console.log("#", method, sd.key, _.error.message(error))
+                        logger.error({
+                            method: method,
+                            bucket: self.bucket,
+                            key: sd.key,
+                            error: _.error.message(error),
+                        }, "unexpected error deleting bucket objects")
+
                         counter.decrement(); // ignoring error
                     })
             })

@@ -36,7 +36,7 @@ const delete_bucket = (_self, done) => {
     logger.warn({
         method: method,
         bucket: self.bucket,
-    }, "DELETE BUCKET");
+    }, "delete bucket");
 
     self.s3.deleteBucket({
         Bucket: self.bucket,
@@ -44,16 +44,29 @@ const delete_bucket = (_self, done) => {
         self.aws_result = data;
 
         if (!error) {
-            console.log("-", method, "deleted bucket:", self.bucket);
+            logger.info({
+                method: method,
+                bucket: self.bucket,
+            }, "deleted bucket")
+
             return done(null, self);
         }
 
         if (error.statusCode === 404) {
-            console.log("-", method, "bucket already deleted:", self.bucket);
+            logger.warn({
+                method: method,
+                bucket: self.bucket,
+            }, "bucket already deleted")
+
             return done(null, self);
         }
 
-        console.log("#", method, "cannot delete bucket:", self.bucket, _.error.message(error));
+        logger.error({
+            method: method,
+            bucket: self.bucket,
+            error: _.error.message(error),
+        }, "cannot delete bucket")
+
         return done(error);
     });
 }

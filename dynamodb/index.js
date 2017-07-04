@@ -16,6 +16,7 @@ module.exports = Object.assign(
     require("./all"),
     require("./create_table"),
     require("./delete_table"),
+    require("./describe_table"),
     require("./wait_table_exists"),
     require("./put"),
     require("./replace"),
