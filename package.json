@@ -3,7 +3,8 @@
     "bin": {
         "dynamodb-get": "./bin/dynamodb-get.js", 
         "s3-cat": "./bin/s3-cat.js", 
-        "s3-ls": "./bin/s3-ls.js"
+        "s3-ls": "./bin/s3-ls.js", 
+        "s3-rm": "./bin/s3-rm.js"
     }, 
     "bugs": {
         "url": "https://github.com/dpjanes/iotdb-awslib/issues"
@@ -36,5 +37,5 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     }, 
-    "version": "1.0.27"
+    "version": "1.0.28"
 }
