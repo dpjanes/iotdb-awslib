@@ -14,5 +14,6 @@ module.exports = Object.assign(
     {},
     require("./initialize"),
     require("./publish"),
+    require("./publish_sms"),
     {}
 );

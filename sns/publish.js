@@ -17,8 +17,8 @@ const assert = require("assert");
 const Q = require("bluebird-q");
 
 /**
- *  Accepts: self.sns, self.json, self.stream_name, self.partition_key
- *  Produces: N/A
+ *  Accepts: self.sns, self.json, self.to_topic | self.to_target 
+ *  Produces: self.aws_result
  */
 const publish = (_self, done) => {
     const self = _.d.clone.shallow(_self);
@@ -26,17 +26,26 @@ const publish = (_self, done) => {
 
     assert.ok(self.sns, `${method}: self.sns is required`);
     assert.ok(_.is.JSON(self.json), `${method}: self.json must be a JSONable Object`);
-    assert.ok(_.is.String(self.stream_name), `${method}: self.stream_name is required`);
-    assert.ok(_.is.String(self.partition_key), `${method}: self.partition_key is required`);
 
-    self.sns.putRecord({
-        Data: JSON.stringify(self.json, null, 0),
-        PartitionKey: self.partition_key,
-        StreamName: self.stream_name,
-    }, (error, data) => {
+    const d = {
+        Message: JSON.stringify(self.json, null, 0),
+        MessageStructure: 'json',
+    }
+
+    if (_.is.String(self.to_topic)) {
+        d.TopicArn = self.to_topic;
+    } else if (_.is.String(self.to_target)) {
+        d.TargetArn = self.to_target;
+    }  else {
+        assert(false, `${method}: self.to_topic or self.to_target is required`)
+    }
+
+    self.sns.publish(d, (error, data) => {
         if (error) {
             return done(error);
         }
+
+        self.aws_result = data;
 
         done(null, self);
     })
