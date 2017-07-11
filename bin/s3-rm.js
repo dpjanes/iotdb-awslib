@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /**
- *  s3-ls.js
+ *  s3-rm.js
  *
  *  David Janes
  *  IOTDB
- *  2017-06-13
+ *  2017-07-05
  *
  *  Copyright (2013-2017) David Janes
  */
@@ -27,25 +27,20 @@ const awsd = {
 }
 
 const ad = minimist(process.argv.slice(2), {
-    binary: [ "download", "json", "recursive" ],
+    boolean: [ "recursive", ],
 });
-
-const action = (name) => ad._.indexOf(name) > -1;
 
 ad._.forEach(s3_path => {
     Q({
         awsd: awsd,
         path: s3_path,
-        recursive: ad.recursive,
     })
         .then(aws.initialize)
         .then(aws.s3.initialize)
         .then(aws.s3.parse_path)
-        .then(aws.s3.list_objects)
+        .then(aws.s3.delete_object)
         .then(_sd => {
-            _sd.paths.forEach(s3_path2 => {
-                console.log(`s3://${_sd.bucket}/${s3_path2}`)
-            })
+            console.log("+", "removed:", s3_path)
         })
         .catch(error => {
             console.log("#", _.error.message(error))

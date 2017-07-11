@@ -17,3 +17,4 @@ exports.sqs = require("./sqs");
 exports.lambda = require("./lambda");
 exports.dynamodb = require("./dynamodb");
 exports.kinesis = require("./kinesis");
+exports.sns = require("./sns");

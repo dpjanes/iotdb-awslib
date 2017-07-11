@@ -39,6 +39,49 @@ const list_objects = (_self, done) => {
         }
     }
 
+    const level = split(prefix).length + 1;
+    let keys = []
+    let token = null;
+
+    const _fetch = () => {
+        self.s3.listObjectsV2({
+            Bucket: self.bucket,
+            Prefix: prefix,
+            ContinuationToken: token,
+        }, (error, data) => {
+            if (error) {
+                return done(error);
+            }
+
+            keys = keys.concat(
+                data.Contents.map(cd => cd.Key)
+                    .filter(name => split(name).length >= level)
+                    .map(name => self.recursive ? name : split(name).slice(0, level).join("/"))
+            )
+
+            if (data.IsTruncated) {
+                assert.ok(data.NextContinuationToken, `${method}: expected a ContinuationToken????`)
+                token = data.NextContinuationToken;
+                process.nextTick(_fetch)
+
+                return;
+            }
+
+            self.paths = _.uniq(keys.sort())
+            self.keys = self.paths;
+
+            done(null, self);
+        });
+    }
+
+    _fetch()
+
+
+/*
+
+
+    ContinuationToken
+
     self.s3.listObjectsV2({
         Bucket: self.bucket,
         Prefix: prefix,
@@ -61,6 +104,7 @@ const list_objects = (_self, done) => {
 
         done(null, self);
     });
+    */
 }
 
 /**
