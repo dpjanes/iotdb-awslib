@@ -44,7 +44,7 @@ if (action("publish")) {
         json: {
             "default": _.timestamp.make(),
         },
-        // to_topic: "arn:aws:sns:us-east-1:061177153071:test-1",
+        to_topic: "arn:aws:sns:us-east-1:061177153071:test-1",
     })
         .then(aws.initialize)
         .then(aws.sns.initialize)

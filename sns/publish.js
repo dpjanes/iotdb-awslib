@@ -28,8 +28,17 @@ const publish = (_self, done) => {
     assert.ok(_.is.JSON(self.json), `${method}: self.json must be a JSONable Object`);
 
     const d = {
-        Message: JSON.stringify(self.json, null, 0),
         MessageStructure: 'json',
+    }
+
+    if (_.is.JSON(self.json)) {
+        d.Message = JSON.stringify(self.json, null, 0)
+    } else if (_.is.String(self.document)) {
+        d.Message = JSON.stringify({
+            default: self.document,
+        }, null, 0)
+    } else {
+        assert(false, `${method}: self.json or self.document is required`)
     }
 
     if (_.is.String(self.to_topic)) {
