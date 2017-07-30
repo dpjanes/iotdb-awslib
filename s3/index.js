@@ -17,6 +17,7 @@ module.exports = Object.assign(
     require("./delete_bucket"),
     require("./delete_bucket_objects"),
     require("./delete_object"),
+    require("./get_json"),
     require("./get_object"),
     require("./head_object"),
     require("./initialize"),
