@@ -34,13 +34,13 @@ if (action("initialize")) {
     })
         .then(aws.initialize)
         .then(aws.dynamodb.initialize)
-        .then(_self => console.log("+", "ok"))
+        .then(sd => console.log("+", "ok"))
         .catch(error => console.log("#", _.error.message(error)))
 }
 
 if (action("create-table")) {
     Q({
-        aws: awsd,
+        awsd: awsd,
         table_name: "movies",
         partition_key: "#year",
         sort_key: "title",
@@ -49,13 +49,13 @@ if (action("create-table")) {
         .then(aws.initialize)
         .then(aws.dynamodb.initialize)
         .then(aws.dynamodb.create_table)
-        .then(_self => console.log("+", "ok"))
+        .then(sd => console.log("+", "ok"))
         .catch(error => console.log("#", _.error.message(error)))
 }
 
 if (action("create-table-wait")) {
     Q({
-        aws: awsd,
+        awsd: awsd,
         table_name: "movies",
         partition_key: "#year",
         sort_key: "title",
@@ -65,25 +65,25 @@ if (action("create-table-wait")) {
         .then(aws.dynamodb.initialize)
         .then(aws.dynamodb.create_table)
         .then(aws.dynamodb.wait_table_exists)
-        .then(_self => console.log("+", "ok"))
+        .then(sd => console.log("+", "ok"))
         .catch(error => console.log("#", _.error.message(error)))
 }
 
 if (action("delete-table")) {
     Q({
-        aws: awsd,
+        awsd: awsd,
         table_name: "movies",
     })
         .then(aws.initialize)
         .then(aws.dynamodb.initialize)
         .then(aws.dynamodb.delete_table)
-        .then(_self => console.log("+", "ok"))
+        .then(sd => console.log("+", "ok"))
         .catch(error => console.log("#", _.error.message(error)))
 }
 
 if (action("put")) {
     Q({
-        aws: awsd,
+        awsd: awsd,
         table_name: "movies",
         json: {
             year: 1999,
@@ -94,14 +94,14 @@ if (action("put")) {
         .then(aws.initialize)
         .then(aws.dynamodb.initialize)
         .then(aws.dynamodb.put)
-        .then(_self => console.log("+", "ok"))
+        .then(sd => console.log("+", "ok"))
         .catch(error => console.log("#", _.error.message(error)))
 }
 
 
 if (action("get")) {
     Q({
-        aws: awsd,
+        awsd: awsd,
         table_name: "movies",
         query: {
             year: 1999,
@@ -111,13 +111,13 @@ if (action("get")) {
         .then(aws.initialize)
         .then(aws.dynamodb.initialize)
         .then(aws.dynamodb.get)
-        .then(_self => console.log("+", "ok", _self.json))
+        .then(sd => console.log("+", "ok", sd.json))
         .catch(error => console.log("#", _.error.message(error)))
 }
 
 if (action("query-simple")) {
     Q({
-        aws: awsd,
+        awsd: awsd,
         table_name: "movies",
         query: {
             year: 1999,
@@ -127,13 +127,13 @@ if (action("query-simple")) {
         .then(aws.initialize)
         .then(aws.dynamodb.initialize)
         .then(aws.dynamodb.query_simple)
-        .then(_self => console.log("+", "ok", _self.jsons))
+        .then(sd => console.log("+", "ok", sd.jsons))
         .catch(error => console.log("#", _.error.message(error)))
 }
 
 if (action("scan-simple")) {
     Q({
-        aws: awsd,
+        awsd: awsd,
         table_name: "movies",
         query: {
             title: "The Matrix",
@@ -143,7 +143,100 @@ if (action("scan-simple")) {
         .then(aws.initialize)
         .then(aws.dynamodb.initialize)
         .then(aws.dynamodb.scan_simple)
-        .then(_self => console.log("+", "ok", _self.jsons))
+        .then(sd => console.log("+", "ok", sd.jsons))
         .catch(error => console.log("#", _.error.message(error)))
+}
+
+if (action("page-all")) {
+    const _run = pager => {
+        Q({
+            awsd: awsd,
+            table_name: "ledger",
+            query_limit: 5,
+            pager: pager,
+        })
+            .then(aws.initialize)
+            .then(aws.dynamodb.initialize)
+            .then(aws.dynamodb.all)
+            .then(sd => {
+                console.log("+", "ok", JSON.stringify(sd.jsons.map(l => l.ledger_id), null, 2))
+                // console.log("+", "ok", JSON.stringify(sd.jsons.map(l => l.user_id), null, 2))
+                console.log("+", "pager", sd.pager)
+                // console.log("+", "pager", _.id.unpack(sd.pager))
+                
+                if (sd.pager) {
+                    process.nextTick(() => {
+                        _run(sd.pager)
+                    })
+                }
+            })
+            .catch(error => console.log("#", _.error.message(error)))
+    }
+
+    _run()
+}
+
+if (action("page-scan")) {
+    const _run = pager => {
+        Q({
+            awsd: awsd,
+            table_name: "ledger",
+            query_limit: 5,
+            pager: pager,
+            query: {
+                "user_id": "urn:consensas:user:Q-SVYoHm7E",
+            }
+        })
+            .then(aws.initialize)
+            .then(aws.dynamodb.initialize)
+            .then(aws.dynamodb.scan_simple)
+            .then(sd => {
+                console.log("+", "ok", JSON.stringify(sd.jsons.map(l => l.ledger_id), null, 2))
+                console.log("+", "pager", sd.pager)
+                // console.log("+", "pager", _.id.unpack(sd.pager))
+                
+                if (sd.pager) {
+                    process.nextTick(() => {
+                        _run(sd.pager)
+                    })
+                }
+            })
+            .catch(error => console.log("#", _.error.message(error)))
+    }
+
+    _run()
+}
+
+
+if (action("page-query")) {
+    const _run = pager => {
+        Q({
+            awsd: awsd,
+            table_name: "snapshot",
+            index_name: "user_id-created-index",
+            query_limit: 5,
+            pager: pager,
+            query: {
+                "user_id": "urn:consensas:user:Q-SVYoHm7E",
+            }
+        })
+            .then(aws.initialize)
+            .then(aws.dynamodb.initialize)
+            .then(aws.dynamodb.query_simple)
+            .then(sd => {
+                console.log("+", "ok", JSON.stringify(sd.jsons.map(l => l.ledger_id), null, 2))
+                console.log("+", "pager", sd.pager)
+                // console.log("+", "pager", _.id.unpack(sd.pager))
+                
+                if (sd.pager) {
+                    process.nextTick(() => {
+                        _run(sd.pager)
+                    })
+                }
+            })
+            .catch(error => console.log("#", _.error.message(error)))
+    }
+
+    _run()
 }
 

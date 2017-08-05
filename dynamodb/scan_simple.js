@@ -20,8 +20,9 @@ const Q = require("bluebird-q");
 const util = require("./util");
 
 /**
- *  Accepts: 
- *  Produces:
+ *  Requires: self.dynamodb_client, self.table_name, self.query
+ *  Acepts: self.pager, self.query_limit, self.query_attributes
+ *  Produces: self.json, self.jsons, self.pager
  */
 const scan_simple = (_self, done) => {
     const self = _.d.clone.shallow(_self);
@@ -32,6 +33,8 @@ const scan_simple = (_self, done) => {
     assert.ok(_.is.JSON(self.query), `${method}: self.query must be a JSON-like object`);
     assert.ok(_.is.Array.of.String(self.query_attributes) || !self.query_attributes, 
         `${method}: self.query_attributes must be Null or an Array of String`);
+    assert.ok(_.is.String(self.pager) || _.is.Nullish(self.pager), `${method}: self.pager must be a String or Nullish`);
+    assert.ok(_.is.Integer(self.query_limit) || _.is.Nullish(self.query_limit), `${method}: self.query_limit must be an Integer or Nullish`);
 
     const FilterExpression = [];
     const ExpressionAttributeNames = {};
@@ -66,6 +69,10 @@ const scan_simple = (_self, done) => {
         ProjectionExpression: ProjectionExpression,
         Limit: self.query_limit ? self.query_limit : null,
     };
+
+    if (self.pager) {
+        initd.ExclusiveStartKey = _.id.unpack(self.pager)
+    }
     
     self.dynamodb_client.scan(initd, (error, data) => {
         if (error) {
@@ -84,6 +91,12 @@ const scan_simple = (_self, done) => {
         }
 
         self.aws_result = data;
+
+        if (data.LastEvaluatedKey) {
+            self.pager = _.id.pack(data.LastEvaluatedKey);
+        } else {
+            self.pager = null;
+        }
 
         done(null, self);
     })
