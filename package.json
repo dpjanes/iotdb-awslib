@@ -1,6 +1,7 @@
 {
     "author": "David Janes <davidjanes@davidjanes.com>", 
     "bin": {
+        "dynamodb-export": "./bin/dynamodb-export.js", 
         "dynamodb-get": "./bin/dynamodb-get.js", 
         "s3-cat": "./bin/s3-cat.js", 
         "s3-ls": "./bin/s3-ls.js", 
@@ -13,6 +14,7 @@
         "aws-sdk": "~2.94.0", 
         "bluebird-q": "~2.1.1", 
         "iotdb-errors": "~3.0.5", 
+        "iotdb-fs": "~1.0.2", 
         "iotdb-helpers": "~3.0.37"
     }, 
     "description": "IOTDB AWS Promise Functions", 
@@ -37,5 +39,5 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     }, 
-    "version": "1.0.31"
+    "version": "1.0.32"
 }
