@@ -98,6 +98,26 @@ if (action("put")) {
         .catch(error => console.log("#", _.error.message(error)))
 }
 
+if (action("replace-fail")) {
+    Q({
+        awsd: awsd,
+        table_name: "movies",
+        query: {
+            year: 1999,
+            title: _.timestamp.make(),
+        },
+        json: {
+            year: 1999,
+            title: "The Matrix 3D",
+        },
+    })
+        .then(aws.initialize)
+        .then(aws.dynamodb.initialize)
+        .then(aws.dynamodb.replace)
+        .then(sd => console.log("+", "ok"))
+        .catch(error => console.log("#", _.error.message(error)))
+}
+
 
 if (action("get")) {
     Q({
