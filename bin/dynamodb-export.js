@@ -72,7 +72,7 @@ Q({
 
         return sd;
     })
-    .then(fs.write.mkdir.parent)
+    .then(fs.mkdir.parent)
     .then(fs.write.json)
     .then(sd => {
         console.log("+", "#items", sd.result.items.length)
@@ -83,26 +83,3 @@ Q({
         console.log("ERROR", error)
         console.log("#", _.error.message(error))
     })
-
-    /*
-
-    .then(_sd => {
-        const sd = _.d.clone.shallow(_sd)
-        sd.query = {
-            [ _sd.table.KeySchema[0].AttributeName ]: primary_key,
-        }
-
-        // console.log(JSON.stringify(_sd.table, null, 2))
-        return sd;
-    })
-    .then(aws.dynamodb.get)
-    .then(_sd => {
-        const sd = _.d.clone.shallow(_sd)
-        console.log(JSON.stringify(sd.json, null, 2))
-        return sd;
-    })
-    .catch(error => {
-        console.log("ERROR", error)
-        console.log("#", _.error.message(error))
-    })
-    */

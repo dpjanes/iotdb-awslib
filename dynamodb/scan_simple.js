@@ -22,7 +22,7 @@ const util = require("./util");
 /**
  *  Requires: self.dynamodb_client, self.table_name, self.query
  *  Acepts: self.pager, self.query_limit, self.query_attributes
- *  Produces: self.json, self.jsons, self.pager
+ *  Produces: self.json, self.jsons, self.cursor
  */
 const scan_simple = (_self, done) => {
     const self = _.d.clone.shallow(_self);
@@ -92,10 +92,23 @@ const scan_simple = (_self, done) => {
 
         self.aws_result = data;
 
-        if (data.LastEvaluatedKey) {
-            self.pager = _.id.pack(data.LastEvaluatedKey);
-        } else {
-            self.pager = null;
+        if (self.query_limit) {
+            self.cursor = {
+                current: self.pager || null,
+                next: null,
+
+                is_first: self.pager ? true : false,
+                is_last: null,
+                has_next: null,
+            }
+
+            if (data.LastEvaluatedKey) {
+                self.cursor.next = _.id.pack(data.LastEvaluatedKey);
+                self.cursor.has_next = true;
+            } else {
+                self.cursor.next = null;
+                self.cursor.is_last = true;
+            }
         }
 
         done(null, self);

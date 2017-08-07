@@ -17,7 +17,7 @@
         "iotdb-fs": "~1.0.2", 
         "iotdb-helpers": "~3.0.37"
     }, 
-    "description": "IOTDB AWS Promise Functions", 
+    "description": "POP AWS", 
     "devDependencies": {
         "grunt": "~1.0.1", 
         "grunt-contrib-jshint": "~1.1.0", 
