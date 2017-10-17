@@ -41,7 +41,7 @@ if (action("send")) {
     _.promise.make({
         awsd: awsd,
 
-        from: "davidjanes@gmail.com",
+        from: "david@consensas.com",
         to: "davidjanes@davidjanes.com",
         subject: "Test Message - メリークリスマス",
         document: "Hello, World - 明けましておめでとうございます",
