@@ -78,6 +78,7 @@ const delete_bucket_objects = (_self, done) => {
                         }, "deleted bucket object")
 
                         counter.decrement();
+                        return null;
                     })
                     .catch(error => {
                         logger.error({
@@ -92,8 +93,12 @@ const delete_bucket_objects = (_self, done) => {
             })
 
             counter.decrement();
+            return null;
         })
-        .then(() => counter.decrement())
+        .then(() => {
+            counter.decrement()
+            return null;
+        })
         .catch(error => counter.decrement(error));
 }
 
