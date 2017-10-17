@@ -14,7 +14,6 @@ const _ = require("iotdb-helpers");
 
 const assert = require("assert");
 
-const Q = require("bluebird-q");
 
 /**
  *  Accepts: self.kinesis, self.json, self.stream_name, self.partition_key
@@ -45,4 +44,4 @@ const send_json = (_self, done) => {
 /**
  *  API
  */
-exports.send_json = Q.denodeify(send_json);
+exports.send_json = _.promise.denodeify(send_json);

@@ -15,7 +15,6 @@ const _ = require("iotdb-helpers");
 const assert = require("assert");
 
 const AWS = require("aws-sdk");
-const Q = require("bluebird-q");
 const minimist = require('minimist');
 
 const aws = require("../index");
@@ -29,7 +28,7 @@ const ad = minimist(process.argv.slice(2));
 const action = (name) => ad._.indexOf(name) > -1;
 
 if (action("initialize")) {
-    Q({
+    _.promise.make({
         awsd: awsd,
     })
         .then(aws.initialize)
@@ -39,13 +38,30 @@ if (action("initialize")) {
 }
 
 if (action("send")) {
-    Q({
+    _.promise.make({
         awsd: awsd,
 
         from: "davidjanes@gmail.com",
         to: "davidjanes@davidjanes.com",
-        subject: "Test Message",
-        document: "Hello, World",
+        subject: "Test Message - メリークリスマス",
+        document: "Hello, World - 明けましておめでとうございます",
+    })
+        .then(aws.initialize)
+        .then(aws.ses.initialize)
+        .then(aws.ses.send)
+        .then(_self => console.log("+", "ok", _self.stream_name))
+        .catch(error => console.log("#", _.error.message(error)))
+}
+
+if (action("send-html")) {
+    _.promise.make({
+        awsd: awsd,
+
+        from: "david@consensas.com",
+        tos: [ "davidjanes@davidjanes.com", "ryan@consensas.com", ],
+        subject: "Test Message - メリークリスマス",
+        document: "<p>Hello, World</p><p>明けましておめでとうございます</p>",
+        document_media_type: "text/html",
     })
         .then(aws.initialize)
         .then(aws.ses.initialize)

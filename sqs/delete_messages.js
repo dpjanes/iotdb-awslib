@@ -14,7 +14,6 @@ const _ = require("iotdb-helpers");
 
 const assert = require("assert");
 
-const Q = require("bluebird-q");
 const async = require("async");
 
 /**
@@ -47,4 +46,4 @@ const requeue_messages = (_self, done) => {
 /**
  *  API
  */
-exports.requeue_messages = Q.denodeify(requeue_messages);
+exports.requeue_messages = _.promise.denodeify(requeue_messages);

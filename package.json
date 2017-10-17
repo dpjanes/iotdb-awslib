@@ -11,23 +11,24 @@
         "url": "https://github.com/dpjanes/iotdb-awslib/issues"
     }, 
     "dependencies": {
-        "aws-sdk": "~2.94.0", 
-        "bluebird-q": "~2.1.1", 
-        "iotdb-errors": "~3.0.5", 
-        "iotdb-fs": "~1.0.2", 
-        "iotdb-helpers": "~3.0.37"
+        "async": "~2.5.0", 
+        "aws-sdk": "~2.134.0", 
+        "iotdb-errors": "~3.0.6", 
+        "iotdb-fs": "~1.0.9", 
+        "iotdb-helpers": "~3.1.6", 
+        "mime": "~2.0.3"
     }, 
-    "description": "POP AWS", 
+    "description": "Pipe-orient programming AWS", 
     "devDependencies": {
         "grunt": "~1.0.1", 
         "grunt-contrib-jshint": "~1.1.0", 
         "grunt-contrib-nodeunit": "~1.0.0", 
-        "grunt-contrib-uglify": "~3.0.1", 
+        "grunt-contrib-uglify": "~3.1.0", 
         "grunt-contrib-watch": "~1.0.0", 
         "grunt-jsbeautifier": "~0.2.13", 
         "jshint-stylish": "~2.2.1", 
         "load-grunt-tasks": "~3.5.2", 
-        "request": "~2.81.0"
+        "request": "~2.83.0"
     }, 
     "license": "ISC", 
     "main": "index.js", 

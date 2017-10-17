@@ -14,11 +14,13 @@ const _ = require("iotdb-helpers");
 
 const assert = require("assert");
 
-const Q = require("bluebird-q");
 
 /**
- *  Accepts: self.ses, self.json, self.email_from, self.partition_key
- *  Produces: N/A
+ *  Requires: self.ses, 
+ *  Produces: self.aws_result
+ *
+ *  If attachments are implemented, they should be an array of
+ *  { document, document_media_type, document_name }
  */
 const send = (_self, done) => {
     const self = _.d.clone.shallow(_self);
@@ -62,10 +64,11 @@ const send = (_self, done) => {
     }
 
     self.ses.sendEmail(message, (error, data) => {
-        console.log(JSON.stringify(message, null, 2))
         if (error) {
             return done(error);
         }
+
+        self.aws_result = data;
 
         done(null, self);
     });
@@ -74,4 +77,4 @@ const send = (_self, done) => {
 /**
  *  API
  */
-exports.send = Q.denodeify(send);
+exports.send = _.promise.denodeify(send);

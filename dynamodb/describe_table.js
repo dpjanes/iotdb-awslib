@@ -15,7 +15,6 @@ const _ = require("iotdb-helpers");
 const assert = require("assert");
 
 const AWS = require("aws-sdk");
-const Q = require("bluebird-q");
 
 /**
  *  Accepts: self.table_name
@@ -45,4 +44,4 @@ const describe_table = (_self, done) => {
 /**
  *  API
  */
-exports.describe_table = Q.denodeify(describe_table);
+exports.describe_table = _.promise.denodeify(describe_table);

@@ -15,7 +15,6 @@ const _ = require("iotdb-helpers");
 const assert = require("assert");
 
 const AWS = require("aws-sdk");
-const Q = require("bluebird-q");
 const minimist = require('minimist');
 
 const aws = require("../index");
@@ -28,7 +27,7 @@ const ad = minimist(process.argv.slice(2));
 const action = (name) => ad._.indexOf(name) > -1;
 
 if (1) {
-    Q({
+    _.promise.make({
         awsd: awsd,
     })
         .then(aws.initialize)
@@ -40,7 +39,7 @@ if (1) {
                 .forEach(bucket => {
                     console.log("+", "delete bucket and everything in it", bucket);
 
-                    Q(_self)
+                    _.promise.make(_self)
                         .then(sd => _.d.add(sd, "bucket", bucket))
                         .then(sd => _.d.add(sd, "key", ""))
                         .then(aws.s3.delete_bucket_objects)

@@ -16,7 +16,6 @@ const assert = require("assert");
 const url = require("url");
 
 const AWS = require("aws-sdk");
-const Q = require("bluebird-q");
 
 /**
  *  Accepts: 
@@ -41,4 +40,4 @@ const parse_path = (_self, done) => {
 /**
  *  API
  */
-exports.parse_path = Q.denodeify(parse_path);
+exports.parse_path = _.promise.denodeify(parse_path);

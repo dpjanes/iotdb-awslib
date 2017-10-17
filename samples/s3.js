@@ -15,7 +15,6 @@ const _ = require("iotdb-helpers");
 const assert = require("assert");
 
 const AWS = require("aws-sdk");
-const Q = require("bluebird-q");
 const minimist = require('minimist');
 
 const aws = require("../index");
@@ -29,7 +28,7 @@ const action = (name) => ad._.indexOf(name) > -1;
 
 // create bucket
 if (action("create-bucket")) {
-    Q({
+    _.promise.make({
         awsd: awsd,
         bucket: "consensas-test1",
     })
@@ -42,7 +41,7 @@ if (action("create-bucket")) {
 
 // list buckets
 if (action("list-buckets")) {
-    Q({
+    _.promise.make({
         aws: awsd,
     })
         .then(aws.initialize)
@@ -54,7 +53,7 @@ if (action("list-buckets")) {
 
 // upload JSON
 if (action("upload-json")) {
-    Q({
+    _.promise.make({
         aws: awsd,
 
         bucket: "consensas-test1",
@@ -72,7 +71,7 @@ if (action("upload-json")) {
 
 // upload document
 if (action("upload-document")) {
-    Q({
+    _.promise.make({
         aws: awsd,
 
         bucket: "consensas-test1",
@@ -88,7 +87,7 @@ if (action("upload-document")) {
 
 // delete object
 if (action("delete-objct")) {
-    Q({
+    _.promise.make({
         aws: awsd,
 
         bucket: "consensas-test1",
@@ -103,7 +102,7 @@ if (action("delete-objct")) {
 
 // list files
 if (action("list-objects")) {
-    Q({
+    _.promise.make({
         aws: awsd,
         bucket: "consensas-test1",
         key: "eLyccgRz",
@@ -117,7 +116,7 @@ if (action("list-objects")) {
 
 // list files
 if (action("list-objects-recursive")) {
-    Q({
+    _.promise.make({
         aws: awsd,
         bucket: "consensas-test1",
         key: "eLyccgRz",
@@ -132,7 +131,7 @@ if (action("list-objects-recursive")) {
 
 // head files
 if (action("head-object")) {
-    Q({
+    _.promise.make({
         aws: awsd,
         bucket: "consensas-test1",
         key: "name.jsonx",
@@ -147,7 +146,7 @@ if (action("head-object")) {
 
 // object exists
 if (action("object-exists")) {
-    Q({
+    _.promise.make({
         aws: awsd,
         bucket: "consensas-test1",
         key: "name.json",
@@ -162,7 +161,7 @@ if (action("object-exists")) {
 
 // object exists using path
 if (action("object-exists-with-path")) {
-    Q({
+    _.promise.make({
         aws: awsd,
         path: "s3://consensas-test1/name.json",
     })

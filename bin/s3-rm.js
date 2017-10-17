@@ -18,7 +18,6 @@ const path = require("path");
 const fs = require("fs");
 
 const AWS = require("aws-sdk");
-const Q = require("bluebird-q");
 const minimist = require('minimist');
 
 const aws = require("../index");
@@ -31,7 +30,7 @@ const ad = minimist(process.argv.slice(2), {
 });
 
 ad._.forEach(s3_path => {
-    Q({
+    _.promise.make({
         awsd: awsd,
         path: s3_path,
     })

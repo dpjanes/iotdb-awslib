@@ -15,7 +15,6 @@ const _ = require("iotdb-helpers");
 const assert = require("assert");
 
 const AWS = require("aws-sdk");
-const Q = require("bluebird-q");
 
 const aws = {
     s3: {
@@ -31,7 +30,7 @@ const get_json = (_self, done) => {
     const self = _.d.clone.shallow(_self);
     const method = "s3.get_json";
 
-    Q(self)
+    _.promise.make(self)
         .then(aws.s3.get_object)
         .then(sd => {
             self.aws_result = sd.aws_result;
@@ -50,4 +49,4 @@ const get_json = (_self, done) => {
 /**
  *  API
  */
-exports.get_json = Q.denodeify(get_json);
+exports.get_json = _.promise.denodeify(get_json);

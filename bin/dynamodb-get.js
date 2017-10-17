@@ -18,7 +18,6 @@ const path = require("path");
 const fs = require("fs");
 
 const AWS = require("aws-sdk");
-const Q = require("bluebird-q");
 const minimist = require('minimist');
 
 const aws = require("../index");
@@ -42,7 +41,7 @@ const primary_key = ad._[1]
 
 awsd.region = ad.region || awsd.region;
 
-Q({
+_.promise.make({
     awsd: awsd,
     table_name: table_name,
 })

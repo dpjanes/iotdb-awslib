@@ -15,7 +15,6 @@ const _ = require("iotdb-helpers");
 const assert = require("assert");
 
 const AWS = require("aws-sdk");
-const Q = require("bluebird-q");
 
 const util = require("./util");
 
@@ -129,4 +128,4 @@ const query_simple = (_self, done) => {
 /**
  *  API
  */
-exports.query_simple = Q.denodeify(query_simple);
+exports.query_simple = _.promise.denodeify(query_simple);

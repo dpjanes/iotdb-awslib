@@ -14,7 +14,6 @@ const _ = require("iotdb-helpers");
 
 const assert = require("assert");
 
-const Q = require("bluebird-q");
 
 /**
  *  Accepts: self.sns, self.json, self.to_topic | self.to_target 
@@ -63,4 +62,4 @@ const publish = (_self, done) => {
 /**
  *  API
  */
-exports.publish = Q.denodeify(publish);
+exports.publish = _.promise.denodeify(publish);

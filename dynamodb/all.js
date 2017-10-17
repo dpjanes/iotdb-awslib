@@ -15,7 +15,6 @@ const _ = require("iotdb-helpers");
 const assert = require("assert");
 
 const AWS = require("aws-sdk");
-const Q = require("bluebird-q");
 
 const util = require("./util");
 
@@ -88,4 +87,4 @@ const all = (_self, done) => {
 /**
  *  API
  */
-exports.all = Q.denodeify(all);
+exports.all = _.promise.denodeify(all);

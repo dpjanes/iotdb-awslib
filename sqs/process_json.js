@@ -15,7 +15,6 @@ const _ = require("iotdb-helpers");
 const assert = require("assert");
 
 const AWS = require("aws-sdk");
-const Q = require("bluebird-q");
 
 /**
  *  Accepts: 
@@ -43,14 +42,14 @@ const process_json = (_self, done) => {
     done(null, self);
 
     const _do_one = () => {
-        Q(self)
+        _.promise.make(self)
             .then(receive_json)
             .then(message_self => {
-                Q(message_self)
+                _.promise.make(message_self)
                     .then(self.handle_message)
                     .catch(self.handle_error)
                     .done(() => {
-                        Q(message_self)
+                        _.promise.make(message_self)
                             .then(delete_message);
 
                         process.nextTick(_do_one)
@@ -66,4 +65,4 @@ const process_json = (_self, done) => {
 /**
  *  API
  */
-exports.process_json = Q.denodeify(process_json);
+exports.process_json = _.promise.denodeify(process_json);

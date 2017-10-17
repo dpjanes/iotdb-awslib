@@ -14,7 +14,6 @@ const _ = require("iotdb-helpers");
 
 const assert = require("assert");
 
-const Q = require("bluebird-q");
 
 /**
  *  Accepts: self.sns, self.document, self.to_phone
@@ -47,4 +46,4 @@ const publish_sms = (_self, done) => {
 /**
  *  API
  */
-exports.publish_sms = Q.denodeify(publish_sms);
+exports.publish_sms = _.promise.denodeify(publish_sms);

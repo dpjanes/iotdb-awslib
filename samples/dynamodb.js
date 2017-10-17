@@ -15,7 +15,6 @@ const _ = require("iotdb-helpers");
 const assert = require("assert");
 
 const AWS = require("aws-sdk");
-const Q = require("bluebird-q");
 const minimist = require('minimist');
 
 const aws = require("../index");
@@ -29,7 +28,7 @@ const ad = minimist(process.argv.slice(2));
 const action = (name) => ad._.indexOf(name) > -1;
 
 if (action("initialize")) {
-    Q({
+    _.promise.make({
         awsd: awsd,
     })
         .then(aws.initialize)
@@ -39,7 +38,7 @@ if (action("initialize")) {
 }
 
 if (action("create-table")) {
-    Q({
+    _.promise.make({
         awsd: awsd,
         table_name: "movies",
         partition_key: "#year",
@@ -54,7 +53,7 @@ if (action("create-table")) {
 }
 
 if (action("create-table-wait")) {
-    Q({
+    _.promise.make({
         awsd: awsd,
         table_name: "movies",
         partition_key: "#year",
@@ -70,7 +69,7 @@ if (action("create-table-wait")) {
 }
 
 if (action("delete-table")) {
-    Q({
+    _.promise.make({
         awsd: awsd,
         table_name: "movies",
     })
@@ -82,7 +81,7 @@ if (action("delete-table")) {
 }
 
 if (action("put")) {
-    Q({
+    _.promise.make({
         awsd: awsd,
         table_name: "movies",
         json: {
@@ -99,7 +98,7 @@ if (action("put")) {
 }
 
 if (action("replace-fail")) {
-    Q({
+    _.promise.make({
         awsd: awsd,
         table_name: "movies",
         query: {
@@ -120,7 +119,7 @@ if (action("replace-fail")) {
 
 
 if (action("get")) {
-    Q({
+    _.promise.make({
         awsd: awsd,
         table_name: "movies",
         query: {
@@ -136,7 +135,7 @@ if (action("get")) {
 }
 
 if (action("query-simple")) {
-    Q({
+    _.promise.make({
         awsd: awsd,
         table_name: "movies",
         query: {
@@ -152,7 +151,7 @@ if (action("query-simple")) {
 }
 
 if (action("scan-simple")) {
-    Q({
+    _.promise.make({
         awsd: awsd,
         table_name: "movies",
         query: {
@@ -169,7 +168,7 @@ if (action("scan-simple")) {
 
 if (action("page-all")) {
     const _run = pager => {
-        Q({
+        _.promise.make({
             awsd: awsd,
             table_name: "ledger",
             query_limit: 5,
@@ -198,13 +197,13 @@ if (action("page-all")) {
 
 if (action("page-scan")) {
     const _run = pager => {
-        Q({
+        _.promise.make({
             awsd: awsd,
             table_name: "ledger",
             query_limit: 5,
             pager: pager,
             query: {
-                "user_id": "urn:consensas:user:Q-SVYoHm7E",
+                "user_id": "urn:consensas:user:_.promise.make-SVYoHm7E",
             }
         })
             .then(aws.initialize)
@@ -230,14 +229,14 @@ if (action("page-scan")) {
 
 if (action("page-query")) {
     const _run = pager => {
-        Q({
+        _.promise.make({
             awsd: awsd,
             table_name: "snapshot",
             index_name: "user_id-created-index",
             query_limit: 5,
             pager: pager,
             query: {
-                "user_id": "urn:consensas:user:Q-SVYoHm7E",
+                "user_id": "urn:consensas:user:_.promise.make-SVYoHm7E",
             }
         })
             .then(aws.initialize)

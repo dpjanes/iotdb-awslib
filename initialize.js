@@ -15,7 +15,6 @@ const _ = require("iotdb-helpers");
 const assert = require("assert");
 
 const AWS = require("aws-sdk");
-const Q = require("bluebird-q");
 
 /**
  *  Accepts: self.awsd
@@ -47,4 +46,4 @@ const initialize = (_self, done) => {
 /**
  *  API
  */
-exports.initialize = Q.denodeify(initialize);
+exports.initialize = _.promise.denodeify(initialize);

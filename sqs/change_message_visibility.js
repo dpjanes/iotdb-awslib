@@ -15,7 +15,6 @@ const _ = require("iotdb-helpers");
 const assert = require("assert");
 
 const AWS = require("aws-sdk");
-const Q = require("bluebird-q");
 
 /**
  *  Accepts: self.sqs, self.message, self.queue_url, self.timeout (seconds)
@@ -49,4 +48,4 @@ const change_message_visibility = (_self, done) => {
 /**
  *  API
  */
-exports.change_message_visibility = Q.denodeify(change_message_visibility);
+exports.change_message_visibility = _.promise.denodeify(change_message_visibility);

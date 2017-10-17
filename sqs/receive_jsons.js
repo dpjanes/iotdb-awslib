@@ -14,7 +14,6 @@ const _ = require("iotdb-helpers");
 
 const assert = require("assert");
 
-const Q = require("bluebird-q");
 const async = require("async");
 
 /**
@@ -73,4 +72,4 @@ const receive_jsons = (_self, done) => {
 /**
  *  API
  */
-exports.receive_jsons = Q.denodeify(receive_jsons);
+exports.receive_jsons = _.promise.denodeify(receive_jsons);

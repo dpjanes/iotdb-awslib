@@ -15,7 +15,6 @@ const _ = require("iotdb-helpers");
 const assert = require("assert");
 
 const AWS = require("aws-sdk");
-const Q = require("bluebird-q");
 const minimist = require('minimist');
 
 const aws = require("../index");
@@ -29,7 +28,7 @@ const ad = minimist(process.argv.slice(2));
 const action = (name) => ad._.indexOf(name) > -1;
 
 if (action("initialize")) {
-    Q({
+    _.promise.make({
         awsd: awsd,
     })
         .then(aws.initialize)
@@ -39,7 +38,7 @@ if (action("initialize")) {
 }
 
 if (action("list-queues")) {
-    Q({
+    _.promise.make({
         aws: awsd,
     })
         .then(aws.initialize)
@@ -50,7 +49,7 @@ if (action("list-queues")) {
 }
 
 if (action("get-queue-url")) {
-    Q({
+    _.promise.make({
         aws: awsd,
         queue_name: "test1",
     })
@@ -62,7 +61,7 @@ if (action("get-queue-url")) {
 }
 
 if (action("send-json")) {
-    Q({
+    _.promise.make({
         aws: awsd,
         queue_name: "test1",
         json: _.timestamp.add({ "a": "Message", "ledger_id": "urn:iotdb:ledger:ZBm22eUo" }),
@@ -76,10 +75,10 @@ if (action("send-json")) {
 }
 
 if (action("process-json")) {
-    Q({
+    _.promise.make({
         aws: awsd,
         queue_name: "test1",
-        handle_message: Q.denodeify((_self, done) => {
+        handle_message: _.promise.denodeify((_self, done) => {
             console.log("+", "MESSAGE", JSON.stringify(_self.json, null, 2));
             done(null, _self);
         }),

@@ -15,7 +15,6 @@ const _ = require("iotdb-helpers");
 const assert = require("assert");
 
 const AWS = require("aws-sdk");
-const Q = require("bluebird-q");
 
 const logger = require("../logger")(__filename);
 
@@ -56,7 +55,7 @@ const delete_bucket_objects = (_self, done) => {
     })
     counter.increment();
 
-    Q(self)
+    _.promise.make(self)
         .then(sd => _.d.add(sd, "recursive", true))
         .then(aws.s3.list_objects)
         .then(_sd => {
@@ -68,7 +67,7 @@ const delete_bucket_objects = (_self, done) => {
 
                 counter.increment();
 
-                Q(sd)
+                _.promise.make(sd)
                     .then(aws.s3.delete_object)
                     .then(() => {
                         logger.info({
@@ -105,4 +104,4 @@ const delete_bucket_objects = (_self, done) => {
 /**
  *  API
  */
-exports.delete_bucket_objects = Q.denodeify(delete_bucket_objects);
+exports.delete_bucket_objects = _.promise.denodeify(delete_bucket_objects);

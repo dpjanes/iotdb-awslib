@@ -15,7 +15,6 @@ const _ = require("iotdb-helpers");
 const assert = require("assert");
 
 const AWS = require("aws-sdk");
-const Q = require("bluebird-q");
 
 const logger = require("../logger")(__filename);
 
@@ -52,4 +51,4 @@ const delete_object = (_self, done) => {
 /**
  *  API
  */
-exports.delete_object = Q.denodeify(delete_object);
+exports.delete_object = _.promise.denodeify(delete_object);
