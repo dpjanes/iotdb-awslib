@@ -11,10 +11,11 @@
 "use strict";
 
 const _ = require("iotdb-helpers");
+const fs = require("iotdb-fs");
+const zip = require("iotdb-zip");
 
 const assert = require("assert");
 
-const AWS = require("aws-sdk");
 const minimist = require('minimist');
 
 const aws = require("../index");
@@ -48,6 +49,26 @@ if (action("create-table")) {
         .then(aws.initialize)
         .then(aws.dynamodb.initialize)
         .then(aws.dynamodb.create_table)
+        .then(sd => console.log("+", "ok"))
+        .catch(error => console.log("#", _.error.message(error)))
+}
+
+if (action("load-table")) {
+    _.promise.make({
+        awsd: awsd,
+        table_name: "movies",
+    })
+        .then(aws.initialize)
+        .then(aws.dynamodb.initialize)
+        .then(zip.initialize.open.p("./data/moviedata.zip"))
+        .then(zip.read.json.p("moviedata.json"))
+        .then(_.promise.block(sd => {
+            sd.movies = sd.json.filter(movie => movie.year >= 1999 && movie.year <= 2001);
+        }))
+        .then(_.promise.series({
+            method: aws.dynamodb.put,
+            inputs: "movies:json",
+        }))
         .then(sd => console.log("+", "ok"))
         .catch(error => console.log("#", _.error.message(error)))
 }
@@ -170,7 +191,7 @@ if (action("page-all")) {
     const _run = pager => {
         _.promise.make({
             awsd: awsd,
-            table_name: "ledger",
+            table_name: "movies",
             query_limit: 5,
             pager: pager,
         })
@@ -178,7 +199,7 @@ if (action("page-all")) {
             .then(aws.dynamodb.initialize)
             .then(aws.dynamodb.all)
             .then(sd => {
-                console.log("+", "ok", JSON.stringify(sd.jsons.map(l => l.ledger_id), null, 2))
+                console.log("+", "ok", JSON.stringify(sd.jsons.map(l => l.title), null, 2))
                 // console.log("+", "ok", JSON.stringify(sd.jsons.map(l => l.user_id), null, 2))
                 console.log("+", "pager", sd.pager)
                 // console.log("+", "pager", _.id.unpack(sd.pager))
