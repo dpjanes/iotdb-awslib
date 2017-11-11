@@ -26,7 +26,15 @@ const awsd = {
 
 const ad = minimist(process.argv.slice(2));
 
-const action = (name) => ad._.indexOf(name) > -1;
+let action = (name) => ad._.indexOf(name) > -1;
+
+if (ad.help) {
+    console.log("usage:", process.argv[1], "<command>")
+    action = name => {
+        console.log(" ", name)
+        return 0;
+    }
+}
 
 if (action("initialize")) {
     _.promise.make({
@@ -171,6 +179,25 @@ if (action("query-simple")) {
         .catch(error => console.log("#", _.error.message(error)))
 }
 
+/**
+ *  THIS IS NOT WORKING YET
+ */
+if (action("query-range")) {
+    _.promise.make({
+        awsd: awsd,
+        table_name: "movies",
+        query: {
+            year: [ "!=", 1999, ],
+            title: "The Matrix", // [ "between", "A", "Z", ]
+        },
+    })
+        .then(aws.initialize)
+        .then(aws.dynamodb.initialize)
+        .then(aws.dynamodb.query_simple)
+        .then(sd => console.log("+", "ok", sd.jsons))
+        .catch(error => console.log("#", _.error.message(error)))
+}
+
 if (action("scan-simple")) {
     _.promise.make({
         awsd: awsd,
@@ -220,18 +247,18 @@ if (action("page-scan")) {
     const _run = pager => {
         _.promise.make({
             awsd: awsd,
-            table_name: "ledger",
+            table_name: "movies",
             query_limit: 5,
             pager: pager,
             query: {
-                "user_id": "urn:consensas:user:_.promise.make-SVYoHm7E",
-            }
+                "year": 1999,
+            },
         })
             .then(aws.initialize)
             .then(aws.dynamodb.initialize)
             .then(aws.dynamodb.scan_simple)
             .then(sd => {
-                console.log("+", "ok", JSON.stringify(sd.jsons.map(l => l.ledger_id), null, 2))
+                console.log("+", "ok", JSON.stringify(sd.jsons.map(l => l.title), null, 2))
                 console.log("+", "pager", sd.pager)
                 // console.log("+", "pager", _.id.unpack(sd.pager))
                 
@@ -247,26 +274,23 @@ if (action("page-scan")) {
     _run()
 }
 
-
 if (action("page-query")) {
     const _run = pager => {
         _.promise.make({
             awsd: awsd,
-            table_name: "snapshot",
-            index_name: "user_id-created-index",
+            table_name: "movies",
             query_limit: 5,
             pager: pager,
             query: {
-                "user_id": "urn:consensas:user:_.promise.make-SVYoHm7E",
-            }
+                "year": 1999,
+            },
         })
             .then(aws.initialize)
             .then(aws.dynamodb.initialize)
             .then(aws.dynamodb.query_simple)
             .then(sd => {
-                console.log("+", "ok", JSON.stringify(sd.jsons.map(l => l.ledger_id), null, 2))
+                console.log("+", "ok", JSON.stringify(sd.jsons.map(l => l.title), null, 2))
                 console.log("+", "pager", sd.pager)
-                // console.log("+", "pager", _.id.unpack(sd.pager))
                 
                 if (sd.cursor && sd.cursor.next) {
                     process.nextTick(() => {
@@ -278,5 +302,27 @@ if (action("page-query")) {
     }
 
     _run()
+}
+
+if (action("promise-page-query")) {
+    _.promise.make({
+        awsd: awsd,
+        table_name: "movies",
+        query_limit: 5,
+        query: {
+            "year": 1999,
+        },
+    })
+        .then(aws.initialize)
+        .then(aws.dynamodb.initialize)
+        .then(_.promise.page({
+            batch: aws.dynamodb.query_simple,
+            method: sd => console.log("title", sd.json.title),
+        }))
+        .then(sd => console.log("+", "ok"))
+        .catch(error => {
+            console.log("#", _.error.message(error))
+            console.log(error);
+        })
 }
 

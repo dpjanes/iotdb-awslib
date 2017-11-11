@@ -29,23 +29,89 @@ const query_simple = (_self, done) => {
 
     assert.ok(self.dynamodb_client, `${method}: self.dynamodb is required`);
     assert.ok(_.is.String(self.table_name), `${method}: self.table_name must be a String`);
-    assert.ok(_.is.String(self.index_name) || _.is.Nullish(self.index_name), `${method}: self.table_name must be a String or Nyll`);
+    assert.ok(_.is.String(self.index_name) || _.is.Nullish(self.index_name), 
+        `${method}: self.table_name must be a String or Nyll`);
     assert.ok(_.is.JSON(self.query), `${method}: self.query must be a JSON-like object`);
     assert.ok(_.is.Array.of.String(self.query_attributes) || !self.query_attributes, 
         `${method}: self.query_attributes must be Null or an Array of String`);
     assert.ok(_.is.String(self.pager) || _.is.Nullish(self.pager), `${method}: self.pager must be a String or Nullish`);
-    assert.ok(_.is.Integer(self.query_limit) || _.is.Nullish(self.query_limit), `${method}: self.query_limit must be an Integer or Nullish`);
+    assert.ok(_.is.Integer(self.query_limit) || _.is.Nullish(self.query_limit), 
+        `${method}: self.query_limit must be an Integer or Nullish`);
 
     const KeyConditionExpression = [];
     const ExpressionAttributeNames = {};
     const ExpressionAttributeValues = {};
-    _.mapObject(self.query, (value, key) => {
-        ExpressionAttributeValues[`:${key}`] = value;
 
-        if (_.is.Number(value)) {
+    _.mapObject(self.query, (value, key) => {
+
+        if (_.is.Array(value)) {
+            /*
+             *  THIS IS NOT WORKING YET
+             *  Just not worth my effort to continue
+             *  DPJ 2017-11-11
+             */
+            let position = 0;
+            while (position < value.length) {
+                let comparitor;
+
+                switch (value[position].toLowerCase()) {
+                case "=": case "eq":
+                    comparitor = comparitor ? comparitor : "="; // fallthru
+                case "!=": case "ne":
+                    comparitor = comparitor ? comparitor : "!="; // fallthru
+                case "<": case "lt":
+                    comparitor = comparitor ? comparitor : "<"; // fallthru
+                case "<=": case "le":
+                    comparitor = comparitor ? comparitor : "LE"; // fallthru
+                case ">": case "gt":
+                    comparitor = comparitor ? comparitor : "GT"; // fallthru
+                case ">=": case "ge":
+                    comparitor = comparitor ? comparitor : "GE"; // fallthru
+
+                // everything falls thru to here
+                {
+                    const key_typed = _.is.Number(value[position + 1]) ? `#${key}` : key;
+                    if (_.is.Number(value[position + 1])) {
+                        ExpressionAttributeNames[key_typed] = key;
+                    }
+                    const value_1 = `:p${position+1}`;
+
+                    KeyConditionExpression.push(`${key_typed} ${comparitor} ${value_1}`);
+                    ExpressionAttributeValues[value_1] = value[position+1]
+
+                    position += 2;
+                }
+                    break;
+
+                case "between":
+                {
+                    const key_typed = _.is.Number(value[position+1]) ? `#${key}` : key;
+                    if (_.is.Number(value[position + 1])) {
+                        ExpressionAttributeNames[key_typed] = key;
+                    }
+                    const value_1 = `:p${position+1}`;
+                    const value_2 = `:p${position+2}`;
+
+                    KeyConditionExpression.push(`${key_typed} BETWEEN ${value_1} AND ${value_2}`);
+                    ExpressionAttributeValues[value_1] = value[position+1]
+                    ExpressionAttributeValues[value_2] = value[position+2]
+
+                    position += 3;
+                }
+                    break;
+
+                default:
+                    console.log("wha?")
+                    process.exit(1)
+                }
+
+            }
+        } else if (_.is.Number(value)) {
+            ExpressionAttributeValues[`:${key}`] = value;
             ExpressionAttributeNames[`#${key}`] = key;
             KeyConditionExpression.push(`#${key} = :${key}`)
         } else {
+            ExpressionAttributeValues[`:${key}`] = value;
             KeyConditionExpression.push(`${key} = :${key}`)
         }
     })
@@ -69,6 +135,8 @@ const query_simple = (_self, done) => {
         ProjectionExpression: ProjectionExpression,
         Limit: self.query_limit ? self.query_limit : null,
     };
+
+    // console.log("HERE:QUERY", JSON.stringify(initd, null, 2))
 
     if (!_.is.Nullish(self.scan_index_forward)) {
         initd.ScanIndexForward = self.scan_index_forward ? true : false;
