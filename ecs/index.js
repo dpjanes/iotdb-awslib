@@ -15,6 +15,8 @@ module.exports = Object.assign(
     require("./initialize"),
     require("./list_clusters"),
     require("./list_tasks"),
+    require("./list_task_definitions"),
+    require("./run_task"),
     require("./stop_task"),
     {}
 );
