@@ -22,8 +22,7 @@ const assert = require("assert");
  *  If attachments are implemented, they should be an array of
  *  { document, document_media_type, document_name }
  */
-const send = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
+const send = _.promise.done((self, done) => {
     const method = "ses.send";
 
     assert.ok(self.ses, `${method}: self.ses is required`);
@@ -72,9 +71,9 @@ const send = (_self, done) => {
 
         done(null, self);
     });
-}
+})
 
 /**
  *  API
  */
-exports.send = _.promise.denodeify(send);
+exports.send = send;
