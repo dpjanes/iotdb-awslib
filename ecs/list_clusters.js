@@ -18,7 +18,7 @@ const assert = require("assert");
  *  Requires: self.ecs, 
  *  Produces: self.aws_result, self.clusters
  */
-const list_clusters = _.promise.done((self, done) => {
+const list_clusters = _.promise.make((self, done) => {
     const method = "ecs.list_clusters";
 
     assert.ok(self.ecs, `${method}: self.ecs is required`);

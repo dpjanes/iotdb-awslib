@@ -18,18 +18,16 @@ const AWS = require("aws-sdk");
 
 /**
  *  Accepts: N/A
- *  Produces:
+ *  Produces: self.ecs
  */
-const initialize = _.promise.make((self, done) => {
+const initialize = _.promise.make(self => {
     const method = "ecs.initialize";
 
     assert.ok(self.AWS, `${method}: self.AWS is required`);
 
-    self.ecs = new AWS.SES({
+    self.ecs = new AWS.ECS({
         apiVersion: "2014-11-13",
     });
-
-    done(null, self);
 })
 
 /**
