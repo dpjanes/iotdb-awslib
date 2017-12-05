@@ -25,9 +25,9 @@ const run_task = _.promise.make((self, done) => {
     assert.ok(self.task_definition, `${method}: self.task_definition is required`);
     assert.ok(self.cluster, `${method}: self.cluster is required`);
 
-    self.ecs.stopTask({
+    self.ecs.runTask({
         cluster: self.cluster,
-        task_definition: self.task_definition,
+        taskDefinition: self.task_definition,
     }, (error, data) => {
         if (error) {
             return done(error);
