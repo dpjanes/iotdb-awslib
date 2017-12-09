@@ -5,7 +5,7 @@
  *  IOTDB
  *  2017-10-16
  *
- *  Copyright (2013-2017) David Janes
+ *  Copyright (2013-2018) David Janes
  */
 
 "use strict";
@@ -14,7 +14,6 @@ const _ = require("iotdb-helpers");
 
 const assert = require("assert");
 
-
 /**
  *  Requires: self.ses, 
  *  Produces: self.aws_result
@@ -22,7 +21,7 @@ const assert = require("assert");
  *  If attachments are implemented, they should be an array of
  *  { document, document_media_type, document_name }
  */
-const send = _.promise.done((self, done) => {
+const send = _.promise.make((self, done) => {
     const method = "ses.send";
 
     assert.ok(self.ses, `${method}: self.ses is required`);
