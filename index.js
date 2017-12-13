@@ -20,3 +20,4 @@ exports.s3 = require("./s3");
 exports.ses = require("./ses");
 exports.sns = require("./sns");
 exports.sqs = require("./sqs");
+exports.cloudwatch = require("./cloudwatch");
