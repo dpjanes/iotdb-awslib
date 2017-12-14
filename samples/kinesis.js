@@ -148,3 +148,17 @@ if (action("get-jsons")) {
     fetch(null)
 }
 
+if (action("get-jsons-all")) {
+    _.promise.make({
+        awsd: awsd,
+        stream: STREAM,
+    })
+        .then(aws.initialize)
+        .then(aws.kinesis.initialize)
+        .then(aws.kinesis.get_jsons.oldest)
+        .then(_.promise.make(sd => {
+            console.log("+", "ok", "jsons", sd.jsons)
+        }))
+        .catch(handle)
+}
+

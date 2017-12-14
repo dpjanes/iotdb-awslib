@@ -100,16 +100,26 @@ const get_jsons = _.promise.make((self, done) => {
         .catch(done)
 })
 
+const parameterized = (shard_iterator_type, starting_sequence_number, timestamp) => _.promise.make((self, done) => {
+    _.promise.make(self)
+        .then(_.promise.add({
+            shard_iterator_type: shard_iterator_type || self.shard_iterator_type,
+            starting_sequence_number: starting_sequence_number || self.starting_sequence_number,
+            timestamp: timestamp || self.timestamp,
+        }))
+        .then(get_jsons)
+        .then(_.promise.done(done, self, "jsons,cursor"))
+        .catch(done)
+})
+
 /**
  *  API
  */
 exports.get_jsons = get_jsons;
 
-/*
-exports.get_jsons.latest = 
-exports.get_jsons.trim_horizon = 
-exports.get_jsons.oldest = 
-exports.get_jsons.at_sequence = sequence => 
-exports.get_jsons.after_sequence = sequence => 
-exports.get_jsons.at_timestamp = timestamp => 
-*/
+exports.get_jsons.latest = parameterized("LATEST");
+exports.get_jsons.trim_horizon = parameterized("TRIM_HORIZON");
+exports.get_jsons.oldest = parameterized("TRIM_HORIZON");
+exports.get_jsons.at_sequence = sequence => parameterized("at_sequence", sequence);
+exports.get_jsons.after_sequence = sequence => parameterized("after_sequence", sequence);
+exports.get_jsons.at_timestamp = timestamp => parameterized("AT_TIMESTAMP", null, timestamp);

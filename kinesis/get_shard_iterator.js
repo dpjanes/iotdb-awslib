@@ -18,7 +18,7 @@ const assert = require("assert");
  *  Accepts: self.kinesis, self.stream
  *  Produces: self.streams
  */
-const get_shard_iterator = (type, sequence, timestamp) => _.promise.make((self, done) => {
+const get_shard_iterator = _.promise.make((self, done) => {
     const method = "kinesis.get_shard_iterator";
 
     assert.ok(self.kinesis, `${method}: self.kinesis is required`);
@@ -28,14 +28,14 @@ const get_shard_iterator = (type, sequence, timestamp) => _.promise.make((self, 
     const params = {
         StreamName: self.stream,
         ShardId: self.shard,
-        ShardIteratorType: type,
+        ShardIteratorType: self.shard_iterator_type || "LATEST",
     }
 
-    if (sequence) {
-        params.StartingSequenceNumber = sequence;
+    if (self.starting_sequence_number) {
+        params.StartingSequenceNumber = self.starting_sequence_number;
     }
-    if (timestamp) {
-        params.Timestamp = timestamp;
+    if (self.timestamp && (self.self.shard_iterator_type === "TIMESTAMP")) {
+        params.Timestamp = self.timestamp;
     }
 
     self.kinesis.getShardIterator(params, (error, data) => {
@@ -50,7 +50,7 @@ const get_shard_iterator = (type, sequence, timestamp) => _.promise.make((self, 
     })
 })
 
-const parameterized = (shard_iterator_type, starting_sequence_number, timestamp) => self => {
+const parameterized = (shard_iterator_type, starting_sequence_number, timestamp) => _.promise.make((self, done) => {
     _.promise.make(self)
         .then(_.promise.add({
             shard_iterator_type: shard_iterator_type || self.shard_iterator_type,
@@ -60,13 +60,13 @@ const parameterized = (shard_iterator_type, starting_sequence_number, timestamp)
         .then(get_shard_iterator)
         .then(_.promise.done(done, self, "aws_result,shard_iterator"))
         .catch(done)
-}
-
+})
 
 /**
  *  API
  */
-exports.get_shard_iterator = get_shard_iterator("LATEST");
+exports.get_shard_iterator = get_shard_iterator;
+
 exports.get_shard_iterator.latest = parameterized("LATEST");
 exports.get_shard_iterator.trim_horizon = parameterized("TRIM_HORIZON");
 exports.get_shard_iterator.oldest = parameterized("TRIM_HORIZON");
