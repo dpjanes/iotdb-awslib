@@ -12,7 +12,9 @@
 
 module.exports = Object.assign(
     {},
+    require("./create_log_group"),
+    require("./create_log_stream"),
     require("./initialize"),
-    require("./send"),
+    require("./log_jsons"),
     {}
 );

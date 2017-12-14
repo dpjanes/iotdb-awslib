@@ -18,7 +18,7 @@ const AWS = require("aws-sdk");
 
 /**
  *  Requires: self.AWS
- *  Produces: self.cloudwatch
+ *  Produces: self.cloudwatch, self.cloudwatchlogs
  */
 const initialize = _.promise.make((self, done) => {
     const method = "cloudwatch.initialize";
@@ -27,6 +27,9 @@ const initialize = _.promise.make((self, done) => {
 
     self.cloudwatch = new AWS.CloudWatch({
         apiVersion: '2010-08-01',
+    });
+    self.cloudwatchlogs = new AWS.CloudWatchLogs({
+        apiVersion: '2014-03-28'
     });
 
     done(null, self);
