@@ -29,6 +29,9 @@ const action = (name) => ad._.indexOf(name) > -1;
 
 const handle = error => {
     console.log("#", _.error.message(error));
+
+    delete error.self;
+    console.log(error)
 }
 
 const STREAM = "unified-logs";
@@ -85,7 +88,7 @@ if (action("send-json")) {
         .then(_.promise.make(sd => {
             console.log("+", "ok");
         }))
-        .catch(error => console.log("#", _.error.message(error)))
+        .catch(handle)
 }
 
 if (action("get-shard-iterator")) {
@@ -101,7 +104,7 @@ if (action("get-shard-iterator")) {
             console.log("+", "ok", sd.shard_iterator);
             console.log("+", "ok", sd.aws_result);
         }))
-        .catch(error => console.log("#", _.error.message(error)))
+        .catch(handle)
 }
 
 if (action("get-records")) {
@@ -116,7 +119,24 @@ if (action("get-records")) {
         .then(aws.kinesis.get_records)
         .then(_.promise.make(sd => {
             console.log("+", "ok", sd.records)
+            console.log("+", "ok", sd.shard_iterator)
         }))
-        .catch(error => console.log("#", _.error.message(error)))
+        .catch(handle)
+}
+
+
+if (action("receive-jsons")) {
+    _.promise.make({
+        awsd: awsd,
+        stream: STREAM,
+    })
+        .then(aws.initialize)
+        .then(aws.kinesis.initialize)
+        // .then(aws.kinesis.describe_stream)
+        .then(aws.kinesis.receive_jsons)
+        .then(_.promise.make(sd => {
+            console.log("+", "ok", sd.jsons)
+        }))
+        .catch(handle)
 }
 

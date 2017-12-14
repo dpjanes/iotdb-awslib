@@ -22,7 +22,7 @@ const get_records = _.promise.make((self, done) => {
     const method = "kinesis.get_records";
 
     assert.ok(self.kinesis, `${method}: self.kinesis is required`);
-    assert.ok(_.is.String(self.shard_iterator), `${method}: self.shard_iterator is required`);
+    assert.ok(self.shard_iterator, `${method}: self.shard_iterator is required`);
 
     self.kinesis.getRecords({
         ShardIterator: self.shard_iterator,

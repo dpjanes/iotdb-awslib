@@ -23,7 +23,7 @@ const get_shard_iterator = _.promise.make((self, done) => {
 
     assert.ok(self.kinesis, `${method}: self.kinesis is required`);
     assert.ok(_.is.String(self.stream), `${method}: self.stream is required`);
-    assert.ok(_.is.String(self.shard), `${method}: self.shard is required`);
+    assert.ok(self.shard, `${method}: self.shard is required`);
 
     self.kinesis.getShardIterator({
         StreamName: self.stream,
