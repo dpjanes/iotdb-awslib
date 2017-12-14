@@ -1,5 +1,5 @@
 /**
- *  kinesis/describe_stream.js
+ *  kinesis/get_shard_iterator.js
  *
  *  David Janes
  *  IOTDB
@@ -16,23 +16,27 @@ const assert = require("assert");
 
 /**
  *  Accepts: self.kinesis, self.stream
- *  Produces: self.stream_description
+ *  Produces: self.streams
  */
-const describe_stream = _.promise.make((self, done) => {
-    const method = "kinesis.describe_stream";
+const get_shard_iterator = _.promise.make((self, done) => {
+    const method = "kinesis.get_shard_iterator";
 
     assert.ok(self.kinesis, `${method}: self.kinesis is required`);
     assert.ok(_.is.String(self.stream), `${method}: self.stream is required`);
+    assert.ok(_.is.String(self.shard), `${method}: self.shard is required`);
 
-    self.kinesis.describeStream({
+    self.kinesis.getShardIterator({
         StreamName: self.stream,
+        ShardId: self.shard,
+        ShardIteratorType: "TRIM_HORIZON",
+        // ShardIteratorType: "LATEST",
     }, (error, data) => {
         if (error) {
             return done(error);
         }
 
         self.aws_result = data;
-        self.stream_description = data.StreamDescription;
+        self.shard_iterator = data.ShardIterator;
 
         done(null, self);
     })
@@ -41,4 +45,4 @@ const describe_stream = _.promise.make((self, done) => {
 /**
  *  API
  */
-exports.describe_stream = describe_stream;
+exports.get_shard_iterator = get_shard_iterator;

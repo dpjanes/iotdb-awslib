@@ -1,5 +1,5 @@
 /**
- *  kinesis/list_streams.js
+ *  kinesis/get_records.js
  *
  *  David Janes
  *  IOTDB
@@ -15,22 +15,25 @@ const _ = require("iotdb-helpers");
 const assert = require("assert");
 
 /**
- *  Accepts: self.kinesis, 
+ *  Accepts: self.kinesis, self.stream
  *  Produces: self.streams
  */
-const list_streams = _.promise.make((self, done) => {
-    const method = "kinesis.list_streams";
+const get_records = _.promise.make((self, done) => {
+    const method = "kinesis.get_records";
 
     assert.ok(self.kinesis, `${method}: self.kinesis is required`);
+    assert.ok(_.is.String(self.shard_iterator), `${method}: self.shard_iterator is required`);
 
-    self.kinesis.listStreams({
+    self.kinesis.getRecords({
+        ShardIterator: self.shard_iterator,
     }, (error, data) => {
         if (error) {
             return done(error);
         }
 
         self.aws_result = data;
-        self.streams = data.StreamNames
+        self.records = data.Records;
+        self.shard_iterator = data.NextShardIterator;
 
         done(null, self);
     })
@@ -39,4 +42,4 @@ const list_streams = _.promise.make((self, done) => {
 /**
  *  API
  */
-exports.list_streams = list_streams;
+exports.get_records = get_records;

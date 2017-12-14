@@ -32,6 +32,7 @@ const handle = error => {
 }
 
 const STREAM = "unified-logs";
+const SHARD = "shardId-000000000000";
 
 if (action("initialize")) {
     _.promise.make({
@@ -87,16 +88,34 @@ if (action("send-json")) {
         .catch(error => console.log("#", _.error.message(error)))
 }
 
-if (action("wait")) {
+if (action("get-shard-iterator")) {
     _.promise.make({
         awsd: awsd,
         stream: STREAM,
+        shard: SHARD,
     })
         .then(aws.initialize)
         .then(aws.kinesis.initialize)
-        .then(aws.kinesis.wait)
+        .then(aws.kinesis.get_shard_iterator)
         .then(_.promise.make(sd => {
-            console.log("+", "ok");
+            console.log("+", "ok", sd.shard_iterator);
+            console.log("+", "ok", sd.aws_result);
+        }))
+        .catch(error => console.log("#", _.error.message(error)))
+}
+
+if (action("get-records")) {
+    _.promise.make({
+        awsd: awsd,
+        stream: STREAM,
+        shard: SHARD,
+    })
+        .then(aws.initialize)
+        .then(aws.kinesis.initialize)
+        .then(aws.kinesis.get_shard_iterator)
+        .then(aws.kinesis.get_records)
+        .then(_.promise.make(sd => {
+            console.log("+", "ok", sd.records)
         }))
         .catch(error => console.log("#", _.error.message(error)))
 }

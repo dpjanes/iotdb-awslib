@@ -13,6 +13,8 @@
 
 module.exports = Object.assign(
     {},
+    require("./get_shard_iterator"),
+    require("./get_records"),
     require("./initialize"),
     require("./describe_stream"),
     require("./send_json"),

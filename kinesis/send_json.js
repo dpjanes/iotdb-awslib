@@ -43,6 +43,8 @@ const send_json = _.promise.make((self, done) => {
             return done(error);
         }
 
+        self.aws_result = data;
+
         done(null, self);
     })
 })
