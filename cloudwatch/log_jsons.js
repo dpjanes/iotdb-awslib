@@ -48,8 +48,6 @@ const log_jsons = _.promise.make((self, done) => {
         params.sequenceToken = self.sequence_token;
     }
 
-    console.log("HERE:CW:PUT", params);
-
     self.cloudwatchlogs.putLogEvents(params, (error, data) => {
         if (error) {
             return done(error);

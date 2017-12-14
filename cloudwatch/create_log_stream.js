@@ -23,9 +23,11 @@ const create_log_stream = _.promise.make((self, done) => {
 
     assert.ok(self.cloudwatchlogs, `${method}: self.cloudwatch is required`);
     assert.ok(_.is.String(self.log_stream), `${method}: self.log_stream must be a String`);
+    assert.ok(_.is.String(self.log_group), `${method}: self.log_group must be a String`);
 
     self.cloudwatchlogs.createLogStream({
-        logStream: self.log_stream,
+        logGroupName: self.log_group,
+        logStreamName: self.log_stream,
     }, (error, data) => {
         if (error) {
             return done(error);
