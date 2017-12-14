@@ -104,3 +104,12 @@ const get_jsons = _.promise.make((self, done) => {
  *  API
  */
 exports.get_jsons = get_jsons;
+
+/*
+exports.get_jsons.latest = 
+exports.get_jsons.trim_horizon = 
+exports.get_jsons.oldest = 
+exports.get_jsons.at_sequence = sequence => 
+exports.get_jsons.after_sequence = sequence => 
+exports.get_jsons.at_timestamp = timestamp => 
+*/
