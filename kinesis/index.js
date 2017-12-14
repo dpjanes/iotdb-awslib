@@ -14,11 +14,11 @@
 module.exports = Object.assign(
     {},
     require("./describe_stream"),
+    require("./get_jsons"),
     require("./get_records"),
     require("./get_shard_iterator"),
     require("./initialize"),
     require("./list_streams"),
-    require("./receive_jsons"),
     require("./send_json"),
     require("./wait_for"),
     {}

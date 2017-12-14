@@ -125,18 +125,26 @@ if (action("get-records")) {
 }
 
 
-if (action("receive-jsons")) {
-    _.promise.make({
-        awsd: awsd,
-        stream: STREAM,
-    })
-        .then(aws.initialize)
-        .then(aws.kinesis.initialize)
-        // .then(aws.kinesis.describe_stream)
-        .then(aws.kinesis.receive_jsons)
-        .then(_.promise.make(sd => {
-            console.log("+", "ok", sd.jsons)
-        }))
-        .catch(handle)
+if (action("get-jsons")) {
+    const fetch = pager => {
+        _.promise.make({
+            awsd: awsd,
+            stream: STREAM,
+            pager: pager,
+        })
+            .then(aws.initialize)
+            .then(aws.kinesis.initialize)
+            .then(aws.kinesis.get_jsons)
+            .then(_.promise.make(sd => {
+                console.log("----")
+                console.log("+", "ok", "jsons", sd.jsons)
+                console.log("+", "ok", "cursor", sd.cursor)
+
+                setTimeout(() => fetch(sd.cursor.next), 10 * 1000)
+            }))
+            .catch(handle)
+    }
+
+    fetch(null)
 }
 

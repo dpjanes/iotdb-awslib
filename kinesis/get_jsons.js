@@ -1,5 +1,5 @@
 /**
- *  kinesis/receive_jsons.js
+ *  kinesis/get_jsons.js
  *
  *  David Janes
  *  IOTDB
@@ -25,11 +25,9 @@ const aws = {
 /**
  */
 const _get_shard_iterator = _.promise.make((self, done) => {
-    const method = "kinesis.receive_jsons/_get_shard_iterator";
+    const method = "kinesis.get_jsons/_get_shard_iterator";
 
     assert.ok(self.shard_description, `${method}: expected self.shard_description`);
-
-    console.log("HERE:AAA.1", self.shard_description)
 
     _.promise.make(self)
         .then(_.promise.add("shard", self.shard_description.ShardId))
@@ -43,7 +41,7 @@ const _get_shard_iterator = _.promise.make((self, done) => {
  *  If there's already ones (in pager), we'll just use that
  */
 const _get_shard_iterators = _.promise.make((self, done) => {
-    const method = "kinesis.receive_jsons/_get_shard_iterators";
+    const method = "kinesis.get_jsons/_get_shard_iterators";
 
     if (self.pager) {
         self.shard_iterators = self.pager.split(",")
@@ -69,8 +67,8 @@ const _get_shard_iterators = _.promise.make((self, done) => {
  *  Accepts: self.kinesis, self.stream_description, self
  *  Produces: self.jsons
  */
-const receive_jsons = _.promise.make((self, done) => {
-    const method = "kinesis.receive_jsons";
+const get_jsons = _.promise.make((self, done) => {
+    const method = "kinesis.get_jsons";
 
     assert.ok(self.kinesis, `${method}: self.kinesis is required`);
     assert.ok(self.stream, `${method}: self.stream is required`);
@@ -105,4 +103,4 @@ const receive_jsons = _.promise.make((self, done) => {
 /**
  *  API
  */
-exports.receive_jsons = receive_jsons;
+exports.get_jsons = get_jsons;
