@@ -22,15 +22,23 @@ const send_json = _.promise.make((self, done) => {
     const method = "kinesis.send_json";
 
     assert.ok(self.kinesis, `${method}: self.kinesis is required`);
-    assert.ok(_.is.JSON(self.json), `${method}: self.json must be a JSONable Object`);
-    assert.ok(_.is.String(self.stream), `${method}: self.stream is required`);
-    assert.ok(_.is.String(self.partition_key), `${method}: self.partition_key is required`);
+    assert.ok(_.is.JSON(self.json), `${method}: self.json must be JSON`);
+    assert.ok(_.is.String(self.stream), `${method}: self.stream must be String`);
+    assert.ok(_.is.Nullish(self.partition_key) || _.is.String(self.partition_key), 
+        `${method}: self.partition_key must String or Null`);
 
-    self.kinesis.putRecord({
+    const params = {
         Data: JSON.stringify(self.json, null, 0),
-        PartitionKey: self.partition_key,
         StreamName: self.stream,
-    }, (error, data) => {
+    }
+
+    if (self.partition_key) {
+        params.PartitionKey = self.partition_key
+    } else {
+        params.PartitionKey = _.hash.md5(params.Data);
+    }
+
+    self.kinesis.putRecord(params, (error, data) => {
         if (error) {
             return done(error);
         }

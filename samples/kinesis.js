@@ -39,7 +39,9 @@ if (action("initialize")) {
     })
         .then(aws.initialize)
         .then(aws.kinesis.initialize)
-        .then(_self => console.log("+", "ok"))
+        .then(_.promise.make(sd => {
+            console.log("+", "ok");
+        }))
         .catch(handle)
 }
 
@@ -72,15 +74,16 @@ if (action("describe-stream")) {
 
 if (action("send-json")) {
     _.promise.make({
-        aws: awsd,
+        awsd: awsd,
         stream: STREAM,
         json: _.timestamp.add({ "a": "Message", "ledger_id": "urn:iotdb:ledger:ZBm22eUo" }),
-        partition_key: "urn:iotdb:ledger:ZBm22eUo",
     })
         .then(aws.initialize)
         .then(aws.kinesis.initialize)
         .then(aws.kinesis.send_json)
-        .then(_self => console.log("+", "ok", _self.stream))
+        .then(_.promise.make(sd => {
+            console.log("+", "ok");
+        }))
         .catch(error => console.log("#", _.error.message(error)))
 }
 
