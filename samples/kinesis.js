@@ -87,3 +87,17 @@ if (action("send-json")) {
         .catch(error => console.log("#", _.error.message(error)))
 }
 
+if (action("wait")) {
+    _.promise.make({
+        awsd: awsd,
+        stream: STREAM,
+    })
+        .then(aws.initialize)
+        .then(aws.kinesis.initialize)
+        .then(aws.kinesis.wait)
+        .then(_.promise.make(sd => {
+            console.log("+", "ok");
+        }))
+        .catch(error => console.log("#", _.error.message(error)))
+}
+

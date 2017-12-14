@@ -1,5 +1,5 @@
 /**
- *  kinesis/describe_stream.js
+ *  kinesis/wait_for.js
  *
  *  David Janes
  *  IOTDB
@@ -16,22 +16,21 @@ const assert = require("assert");
 
 /**
  *  Accepts: self.kinesis, self.stream
- *  Produces: self.stream_description
+ *  Produces: self.streams
  */
-const describe_stream = _.promise.make((self, done) => {
-    const method = "kinesis.describe_stream";
+const wait_for = _.promise.make((self, done) => {
+    const method = "kinesis.wait_for";
 
     assert.ok(self.kinesis, `${method}: self.kinesis is required`);
     assert.ok(_.is.String(self.stream), `${method}: self.stream is required`);
+    assert.ok(_.is.String(self.resource), `${method}: self.resource is required`);
 
-    self.kinesis.describeStream({
+    self.kinesis.waitFor(self.resource, {
         StreamName: self.stream,
     }, (error, data) => {
         if (error) {
             return done(error);
         }
-
-        self.stream_description = data.StreamDescription;
 
         done(null, self);
     })
@@ -40,4 +39,4 @@ const describe_stream = _.promise.make((self, done) => {
 /**
  *  API
  */
-exports.describe_stream = describe_stream;
+exports.wait_for = wait_for;

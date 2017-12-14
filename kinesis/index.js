@@ -17,5 +17,6 @@ module.exports = Object.assign(
     require("./describe_stream"),
     require("./send_json"),
     require("./list_streams"),
+    require("./wait_for"),
     {}
 );
