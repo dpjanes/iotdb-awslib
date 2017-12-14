@@ -20,8 +20,7 @@ const AWS = require("aws-sdk");
  *  Accepts: N/
  *  Produces:
  */
-const initialize = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
+const initialize = _.promise.make((self, done) => {
     const method = "kinesis.initialize";
 
     assert.ok(self.AWS, `${method}: self.AWS is required`);
@@ -31,9 +30,9 @@ const initialize = (_self, done) => {
     });
 
     done(null, self);
-}
+})
 
 /**
  *  API
  */
-exports.initialize = _.promise.denodeify(initialize);
+exports.initialize = initialize;

@@ -27,6 +27,10 @@ const ad = minimist(process.argv.slice(2));
 
 const action = (name) => ad._.indexOf(name) > -1;
 
+const handle = error => {
+    console.log("#", _.error.message(error));
+}
+
 if (action("initialize")) {
     _.promise.make({
         awsd: awsd,
@@ -34,7 +38,34 @@ if (action("initialize")) {
         .then(aws.initialize)
         .then(aws.kinesis.initialize)
         .then(_self => console.log("+", "ok"))
-        .catch(error => console.log("#", _.error.message(error)))
+        .catch(handle)
+}
+
+if (action("list-streams")) {
+    _.promise.make({
+        awsd: awsd,
+    })
+        .then(aws.initialize)
+        .then(aws.kinesis.initialize)
+        .then(aws.kinesis.list_streams)
+        .then(_.promise.make(sd => {
+            console.log("+", "ok", sd.stream_names)
+        }))
+        .catch(handle)
+}
+
+if (action("describe-stream")) {
+    _.promise.make({
+        awsd: awsd,
+        stream_name: "unified-logs",
+    })
+        .then(aws.initialize)
+        .then(aws.kinesis.initialize)
+        .then(aws.kinesis.describe_stream)
+        .then(_.promise.make(sd => {
+            console.log("+", "ok", sd.stream)
+        }))
+        .catch(handle)
 }
 
 /*

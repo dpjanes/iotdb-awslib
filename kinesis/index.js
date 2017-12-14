@@ -13,6 +13,7 @@
 module.exports = Object.assign(
     {},
     require("./initialize"),
+    require("./describe_stream"),
     require("./send_json"),
     require("./list_streams"),
     {}

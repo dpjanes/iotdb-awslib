@@ -14,13 +14,11 @@ const _ = require("iotdb-helpers");
 
 const assert = require("assert");
 
-
 /**
  *  Accepts: self.kinesis, self.json, self.stream_name, self.partition_key
  *  Produces: N/A
  */
-const send_json = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
+const send_json = _.promise.make((self, done) => {
     const method = "kinesis.send_json";
 
     assert.ok(self.kinesis, `${method}: self.kinesis is required`);
@@ -39,9 +37,9 @@ const send_json = (_self, done) => {
 
         done(null, self);
     })
-}
+})
 
 /**
  *  API
  */
-exports.send_json = _.promise.denodeify(send_json);
+exports.send_json = send_json;

@@ -14,17 +14,14 @@ const _ = require("iotdb-helpers");
 
 const assert = require("assert");
 
-
 /**
- *  Accepts: self.kinesis, self.json, self.stream_name, self.partition_key
- *  Produces: N/A
+ *  Accepts: self.kinesis, 
+ *  Produces: self.stream_names
  */
-const list_streams = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
+const list_streams = _.promise.make((self, done) => {
     const method = "kinesis.list_streams";
 
     assert.ok(self.kinesis, `${method}: self.kinesis is required`);
-    assert.ok(_.is.JSON(self.json), `${method}: self.json must be a JSONable Object`);
 
     self.kinesis.listStreams({
     }, (error, data) => {
@@ -32,11 +29,13 @@ const list_streams = (_self, done) => {
             return done(error);
         }
 
+        self.stream_names = data.StreamNames
+
         done(null, self);
     })
-}
+})
 
 /**
  *  API
  */
-exports.list_streams = _.promise.denodeify(list_streams);
+exports.list_streams = list_streams;
