@@ -31,6 +31,8 @@ const handle = error => {
     console.log("#", _.error.message(error));
 }
 
+const STREAM = "unified-logs";
+
 if (action("initialize")) {
     _.promise.make({
         awsd: awsd,
@@ -49,7 +51,7 @@ if (action("list-streams")) {
         .then(aws.kinesis.initialize)
         .then(aws.kinesis.list_streams)
         .then(_.promise.make(sd => {
-            console.log("+", "ok", sd.stream_names)
+            console.log("+", "ok", sd.streams)
         }))
         .catch(handle)
 }
@@ -57,77 +59,28 @@ if (action("list-streams")) {
 if (action("describe-stream")) {
     _.promise.make({
         awsd: awsd,
-        stream_name: "unified-logs",
+        stream: STREAM,
     })
         .then(aws.initialize)
         .then(aws.kinesis.initialize)
         .then(aws.kinesis.describe_stream)
         .then(_.promise.make(sd => {
-            console.log("+", "ok", sd.stream)
+            console.log("+", "ok", sd.stream_description)
         }))
         .catch(handle)
 }
 
-/*
-if (action("list-queues")) {
-    _.promise.make({
-        aws: awsd,
-    })
-        .then(aws.initialize)
-        .then(aws.kinesis.initialize)
-        .then(aws.kinesis.list_queues)
-        .then(_self => console.log("+", "ok", _self.queue_urls))
-        .catch(error => console.log("#", _.error.message(error)))
-}
-
-if (action("get-queue-url")) {
-    _.promise.make({
-        aws: awsd,
-        queue_name: "test1",
-    })
-        .then(aws.initialize)
-        .then(aws.kinesis.initialize)
-        .then(aws.kinesis.get_queue_url)
-        .then(_self => console.log("+", "ok", _self.queue_url))
-        .catch(error => console.log("#", _.error.message(error)))
-}
-*/
-
 if (action("send-json")) {
     _.promise.make({
         aws: awsd,
-        stream_name: "ledgers",
+        stream: STREAM,
         json: _.timestamp.add({ "a": "Message", "ledger_id": "urn:iotdb:ledger:ZBm22eUo" }),
         partition_key: "urn:iotdb:ledger:ZBm22eUo",
     })
         .then(aws.initialize)
         .then(aws.kinesis.initialize)
         .then(aws.kinesis.send_json)
-        .then(_self => console.log("+", "ok", _self.stream_name))
+        .then(_self => console.log("+", "ok", _self.stream))
         .catch(error => console.log("#", _.error.message(error)))
 }
 
-/*
-if (action("process-json")) {
-    _.promise.make({
-        aws: awsd,
-        queue_name: "test1",
-        handle_message: _.promise.denodeify((_self, done) => {
-            console.log("+", "MESSAGE", JSON.stringify(_self.json, null, 2));
-            done(null, _self);
-        }),
-        handle_error: error => {
-            console.log("#", "error", _.error.message(error));
-        },
-        handle_failure: error => {
-            console.log("#", "FAILURE", _.error.message(error));
-        },
-    })
-        .then(aws.initialize)
-        .then(aws.kinesis.initialize)
-        .then(aws.kinesis.get_queue_url)
-        .then(aws.kinesis.process_json)
-        .then(_self => console.log("+", "ok", _self.queue_url))
-        .catch(error => console.log("#", _.error.message(error)))
-}
-*/

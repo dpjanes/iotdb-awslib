@@ -15,7 +15,7 @@ const _ = require("iotdb-helpers");
 const assert = require("assert");
 
 /**
- *  Accepts: self.kinesis, self.json, self.stream_name, self.partition_key
+ *  Accepts: self.kinesis, self.json, self.stream, self.partition_key
  *  Produces: N/A
  */
 const send_json = _.promise.make((self, done) => {
@@ -23,13 +23,13 @@ const send_json = _.promise.make((self, done) => {
 
     assert.ok(self.kinesis, `${method}: self.kinesis is required`);
     assert.ok(_.is.JSON(self.json), `${method}: self.json must be a JSONable Object`);
-    assert.ok(_.is.String(self.stream_name), `${method}: self.stream_name is required`);
+    assert.ok(_.is.String(self.stream), `${method}: self.stream is required`);
     assert.ok(_.is.String(self.partition_key), `${method}: self.partition_key is required`);
 
     self.kinesis.putRecord({
         Data: JSON.stringify(self.json, null, 0),
         PartitionKey: self.partition_key,
-        StreamName: self.stream_name,
+        StreamName: self.stream,
     }, (error, data) => {
         if (error) {
             return done(error);

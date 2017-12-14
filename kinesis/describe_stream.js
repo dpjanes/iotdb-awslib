@@ -1,5 +1,5 @@
 /**
- *  kinesis/list_streams.js
+ *  kinesis/describe_stream.js
  *
  *  David Janes
  *  IOTDB
@@ -18,18 +18,20 @@ const assert = require("assert");
  *  Accepts: self.kinesis, 
  *  Produces: self.streams
  */
-const list_streams = _.promise.make((self, done) => {
-    const method = "kinesis.list_streams";
+const describe_stream = _.promise.make((self, done) => {
+    const method = "kinesis.describe_stream";
 
     assert.ok(self.kinesis, `${method}: self.kinesis is required`);
+    assert.ok(_.is.String(self.stream), `${method}: self.stream is required`);
 
-    self.kinesis.listStreams({
+    self.kinesis.describeStream({
+        StreamName: self.stream,
     }, (error, data) => {
         if (error) {
             return done(error);
         }
 
-        self.streams = data.StreamNames
+        self.stream_description = data.StreamDescription;
 
         done(null, self);
     })
@@ -38,4 +40,4 @@ const list_streams = _.promise.make((self, done) => {
 /**
  *  API
  */
-exports.list_streams = list_streams;
+exports.describe_stream = describe_stream;
