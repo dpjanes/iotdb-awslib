@@ -27,7 +27,6 @@ const describe_log_groups = _.promise.make((self, done) => {
         `${method}: self.log_group_prefix must be a String or Nullish`);
 
     const params = {
-        logGroup: self.log_group,
     }
 
     if (self.log_group_prefix) {
