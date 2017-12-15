@@ -17,6 +17,7 @@ module.exports = Object.assign(
     require("./describe_log_groups"),
     require("./describe_log_streams"),
     require("./get_log_events"),
+    require("./get_jsons"),
     require("./initialize"),
     require("./log_jsons"),
     {}
