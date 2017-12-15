@@ -74,3 +74,19 @@ if (action("log-streams")) {
         .catch(handle)
 }
 
+
+if (action("log-events")) {
+    _.promise.make({
+        awsd: awsd,
+        log_group: "website",
+        log_stream: "2017/12/15/11/14/10",
+    })
+        .then(aws.initialize)
+        .then(aws.cloudwatch.initialize)
+        .then(aws.cloudwatch.get_log_events)
+        .then(_.promise.make(sd => {
+            console.log("+", "ok", sd.log_events);
+        }))
+        .catch(handle)
+}
+
