@@ -28,7 +28,7 @@ const describe_log_streams = _.promise.make((self, done) => {
         `${method}: self.log_stream_prefix must be a String or Nullish`);
 
     const params = {
-        logStream: self.log_stream,
+        logGroupName: self.log_group,
     }
 
     if (self.log_stream_prefix) {
