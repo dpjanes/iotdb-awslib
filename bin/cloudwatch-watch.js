@@ -60,7 +60,7 @@ const _check = _.promise.make((self, done) => {
                     const previous = state[lsd.logStreamName];
                     if (!previous) {
                         return lsd
-                    } else if (previous.lastEventTimestamp !== lsd.lastEventTimestamp) {
+                    } else if (previous.uploadSequenceToken !== lsd.uploadSequenceToken) {
                         return lsd
                     }
                 })
@@ -69,8 +69,10 @@ const _check = _.promise.make((self, done) => {
                 state[lsd.logStreamName] = lsd
             })
 
-            // console.log("===")
-            // console.log(sd.log_stream_descriptions)
+/*
+            console.log("===")
+            console.log(sd.log_stream_descriptions)
+        */
 
         }))
         .then(_.promise.series({
