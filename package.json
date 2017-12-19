@@ -12,10 +12,10 @@
     }, 
     "dependencies": {
         "async": "~2.6.0", 
-        "aws-sdk": "~2.170.0", 
+        "aws-sdk": "~2.171.0", 
         "iotdb-errors": "~3.0.6", 
         "iotdb-fs": "~1.0.24", 
-        "iotdb-helpers": "~3.1.21", 
+        "iotdb-helpers": "~3.1.23", 
         "mime": "~2.0.3"
     }, 
     "description": "Pipe-orient programming AWS", 
@@ -40,5 +40,5 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     }, 
-    "version": "1.0.41"
+    "version": "1.0.42"
 }
