@@ -19,11 +19,10 @@ const AWS = require("aws-sdk");
 const split = s => s.split("/").filter(s => s.length)
 
 /**
- *  Accepts: self.bucket, self.key, self.recursive (optional)
+ *  Requires: self.bucket, self.key
  *  Produces: self.paths
  */
-const list_objects = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
+const list_objects = recursive => _.promise.make((self, done) => {
     const method = "s3.list_objects";
 
     assert.ok(self.s3, `${method}: self.s3 is required`);
@@ -55,7 +54,7 @@ const list_objects = (_self, done) => {
             keys = keys.concat(
                 data.Contents.map(cd => cd.Key)
                     .filter(name => split(name).length >= level)
-                    .map(name => self.recursive ? name : split(name).slice(0, level).join("/"))
+                    .map(name => recursive ? name : split(name).slice(0, level).join("/"))
             )
 
             if (data.IsTruncated) {
@@ -74,9 +73,10 @@ const list_objects = (_self, done) => {
     }
 
     _fetch()
-}
+})
 
 /**
  *  API
  */
-exports.list_objects = _.promise.denodeify(list_objects);
+exports.list_objects = list_objects(false);
+exports.list_objects.recursive = list_objects(true);

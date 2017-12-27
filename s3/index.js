@@ -25,6 +25,7 @@ module.exports = Object.assign(
     require("./list_objects"),
     require("./object_exists"),
     require("./parse_path"),
+    require("./join_paths"),
     require("./upload_document"),
     require("./upload_json"),
     {}

@@ -21,8 +21,7 @@ const AWS = require("aws-sdk");
  *  Accepts: 
  *  Produces:
  */
-const parse_path = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
+const parse_path = _.promise.make((self, done) => {
     const method = "s3.parse_path";
 
     assert.ok(_.is.String(self.path), `${method}: self.path must be a String`);
@@ -35,9 +34,9 @@ const parse_path = (_self, done) => {
     self.bucket = urlp.hostname;
     
     done(null, self);
-}
+})
 
 /**
  *  API
  */
-exports.parse_path = _.promise.denodeify(parse_path);
+exports.parse_path = parse_path;
