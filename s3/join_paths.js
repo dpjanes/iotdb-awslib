@@ -25,7 +25,7 @@ const join_paths = _.promise.make((self, done) => {
     assert.ok(_.is.Array.of.String(self.paths), `${method}: self.paths must be Array of String`)
     assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be String`)
 
-    sd.paths = sd.paths.map(name => name.startsWith("s3://") ? name : `s3://${_self.bucket}/${name}`)
+    self.paths = self.paths.map(name => name.startsWith("s3://") ? name : `s3://${self.bucket}/${name}`)
 
     done(null, self);
 })
