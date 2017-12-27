@@ -5,7 +5,7 @@
  *  IOTDB
  *  2017-01-18
  *
- *  Copyright (2013-2017) David Janes
+ *  Copyright (2013-2018) David Janes
  */
 
 "use strict";
@@ -74,36 +74,6 @@ const list_objects = (_self, done) => {
     }
 
     _fetch()
-
-
-/*
-
-
-    ContinuationToken
-
-    self.s3.listObjectsV2({
-        Bucket: self.bucket,
-        Prefix: prefix,
-    }, (error, data) => {
-        if (error) {
-            return done(error);
-        }
-
-        assert(!data.IsTruncated, "s3.list_objects: if you get this, complete implementation of this function!");
-
-        const level = split(prefix).length + 1;
-
-        // XXX - need to add bucket prefix?
-        self.paths = _.uniq(data.Contents.map(cd => cd.Key)
-            .filter(name => split(name).length >= level)
-            .map(name => self.recursive ? name : split(name).slice(0, level).join("/"))
-            .sort())
-
-        self.keys = self.paths;
-
-        done(null, self);
-    });
-    */
 }
 
 /**
