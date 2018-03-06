@@ -22,18 +22,14 @@ const register_task_definition = _.promise.make((self, done) => {
     const method = "ecs.register_task_definition";
 
     assert.ok(self.ecs, `${method}: self.ecs is required`);
-    assert.ok(_.is.Dictionary(self.task_defintion), `${method}: self.task_defintion is required`);
+    assert.ok(_.is.Dictionary(self.task_definition), `${method}: self.task_definition is required`);
 
-    self.ecs.registerTaskDefinitions(self.task_definition, (error, data) => {
+    self.ecs.registerTaskDefinition(self.task_definition, (error, data) => {
         if (error) {
             return done(error);
         }
 
-        assert.ok(data)
-        assert.ok(data.taskDefinitionArns)
-
         self.aws_result = data;
-        self.task_definition = data.taskDefinitionArns;
 
         done(null, self);
     });
