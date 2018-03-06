@@ -13,6 +13,8 @@
 module.exports = Object.assign(
     {},
     require("./initialize"),
+    require("./describe_tasks"),
+    require("./describe_task"),
     require("./list_clusters"),
     require("./list_tasks"),
     require("./list_task_definitions"),
