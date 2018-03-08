@@ -21,3 +21,4 @@ exports.ses = require("./ses");
 exports.sns = require("./sns");
 exports.sqs = require("./sqs");
 exports.cloudwatch = require("./cloudwatch");
+exports.route53 = require("./route53");
