@@ -25,8 +25,8 @@ const initialize = _.promise.make(self => {
 
     assert.ok(self.AWS, `${method}: self.AWS is required`);
 
-    self.route53 = new AWS.ECS({
-        apiVersion: "2014-11-13",
+    self.route53 = new AWS.Route53({
+        apiVersion: "2013-04-01",
     });
 })
 
