@@ -117,3 +117,70 @@ if (action("find_resource")) {
         })
 }
 
+
+if (action("create.a")) {
+    _.promise.make({
+        awsd: awsd,
+        zone_name: "consensas.internal.",
+        zone_private: null,
+    })
+        .then(aws.initialize)
+        .then(aws.route53.initialize)
+        .then(aws.route53.list_zones)
+        .then(aws.route53.find_zone)
+        .then(aws.route53.resource.A("localhost.consensas.internal", "127.0.0.1"))
+        .then(aws.route53.resource.create)
+        .then(_.promise.make(sd => {
+            console.log("+", "ok", JSON.stringify(sd.resource, null, 2))
+        }))
+        .catch(error => {
+            console.log("#", _.error.message(error))
+            delete error.self
+            console.log(error)
+        })
+}
+
+if (action("upsert.a")) {
+    _.promise.make({
+        awsd: awsd,
+        zone_name: "consensas.internal.",
+        zone_private: null,
+    })
+        .then(aws.initialize)
+        .then(aws.route53.initialize)
+        .then(aws.route53.list_zones)
+        .then(aws.route53.find_zone)
+        .then(aws.route53.resource.A("localhost.consensas.internal", "127.0.0.1"))
+        .then(aws.route53.resource.upsert)
+        .then(_.promise.make(sd => {
+            console.log("+", "ok", JSON.stringify(sd.resource, null, 2))
+        }))
+        .catch(error => {
+            console.log("#", _.error.message(error))
+            delete error.self
+            console.log(error)
+        })
+}
+
+if (action("delete.a")) {
+    _.promise.make({
+        awsd: awsd,
+        zone_name: "consensas.internal.",
+        zone_private: null,
+    })
+        .then(aws.initialize)
+        .then(aws.route53.initialize)
+        .then(aws.route53.list_zones)
+        .then(aws.route53.find_zone)
+        .then(aws.route53.resource.A("localhost.consensas.internal", "127.0.0.1"))
+        .then(aws.route53.resource.delete)
+        .then(_.promise.make(sd => {
+            console.log("+", "ok", JSON.stringify(sd.resource, null, 2))
+        }))
+        .catch(error => {
+            console.log("#", _.error.message(error))
+            delete error.self
+            console.log(error)
+        })
+}
+

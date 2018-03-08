@@ -17,5 +17,6 @@ module.exports = Object.assign(
     require("./find_resource"),
     require("./list_zones"),
     require("./list_resources"),
+    require("./resource"),
     {}
 );
