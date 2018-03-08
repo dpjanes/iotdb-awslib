@@ -23,16 +23,16 @@ const list_hosted_zones = _.promise.make((self, done) => {
 
     assert.ok(self.route53, `${method}: self.route53 is required`);
 
-    self.route53.listClusters((error, data) => {
+    self.route53.listHostedZones((error, data) => {
         if (error) {
             return done(error);
         }
 
         assert.ok(data)
-        assert.ok(data.clusterArns)
+        assert.ok(data.HostedZones)
 
         self.aws_result = data;
-        self.hosted_zones = data.clusterArns;
+        self.zones = data.HostedZones;
 
         done(null, self);
     });

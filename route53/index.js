@@ -13,6 +13,7 @@
 module.exports = Object.assign(
     {},
     require("./initialize"),
+    require("./find_hosted_zone"),
     require("./list_hosted_zones"),
     {}
 );
