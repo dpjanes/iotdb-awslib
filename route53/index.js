@@ -13,7 +13,9 @@
 module.exports = Object.assign(
     {},
     require("./initialize"),
-    require("./find_hosted_zone"),
-    require("./list_hosted_zones"),
+    require("./find_zone"),
+    require("./find_resource"),
+    require("./list_zones"),
+    require("./list_resources"),
     {}
 );

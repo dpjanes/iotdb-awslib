@@ -1,5 +1,5 @@
 /**
- *  route53/list_hosted_zones.js
+ *  route53/list_zones.js
  *
  *  David Janes
  *  IOTDB
@@ -16,10 +16,10 @@ const assert = require("assert")
 
 /**
  *  Requires: self.route53, 
- *  Produces: self.aws_result, self.hosted_zones
+ *  Produces: self.aws_result, self.zones
  */
-const list_hosted_zones = _.promise.make((self, done) => {
-    const method = "route53.list_hosted_zones";
+const list_zones = _.promise.make((self, done) => {
+    const method = "route53.list_zones";
 
     assert.ok(self.route53, `${method}: self.route53 is required`);
 
@@ -41,4 +41,4 @@ const list_hosted_zones = _.promise.make((self, done) => {
 /**
  *  API
  */
-exports.list_hosted_zones = list_hosted_zones;
+exports.list_zones = list_zones;
