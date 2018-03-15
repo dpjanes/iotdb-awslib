@@ -17,22 +17,26 @@ const assert = require("assert")
 /**
  *  Requires: self.ec2, 
  *  Produces: self.aws_result, self.instances
+ *
+ *  TDB: filters
  */
 const list_instances = _.promise.make((self, done) => {
     const method = "ec2.list_instances";
 
     assert.ok(self.ec2, `${method}: self.ec2 is required`);
 
-    self.ec2.listHostedZones((error, data) => {
+    const paramd = {}
+
+    self.ec2.describeInstances(paramd, (error, data) => {
         if (error) {
             return done(error);
         }
 
         assert.ok(data)
-        assert.ok(data.HostedZones)
+        assert.ok(data.Instances)
 
         self.aws_result = data;
-        self.instances = data.HostedZones;
+        self.instances = data.Instances;
 
         done(null, self);
     });
