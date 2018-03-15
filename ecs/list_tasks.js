@@ -15,13 +15,14 @@ const _ = require("iotdb-helpers");
 const assert = require("assert");
 
 /**
- *  Requires: self.ecs, 
+ *  Requires: self.ecs, self.cluster
  *  Produces: self.aws_result, self.tasks
  */
 const list_tasks = _.promise.make((self, done) => {
     const method = "ecs.list_tasks";
 
     assert.ok(self.ecs, `${method}: self.ecs is required`);
+    assert.ok(_.is.String(self.cluster), `${method}: self.cluster is required`);
 
     self.ecs.listTasks({
         cluster: self.cluster,
