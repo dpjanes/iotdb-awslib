@@ -33,10 +33,10 @@ const list_instances = _.promise.make((self, done) => {
         }
 
         assert.ok(data)
-        assert.ok(data.Instances)
+        assert.ok(data.Reservations)
 
-        self.aws_result = data;
-        self.instances = data.Instances;
+        self.aws_result = data
+        self.instances = _.flatten(data.Reservations.map(r => r.Instances))
 
         done(null, self);
     });
