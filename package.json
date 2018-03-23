@@ -12,10 +12,10 @@
     }, 
     "dependencies": {
         "async": "~2.6.0", 
-        "aws-sdk": "~2.206.0", 
+        "aws-sdk": "~2.213.1", 
         "iotdb-errors": "~3.1.6", 
         "iotdb-fs": "~1.0.30", 
-        "iotdb-helpers": "~3.2.8", 
+        "iotdb-helpers": "~3.2.9", 
         "mime": "~2.2.0"
     }, 
     "description": "Pipe-orient programming AWS", 
@@ -28,7 +28,7 @@
         "grunt-jsbeautifier": "~0.2.13", 
         "jshint-stylish": "~2.2.1", 
         "load-grunt-tasks": "~3.5.2", 
-        "request": "~2.83.0"
+        "request": "~2.85.0"
     }, 
     "license": "ISC", 
     "main": "index.js", 
@@ -40,5 +40,5 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     }, 
-    "version": "1.0.47"
+    "version": "1.0.48"
 }
