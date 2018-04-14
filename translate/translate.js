@@ -25,11 +25,11 @@ const translate = _.promise.make((self, done) => {
     assert.ok(_.is.String(self.document), `${method}: self.document must be a String`);
     assert.ok(_.is.String(self.from_language) || _.is.Nullish(self.from_language), 
         `${method}: self.from_language must be a String or Null`);
-    assert.ok(_.is.String(self.to_language), `${method}: self.to_language must be a String`);
+    assert.ok(_.is.String(self.language), `${method}: self.language must be a String`);
 
     self.translate.translateText({
         SourceLanguageCode: self.from_language || "en",
-        TargetLanguageCode: self.to_language,
+        TargetLanguageCode: self.language,
         Text: self.document,
     }, (error, data) => {
         if (error) {

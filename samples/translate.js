@@ -47,7 +47,7 @@ if (action("translate")) {
     _.promise.make({
         awsd: awsd,
         document: "Hello, World",
-        to_language: "zh",
+        language: "zh",
     })
         .then(aws.initialize)
         .then(aws.translate.initialize)
