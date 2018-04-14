@@ -15,27 +15,32 @@ const _ = require("iotdb-helpers");
 const assert = require("assert");
 
 /**
- *  Requires: self.ecs, self.document
+ *  Requires: self.translate, self.document
  *  Produces: self.aws_result, self.document
  */
 const translate = _.promise.make((self, done) => {
-    const method = "ecs.translate";
+    const method = "translate.translate";
 
-    assert.ok(self.ecs, `${method}: self.ecs is required`);
-    assert.ok(_.is.String(self.document), `${method}: self.document is required`);
+    assert.ok(self.translate, `${method}: self.translate is required`);
+    assert.ok(_.is.String(self.document), `${method}: self.document must be a String`);
+    assert.ok(_.is.String(self.from_language) || _.is.Nullish(self.from_language), 
+        `${method}: self.from_language must be a String or Null`);
+    assert.ok(_.is.String(self.to_language), `${method}: self.to_language must be a String`);
 
-    self.ecs.listTasks({
-        document: self.document,
+    self.translate.translateText({
+        SourceLanguageCode: self.from_language || "en",
+        TargetLanguageCode: self.to_language,
+        Text: self.document,
     }, (error, data) => {
         if (error) {
             return done(error);
         }
 
         assert.ok(data)
-        assert.ok(data.taskArns)
+        assert.ok(data.TranslatedText)
 
         self.aws_result = data;
-        self.tasks = data.taskArns;
+        self.document = data.TranslatedText;
 
         done(null, self);
     });
