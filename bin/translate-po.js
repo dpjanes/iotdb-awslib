@@ -25,6 +25,7 @@ const minimist = require('minimist');
 const aws = require("../index");
 const awsd = {
     profile: "consensas",
+    region: "us-east-1",
 }
 
 const ad = minimist(process.argv.slice(2), {
@@ -35,6 +36,9 @@ const action = (name) => ad._.indexOf(name) > -1;
 
 if (ad.profile) {
     awsd.profile = ad.profile
+}
+if (ad.region) {
+    awsd.region = ad.region
 }
 
 /**
@@ -54,8 +58,6 @@ const _po = _.promise.make((self, done) => {
                 sd.translations[key] = _.d.first(vd, "msgstr","");
             })
 
-            console.log(sd.translations)
-
             sd.translates = []
 
             _.mapObject(sd.translations, (value, key) => {
@@ -67,11 +69,20 @@ const _po = _.promise.make((self, done) => {
         .then(_.promise.series({
             method: aws.translate.translate,
             inputs: "translates:document",
-            outputs: "translated",
+            outputs: "results",
             output_selector: sd => sd.document,
         }))
         .then(_.promise.make(sd => {
-            console.log(translated)
+            sd.translates.forEach((key, index) => {
+                sd.translations[key] = sd.results[index]
+            })
+
+            _.mapObject(sd.translations, (value, key) => {
+                console.log(`\
+msgid "${key}"
+msgstr "${value}"
+`)
+            })
         }))
         .then(_.promise.done(done, self))
         .catch(done)
