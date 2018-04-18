@@ -15,7 +15,7 @@
         "aws-sdk": "~2.224.1", 
         "iotdb-errors": "~3.1.6", 
         "iotdb-fs": "~1.0.30", 
-        "iotdb-helpers": "~3.2.12", 
+        "iotdb-helpers": "~3.2.13", 
         "mime": "~2.3.1"
     }, 
     "description": "Pipe-orient programming AWS", 
@@ -40,5 +40,5 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     }, 
-    "version": "1.0.49"
+    "version": "1.0.50"
 }
