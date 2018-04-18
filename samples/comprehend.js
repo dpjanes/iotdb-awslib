@@ -62,3 +62,21 @@ if (action("sentiment")) {
             console.log(error)
         })
 }
+
+if (action("entities")) {
+    _.promise.make({
+        awsd: awsd,
+        document: fs.fs.readFileSync(path.join(__dirname, "data", "bbc_congo.txt"), "utf-8"),
+    })
+        .then(aws.initialize)
+        .then(aws.comprehend.initialize)
+        .then(aws.comprehend.entities)
+        .then(_.promise.make(sd => {
+            console.log("+", "ok", sd.entities)
+        }))
+        .catch(error => {
+            console.log("#", _.error.message(error))
+            delete error.self
+            console.log(error)
+        })
+}
