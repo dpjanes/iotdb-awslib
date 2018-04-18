@@ -49,6 +49,7 @@ echo "=================="
         route53/*.js \
         ec2/*.js \
         translate/*.js \
+        comprehend/*.js \
         |
     ( cd "${NPM_DST}" && tar xvf - && npm publish ) || exit 1
     git commit -m "new release" package.json || exit 1
