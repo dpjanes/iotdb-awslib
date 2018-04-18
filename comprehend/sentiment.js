@@ -21,7 +21,7 @@ const assert = require("assert");
 const sentiment = _.promise.make((self, done) => {
     const method = "comprehend.sentiment";
 
-    assert.ok(self.sentiment, `${method}: self.comprehend is required`);
+    assert.ok(self.comprehend, `${method}: self.comprehend is required`);
     assert.ok(_.is.String(self.document), `${method}: self.document must be a String`);
     assert.ok(_.is.String(self.from_language) || _.is.Nullish(self.from_language), 
         `${method}: self.from_language must be a String or Null`);
@@ -35,7 +35,8 @@ const sentiment = _.promise.make((self, done) => {
         }
 
         assert.ok(data)
-        assert.ok(data.TranslatedText)
+        assert.ok(data.Sentiment)
+        assert.ok(data.SentimentScore)
 
         self.aws_result = data;
 

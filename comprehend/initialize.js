@@ -25,7 +25,7 @@ const initialize = _.promise.make(self => {
 
     assert.ok(self.AWS, `${method}: self.AWS is required`);
 
-    self.translate = new AWS.Translate({
+    self.comprehend = new AWS.Comprehend({
         apiVersion: "2017-11-27",
     });
 })
