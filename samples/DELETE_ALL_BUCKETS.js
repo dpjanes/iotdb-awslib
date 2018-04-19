@@ -17,8 +17,9 @@ const assert = require("assert");
 const AWS = require("aws-sdk");
 const minimist = require('minimist');
 
-const aws = require("../index");
-const awsd = require("./aws.json")
+const aws = require("..")
+const config = require("./aws.json")
+const awsd = config.awsd
 
 const ad = minimist(process.argv.slice(2));
 

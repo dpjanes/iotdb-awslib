@@ -13,5 +13,6 @@
 module.exports = Object.assign(
     {},
     require("./list"),
+    require("./remove"),
     {}
 );

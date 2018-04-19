@@ -1,5 +1,5 @@
 /**
- *  s3/list.js
+ *  s3/remove.js
  *
  *  David Janes
  *  IOTDB
@@ -18,40 +18,39 @@ const AWS = require("aws-sdk")
 
 /**
  */
-const list = _.promise.make((self, done) => {
-    const method = "aws.s3.fs.list"
+const remove = _.promise.make((self, done) => {
+    const method = "aws.s3.fs.remove"
     const aws = require("../..")
 
     assert.ok(_.is.String(self.path), `${method}: self.path must be String`)
 
     _.promise.make(self)
         .then(aws.s3.parse_path)
-        .then(aws.s3.list_objects)
-        .then(_.promise.done(done, self, "paths"))
+        .then(aws.s3.delete_object)
+        .then(_.promise.done(done, self))
         .catch(done)
 })
 
 /**
  */
-const list_recursive = _.promise.make((self, done) => {
-    const method = "aws.s3.fs.list.recursive"
+const remove_recursive = _.promise.make((self, done) => {
+    const method = "aws.s3.fs.remove.recursive"
     const aws = require("../..")
 
     assert.ok(_.is.String(self.path), `${method}: self.path must be String`)
 
     _.promise.make(self)
-        .then(_.promise.add("fails", []))
         .then(aws.s3.parse_path)
-        .then(aws.s3.list_objects.recursive)
-        .then(_.promise.done(done, self, "paths,fails"))
+        .then(aws.s3.delete_bucket_objects)
+        .then(_.promise.done(done, self))
         .catch(done)
 })
 
 /**
  *  API
  */
-exports.list = list
-exports.list.recursive = list_recursive
-exports.list.breadth_first = list_recursive
-exports.list.depth_first = () => { throw new Error("aws.s3.fs.list.depth_first not implemented") }
+exports.remove = remove
+exports.remove.recursive = remove_recursive
+exports.remove.breadth_first = remove_recursive
+exports.remove.depth_first = () => { throw new Error("aws.s3.fs.remove.depth_first not implemented") }
 

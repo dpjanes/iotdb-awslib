@@ -18,7 +18,8 @@ const AWS = require("aws-sdk");
 const minimist = require('minimist');
 
 const aws = require("../index");
-const awsd = require("./aws.json")
+const config = require("./aws.json")
+const awsd = config.awsd
 
 const ad = minimist(process.argv.slice(2));
 
@@ -28,7 +29,7 @@ const action = (name) => ad._.indexOf(name) > -1;
 if (action("create-bucket")) {
     _.promise.make({
         awsd: awsd,
-        bucket: "consensas-test1",
+        bucket: ad.bucket || "consensas-test1",
     })
         .then(aws.initialize)
         .then(aws.s3.initialize)
@@ -54,8 +55,8 @@ if (action("upload-json")) {
     _.promise.make({
         awsd: awsd,
 
-        bucket: "consensas-test1",
-        key: "name.json",
+        bucket: ad.bucket || "consensas-test1",
+        key: ad.key || "name.json",
         json: {
             "hello": "world",
         },
@@ -72,7 +73,7 @@ if (action("upload-document")) {
     _.promise.make({
         awsd: awsd,
 
-        bucket: "consensas-test1",
+        bucket: ad.bucket || "consensas-test1",
         key: "test.txt",
         document: "The quick brown fox jumped over the lazy dog",
     })
@@ -88,7 +89,7 @@ if (action("delete-object")) {
     _.promise.make({
         awsd: awsd,
 
-        bucket: "consensas-test1",
+        bucket: ad.bucket || "consensas-test1",
         key: "test.txt",
     })
         .then(aws.initialize)
@@ -102,7 +103,7 @@ if (action("delete-object")) {
 if (action("list-objects")) {
     _.promise.make({
         awsd: awsd,
-        bucket: "consensas-test1",
+        bucket: ad.bucket || "consensas-test1",
         key: "eLyccgRz",
     })
         .then(aws.initialize)
@@ -116,7 +117,7 @@ if (action("list-objects")) {
 if (action("list-objects-recursive")) {
     _.promise.make({
         awsd: awsd,
-        bucket: "consensas-test1",
+        bucket: ad.bucket || "consensas-test1",
         key: "eLyccgRz",
     })
         .then(aws.initialize)
@@ -130,8 +131,8 @@ if (action("list-objects-recursive")) {
 if (action("head-object")) {
     _.promise.make({
         awsd: awsd,
-        bucket: "consensas-test1",
-        key: "name.jsonx",
+        bucket: ad.bucket || "consensas-test1",
+        key: ad.key || "name.jsonx",
     })
         .then(aws.initialize)
         .then(aws.s3.initialize)
@@ -145,8 +146,8 @@ if (action("head-object")) {
 if (action("object-exists")) {
     _.promise.make({
         awsd: awsd,
-        bucket: "consensas-test1",
-        key: "name.json",
+        bucket: ad.bucket || "consensas-test1",
+        key: ad.key || "name.json",
     })
         .then(aws.initialize)
         .then(aws.s3.initialize)
