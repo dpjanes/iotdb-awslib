@@ -18,9 +18,7 @@ const AWS = require("aws-sdk");
 const minimist = require('minimist');
 
 const aws = require("../index");
-const awsd = {
-    profile: "consensas",
-}
+const awsd = require("./aws.json")
 
 const ad = minimist(process.argv.slice(2));
 

@@ -20,10 +20,7 @@ const AWS = require("aws-sdk")
 const minimist = require('minimist')
 
 const aws = require("../index")
-const awsd = {
-    profile: "consensas",
-    region: "us-east-1",
-}
+const awsd = require("./aws.json")
 
 const _normalize = s => s.replace(/-/g, "_")
 const ad = minimist(process.argv.slice(2));

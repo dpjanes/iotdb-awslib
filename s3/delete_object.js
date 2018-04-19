@@ -10,20 +10,19 @@
 
 "use strict";
 
-const _ = require("iotdb-helpers");
+const _ = require("iotdb-helpers")
 
-const assert = require("assert");
+const assert = require("assert")
 
-const AWS = require("aws-sdk");
+const AWS = require("aws-sdk")
 
-const logger = require("../logger")(__filename);
+const logger = require("../logger")(__filename)
 
 /**
- *  Accepts: 
+ *  Requires: self.s3
  *  Produces:
  */
-const delete_object = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
+const delete_object = _.promise.make((self, done) => {
     const method = "s3.delete_object";
 
     assert.ok(self.s3, `${method}: self.s3 is required`);
@@ -46,9 +45,9 @@ const delete_object = (_self, done) => {
 
         done(null, self);
     });
-}
+})
 
 /**
  *  API
  */
-exports.delete_object = _.promise.denodeify(delete_object);
+exports.delete_object = delete_object
