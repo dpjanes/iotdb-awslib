@@ -37,7 +37,7 @@ const upload_document = (_self, done) => {
         Bucket: self.bucket,
         Key: self.key,
         Body: self.document,
-        ContentType: self.document_media_type || mime.lookup(self.key) || "application/octet-stream",
+        ContentType: self.document_media_type || mime.getType(self.key) || "application/octet-stream",
         ContentEncoding: self.document_encoding || null,
     }
 

@@ -48,9 +48,20 @@ const list_recursive = _.promise.make((self, done) => {
 })
 
 /**
+ */
+const list_p = (_path) => _.promise.make((self, done) => {
+    _.promise.make(self)
+        .then(_.promise.add("path", _path))
+        .then(list)
+        .then(_.promise.done(done, self, "paths"))
+        .catch(done)
+})
+
+/**
  *  API
  */
 exports.list = list
+exports.list.p = list_p
 exports.list.recursive = list_recursive
 exports.list.breadth_first = list_recursive
 exports.list.depth_first = () => { throw new Error("aws.s3.fs.list.depth_first not implemented") }

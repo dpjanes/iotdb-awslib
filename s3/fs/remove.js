@@ -47,9 +47,20 @@ const remove_recursive = _.promise.make((self, done) => {
 })
 
 /**
+ */
+const remove_p = (_path) => _.promise.make((self, done) => {
+    _.promise.make(self)
+        .then(_.promise.add("path", _path))
+        .then(remove)
+        .then(_.promise.done(done, self, "paths"))
+        .catch(done)
+})
+
+/**
  *  API
  */
 exports.remove = remove
+exports.remove.p = remove_p
 exports.remove.recursive = remove_recursive
 exports.remove.breadth_first = remove_recursive
 exports.remove.depth_first = () => { throw new Error("aws.s3.fs.remove.depth_first not implemented") }

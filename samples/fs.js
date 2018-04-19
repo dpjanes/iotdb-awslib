@@ -25,8 +25,8 @@ const ad = minimist(process.argv.slice(2))
 
 const action = (name) => ad._.indexOf(name) > -1
 
+const default_bucket = ad.path || `s3://${config.bucket}/`
 const default_path = ad.path || `s3://${config.bucket}/`
-console.log(default_path)
 
 if (action("list")) {
     _.promise.make({
@@ -50,6 +50,39 @@ if (action("list-recursive")) {
         .then(aws.initialize)
         .then(aws.s3.initialize)
         .then(aws.s3.fs.list.recursive)
+        .then(_.promise.make(sd => {
+            console.log("+", "ok", sd.paths)
+        }))
+        .catch(error => console.log("#", _.error.message(error)))
+}
+
+if (action("write")) {
+    _.promise.make({
+        awsd: awsd,
+    })
+        .then(aws.initialize)
+        .then(aws.s3.initialize)
+        .then(aws.s3.fs.write.p(aws.s3.fs.join(default_bucket, "somefile.txt"), "a document", "utf-8"))
+        .then(aws.s3.fs.list.p(default_bucket))
+        .then(_.promise.make(sd => {
+            console.log("+", "ok", sd.paths)
+        }))
+        .catch(error => console.log("#", _.error.message(error)))
+}
+
+if (action("remove")) {
+    _.promise.make({
+        awsd: awsd,
+    })
+        .then(aws.initialize)
+        .then(aws.s3.initialize)
+        .then(aws.s3.fs.write.p(aws.s3.fs.join(default_bucket, "somefile.txt"), "a document", "utf-8"))
+        .then(aws.s3.fs.list.p(default_bucket))
+        .then(_.promise.make(sd => {
+            console.log("-", "paths", sd.paths)
+        }))
+        .then(aws.s3.fs.remove.p(aws.s3.fs.join(default_bucket, "somefile.txt")))
+        .then(aws.s3.fs.list.p(default_bucket))
         .then(_.promise.make(sd => {
             console.log("+", "ok", sd.paths)
         }))

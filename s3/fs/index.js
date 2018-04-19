@@ -14,5 +14,8 @@ module.exports = Object.assign(
     {},
     require("./list"),
     require("./remove"),
+    require("./write"),
     {}
 );
+
+module.exports.join = require("iotdb-helpers").net.url.join;
