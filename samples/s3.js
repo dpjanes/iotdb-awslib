@@ -40,7 +40,7 @@ if (action("create-bucket")) {
 // list buckets
 if (action("list-buckets")) {
     _.promise.make({
-        aws: awsd,
+        awsd: awsd,
     })
         .then(aws.initialize)
         .then(aws.s3.initialize)
@@ -52,7 +52,7 @@ if (action("list-buckets")) {
 // upload JSON
 if (action("upload-json")) {
     _.promise.make({
-        aws: awsd,
+        awsd: awsd,
 
         bucket: "consensas-test1",
         key: "name.json",
@@ -70,7 +70,7 @@ if (action("upload-json")) {
 // upload document
 if (action("upload-document")) {
     _.promise.make({
-        aws: awsd,
+        awsd: awsd,
 
         bucket: "consensas-test1",
         key: "test.txt",
@@ -84,9 +84,9 @@ if (action("upload-document")) {
 }
 
 // delete object
-if (action("delete-objct")) {
+if (action("delete-object")) {
     _.promise.make({
-        aws: awsd,
+        awsd: awsd,
 
         bucket: "consensas-test1",
         key: "test.txt",
@@ -101,7 +101,7 @@ if (action("delete-objct")) {
 // list files
 if (action("list-objects")) {
     _.promise.make({
-        aws: awsd,
+        awsd: awsd,
         bucket: "consensas-test1",
         key: "eLyccgRz",
     })
@@ -115,7 +115,7 @@ if (action("list-objects")) {
 // list files
 if (action("list-objects-recursive")) {
     _.promise.make({
-        aws: awsd,
+        awsd: awsd,
         bucket: "consensas-test1",
         key: "eLyccgRz",
     })
@@ -129,7 +129,7 @@ if (action("list-objects-recursive")) {
 // head files
 if (action("head-object")) {
     _.promise.make({
-        aws: awsd,
+        awsd: awsd,
         bucket: "consensas-test1",
         key: "name.jsonx",
     })
@@ -144,7 +144,7 @@ if (action("head-object")) {
 // object exists
 if (action("object-exists")) {
     _.promise.make({
-        aws: awsd,
+        awsd: awsd,
         bucket: "consensas-test1",
         key: "name.json",
     })
@@ -159,7 +159,7 @@ if (action("object-exists")) {
 // object exists using path
 if (action("object-exists-with-path")) {
     _.promise.make({
-        aws: awsd,
+        awsd: awsd,
         path: "s3://consensas-test1/name.json",
     })
         .then(aws.initialize)
