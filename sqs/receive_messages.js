@@ -20,8 +20,7 @@ const AWS = require("aws-sdk");
  *  Accepts: 
  *  Produces:
  */
-const receive_messages = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
+const receive_messages = _.promise.make((self, done) => {
     const method = "sqs.receive_messages";
 
     assert.ok(self.sqs, `${method}: self.sqs is required`);
@@ -42,9 +41,9 @@ const receive_messages = (_self, done) => {
 
         return done(null, self);
     });
-}
+})
 
 /**
  *  API
  */
-exports.receive_messages = _.promise.denodeify(receive_messages);
+exports.receive_messages = receive_messages

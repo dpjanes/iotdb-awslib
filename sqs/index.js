@@ -18,6 +18,7 @@ module.exports = Object.assign(
     require("./get_queue_url"),
     require("./initialize"),
     require("./list_queues"),
+    require("./list_dlq_sources"),
     require("./process_json"),
     require("./receive_json"),
     require("./receive_jsons"),

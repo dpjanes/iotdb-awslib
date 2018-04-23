@@ -20,8 +20,7 @@ const AWS = require("aws-sdk");
  *  Accepts: 
  *  Produces:
  */
-const receive_message = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
+const receive_message = _.promise.make((self, done) => {
     const method = "sqs.receive_message";
 
     assert.ok(self.sqs, `${method}: self.sqs is required`);
@@ -32,22 +31,23 @@ const receive_message = (_self, done) => {
         QueueUrl: self.queue_url,
         MaxNumberOfMessages: 1,
         WaitTimeSeconds: _.is.Number(self.timeout) ? self.timeout : 15,
+        AttributeNames: [ "All" ],
     }, (error, data) => {
         if (error) {
             return done(error);
         }
 
         self.message = null;
-
+    
         if (data.Messages) {
             self.message = data.Messages[0];
         }
 
         return done(null, self);
     });
-}
+})
 
 /**
  *  API
  */
-exports.receive_message = _.promise.denodeify(receive_message);
+exports.receive_message = receive_message

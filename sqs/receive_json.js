@@ -20,8 +20,7 @@ const AWS = require("aws-sdk");
  *  Accepts: 
  *  Produces:
  */
-const receive_json = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
+const receive_json = _.promise.make((self, done) => {
     const method = "sqs.receive_json";
 
     const delete_message = require("./delete_message").delete_message;
@@ -60,9 +59,9 @@ const receive_json = (_self, done) => {
 
         return done(null, self);
     });
-}
+})
 
 /**
  *  API
  */
-exports.receive_json = _.promise.denodeify(receive_json);
+exports.receive_json = receive_json
