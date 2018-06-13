@@ -5,7 +5,7 @@
  *  IOTDB.org
  *  2017-01-29
  *
- *  Copyright (2013-2017) David Janes
+ *  Copyright (2013-2018) David Janes
  */
 
 "use strict";

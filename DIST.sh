@@ -38,6 +38,7 @@ echo "=================="
         index.js initialize.js logger.js \
         bin/*.js \
         s3/*.js \
+        s3/fs/*.js \
         dynamodb/*.js \
         lambda/*.js \
         kinesis/*.js \

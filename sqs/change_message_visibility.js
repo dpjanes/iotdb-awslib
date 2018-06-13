@@ -5,7 +5,7 @@
  *  IOTDB
  *  2017-04-24
  *
- *  Copyright (2013-2017) David Janes
+ *  Copyright (2013-2018) David Janes
  */
 
 "use strict";
@@ -20,8 +20,7 @@ const AWS = require("aws-sdk");
  *  Accepts: self.sqs, self.message, self.queue_url, self.timeout (seconds)
  *  Produces:
  */
-const change_message_visibility = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
+const change_message_visibility = _.promise.make((self, done) => {
     const method = "sqs.change_message_visibility";
 
     assert.ok(self.sqs, `${method}: self.sqs is required`);
@@ -43,9 +42,9 @@ const change_message_visibility = (_self, done) => {
 
         return done(null, self);
     });
-}
+})
 
 /**
  *  API
  */
-exports.change_message_visibility = _.promise.denodeify(change_message_visibility);
+exports.change_message_visibility = change_message_visibility

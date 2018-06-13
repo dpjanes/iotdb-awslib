@@ -5,7 +5,7 @@
  *  IOTDB
  *  2017-04-24
  *
- *  Copyright (2013-2017) David Janes
+ *  Copyright (2013-2018) David Janes
  */
 
 "use strict";
@@ -24,8 +24,7 @@ const async = require("async");
  *  with unparsable messages are rarely if ever 
  *  going to show up.
  */
-const receive_jsons = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
+const receive_jsons = _.promise.make((self, done) => {
     const method = "sqs.receive_jsons";
 
     assert.ok(self.sqs, `${method}: self.sqs is required`);
@@ -67,9 +66,9 @@ const receive_jsons = (_self, done) => {
 
         async.series(ops, () => done(null, self))
     });
-}
+})
 
 /**
  *  API
  */
-exports.receive_jsons = _.promise.denodeify(receive_jsons);
+exports.receive_jsons = receive_jsons

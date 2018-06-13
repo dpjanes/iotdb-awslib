@@ -5,7 +5,7 @@
  *  IOTDB
  *  2017-01-30
  *
- *  Copyright (2013-2017) David Janes
+ *  Copyright (2013-2018) David Janes
  */
 
 "use strict";
@@ -20,8 +20,7 @@ const AWS = require("aws-sdk");
  *  Accepts: 
  *  Produces:
  */
-const delete_message = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
+const delete_message = _.promise.make((self, done) => {
     const method = "sqs.delete_message";
 
     assert.ok(self.sqs, `${method}: self.sqs is required`);
@@ -41,9 +40,9 @@ const delete_message = (_self, done) => {
 
         return done(null, self);
     });
-}
+})
 
 /**
  *  API
  */
-exports.delete_message = _.promise.denodeify(delete_message);
+exports.delete_message = delete_message

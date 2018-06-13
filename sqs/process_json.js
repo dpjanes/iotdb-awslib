@@ -5,7 +5,7 @@
  *  IOTDB
  *  2017-01-30
  *
- *  Copyright (2013-2017) David Janes
+ *  Copyright (2013-2018) David Janes
  */
 
 "use strict";
@@ -20,8 +20,7 @@ const AWS = require("aws-sdk");
  *  Accepts: 
  *  Produces:
  */
-const process_json = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
+const process_json = _.promise.make((self, done) => {
     const method = "sqs.process_json";
 
     const receive_message = require("./receive_message").receive_message;
@@ -60,9 +59,9 @@ const process_json = (_self, done) => {
     }
 
     _do_one();
-}
+})
 
 /**
  *  API
  */
-exports.process_json = _.promise.denodeify(process_json);
+exports.process_json = process_json

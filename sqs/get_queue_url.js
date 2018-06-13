@@ -5,7 +5,7 @@
  *  IOTDB
  *  2017-01-30
  *
- *  Copyright (2013-2017) David Janes
+ *  Copyright (2013-2018) David Janes
  */
 
 "use strict";
@@ -20,8 +20,7 @@ const AWS = require("aws-sdk");
  *  Accepts: 
  *  Produces:
  */
-const get_queue_url = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
+const get_queue_url = _.promise.make((self, done) => {
     const method = "sqs.get_queue_url";
 
     assert.ok(self.sqs, `${method}: self.sqs is required`);
@@ -38,9 +37,9 @@ const get_queue_url = (_self, done) => {
 
         return done(null, self);
     });
-}
+})
 
 /**
  *  API
  */
-exports.get_queue_url = _.promise.denodeify(get_queue_url);
+exports.get_queue_url = get_queue_url

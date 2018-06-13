@@ -5,7 +5,7 @@
  *  IOTDB
  *  2017-04-24
  *
- *  Copyright (2013-2017) David Janes
+ *  Copyright (2013-2018) David Janes
  */
 
 "use strict";
@@ -23,8 +23,7 @@ const AWS = require("aws-sdk");
  *  Changes message visibility to 0, making it available to
  *  other queue proccessors
  */
-const requeue_message = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
+const requeue_message = _.promise.make((self, done) => {
     const method = "sqs.requeue_message";
 
     assert.ok(self.sqs, `${method}: self.sqs is required`);
@@ -45,9 +44,9 @@ const requeue_message = (_self, done) => {
 
         return done(null, self);
     });
-}
+})
 
 /**
  *  API
  */
-exports.requeue_message = _.promise.denodeify(requeue_message);
+exports.requeue_message = requeue_message

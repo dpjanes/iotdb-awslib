@@ -5,7 +5,7 @@
  *  IOTDB
  *  2017-01-30
  *
- *  Copyright (2013-2017) David Janes
+ *  Copyright (2013-2018) David Janes
  */
 
 "use strict";
@@ -20,8 +20,7 @@ const AWS = require("aws-sdk");
  *  Accepts: 
  *  Produces:
  */
-const list_queues = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
+const list_queues = _.promise.make((self, done) => {
     const method = "sqs.list_queues";
 
     assert.ok(self.sqs, `${method}: self.sqs is required`);
@@ -36,9 +35,9 @@ const list_queues = (_self, done) => {
 
         return done(null, self);
     });
-}
+})
 
 /**
  *  API
  */
-exports.list_queues = _.promise.denodeify(list_queues);
+exports.list_queues = list_queues

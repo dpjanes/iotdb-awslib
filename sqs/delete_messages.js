@@ -5,7 +5,7 @@
  *  IOTDB
  *  2017-04-24
  *
- *  Copyright (2013-2017) David Janes
+ *  Copyright (2013-2018) David Janes
  */
 
 "use strict";
@@ -19,12 +19,8 @@ const async = require("async");
 /**
  *  Accepts: self.sqs, self.message, self.queue_url
  *  Produces:
- *
- *  Changes all messages visibility to 0, making it available to
- *  other queue proccessors
  */
-const requeue_messages = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
+const requeue_messages = _.promise.make((self, done) => {
     const method = "sqs.requeue_messages";
 
     assert.ok(self.sqs, `${method}: self.sqs is required`);
@@ -41,9 +37,9 @@ const requeue_messages = (_self, done) => {
     });
 
     async.series(ops, () => done(null, self))
-}
+})
 
 /**
  *  API
  */
-exports.requeue_messages = _.promise.denodeify(requeue_messages);
+exports.requeue_messages = requeue_messages
