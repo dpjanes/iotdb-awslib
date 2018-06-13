@@ -10,11 +10,11 @@
 
 "use strict";
 
-const _ = require("iotdb-helpers");
+const _ = require("iotdb-helpers")
 
-const assert = require("assert");
+const assert = require("assert")
 
-const AWS = require("aws-sdk");
+const AWS = require("aws-sdk")
 
 /**
  *  Accepts: 

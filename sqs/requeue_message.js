@@ -14,8 +14,6 @@ const _ = require("iotdb-helpers");
 
 const assert = require("assert");
 
-const AWS = require("aws-sdk");
-
 /**
  *  Accepts: self.sqs, self.message, self.queue_url
  *  Produces:
