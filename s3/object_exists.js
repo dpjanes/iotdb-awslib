@@ -20,8 +20,7 @@ const AWS = require("aws-sdk");
  *  Accepts: 
  *  Produces:
  */
-const object_exists = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
+const object_exists = _.promise.make((self, done) => {
     const method = "s3.object_exists";
 
     assert.ok(self.s3, `${method}: self.s3 is required`);
@@ -44,9 +43,9 @@ const object_exists = (_self, done) => {
 
         return done(error);
     });
-}
+})
 
 /**
  *  API
  */
-exports.object_exists = _.promise.denodeify(object_exists);
+exports.object_exists = object_exists
