@@ -49,6 +49,7 @@ echo "=================="
         cloudwatch/*.js \
         route53/*.js \
         ec2/*.js \
+        ecr/*.js \
         translate/*.js \
         comprehend/*.js \
         |
