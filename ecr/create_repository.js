@@ -1,5 +1,5 @@
 /**
- *  ecr/describe_repositories.js
+ *  ecr/create_repository.js
  *
  *  David Janes
  *  IOTDB
@@ -16,21 +16,23 @@ const assert = require("assert")
 
 /**
  *  Requires: 
- *  Produces: self.aws_result, self.repositories
+ *  Produces: self.aws_result, self.repository
  */
-const describe_repositories = _.promise.make((self, done) => {
-    const method = "ecr.describe_repositories";
+const create_repository = _.promise.make((self, done) => {
+    const method = "ecr.create_repository";
 
     assert.ok(self.ecr, `${method}: self.ecr is required`);
+    assert.ok(_.is.String(self.name), `${method}: self.name is must be String`);
 
-    self.ecr.describeRepositories({
+    self.ecr.createRepository({
+        repositoryName: self.name,
     }, (error, data) => {
         if (error) {
             return done(error);
         }
 
         self.aws_result = data;
-        self.repositories = data.repositories;
+        self.repository = data.repository || null;
 
         done(null, self);
     });
@@ -39,4 +41,4 @@ const describe_repositories = _.promise.make((self, done) => {
 /**
  *  API
  */
-exports.describe_repositories = describe_repositories;
+exports.create_repository = create_repository;

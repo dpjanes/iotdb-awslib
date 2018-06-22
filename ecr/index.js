@@ -13,12 +13,17 @@
 module.exports = Object.assign(
     {},
     require("./initialize"),
-    require("./describe_repositories"),
+    require("./list_repositories"),
+    require("./repository_get_by_name"),
+    require("./create_repository"),
+    require("./delete_repository"),
     {}
 );
 
 module.exports.repository = {
-    list: module.exports.describe_repositories,
-    get_by_name: _.promise.make((self, done
+    create: module.exports.create_repository,
+    delete: module.exports.delete_repository,
+    list: module.exports.list_repositories,
+    get_by_name: module.exports.repository_get_by_name,
 }
 
