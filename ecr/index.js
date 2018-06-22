@@ -13,6 +13,12 @@
 module.exports = Object.assign(
     {},
     require("./initialize"),
-    require("./describe_repository"),
+    require("./describe_repositories"),
     {}
 );
+
+module.exports.repository = {
+    list: module.exports.describe_repositories,
+    get_by_name: _.promise.make((self, done
+}
+
