@@ -30,6 +30,13 @@ const repository_get_by_name = _.promise.make((self, done) => {
         ],
     }, (error, data) => {
         if (error) {
+            if (error.code === "RepositoryNotFoundException") {
+                self.aws_result = null
+                self.repository = null
+
+                return done(null, self)
+            }
+
             return done(error);
         }
 

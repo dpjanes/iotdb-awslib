@@ -9,25 +9,29 @@
  *  Copyright (2013-2017) David Janes
  */
 
-"use strict";
+"use strict"
 
-const _ = require("iotdb-helpers");
+const _ = require("iotdb-helpers")
 
-const assert = require("assert");
-const path = require("path");
-const fs = require("fs");
+const assert = require("assert")
+const path = require("path")
+const fs = require("fs")
 
-const AWS = require("aws-sdk");
-const minimist = require('minimist');
+const AWS = require("aws-sdk")
+const minimist = require('minimist')
 
-const aws = require("../index");
+const aws = require("../index")
 const awsd = {
-    // profile: "consensas",
 }
 
 const ad = minimist(process.argv.slice(2), {
     binary: [ "download", "json", "recursive" ],
-});
+    string: [ "profile", ],
+})
+
+if (ad.profile) {
+    awsd.profile = ad.profile
+}
 
 const action = (name) => ad._.indexOf(name) > -1;
 
