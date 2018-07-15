@@ -52,7 +52,7 @@ if (action("log-groups")) {
         .then(aws.cloudwatch.initialize)
         .then(aws.cloudwatch.describe_log_groups)
         .then(_.promise.make(sd => {
-            console.log("+", "ok", sd.log_group_descriptions);
+            console.log("+", "ok", sd.log_groups);
         }))
         .catch(handle)
 }

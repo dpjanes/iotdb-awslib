@@ -56,6 +56,10 @@ const get_log_events = _.promise.make((self, done) => {
             next: data.nextForwardToken,
         }
 
+        if (self.pager && (data.nextForwardToken === self.pager)) {
+            self.cursor.next = null
+        }
+
         done(null, self);
     });
 })
