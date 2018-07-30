@@ -24,6 +24,14 @@ const describe_tasks = _.promise.make((self, done) => {
     assert.ok(self.ecs, `${method}: self.ecs is required`);
     assert.ok(_.is.Array.of.String(self.tasks), `${method}: self.tasks is required`);
 
+    if (self.tasks.length === 0) {
+        self.aws_result = null
+        self.task_descriptions = []
+        self.task_description = null
+
+        return done(null, self)
+    }
+
     self.ecs.describeTasks({
         cluster: self.cluster,
         tasks: self.tasks,
