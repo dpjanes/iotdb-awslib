@@ -34,7 +34,22 @@ const get_queue_attributes = _.promise.make((self, done) => {
 
         self.json = data.Attributes
         _.mapObject(self.json, (value, key) => {
-            self.json[key] = _.coerce.to.Number(value, value)
+            if (!_.is.String(value)) {
+                return
+            }
+
+            if (value.match(/^[0-9]/)) {
+                self.json[key] = _.coerce.to.Number(value, value)
+            } else if (value.match(/^{/)) {
+                try {
+                    self.json[key] = JSON.parse(value)
+                } catch (x) {
+                }
+            } else if (value === 'true') {
+                self.json[key] = true
+            } else if (value === 'false') {
+                self.json[key] = false
+            }
         })
 
         done(null, self)
