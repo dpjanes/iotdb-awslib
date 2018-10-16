@@ -46,10 +46,23 @@ if (action("list-queues")) {
         .catch(error => console.log("#", _.error.message(error)))
 }
 
+if (action("get-queue-attributes")) {
+    _.promise.make({
+        awsd: awsd,
+        queue_name: "test",
+    })
+        .then(aws.initialize)
+        .then(aws.sqs.initialize)
+        .then(aws.sqs.get_queue_url)
+        .then(aws.sqs.get_queue_attributes)
+        .then(_self => console.log("+", "ok", _self.json))
+        .catch(error => console.log("#", _.error.message(error)))
+}
+
 if (action("get-queue-url")) {
     _.promise.make({
         awsd: awsd,
-        queue_name: "test1",
+        queue_name: "test",
     })
         .then(aws.initialize)
         .then(aws.sqs.initialize)
@@ -61,7 +74,7 @@ if (action("get-queue-url")) {
 if (action("send-json")) {
     _.promise.make({
         awsd: awsd,
-        queue_name: "test1",
+        queue_name: "test",
         json: _.timestamp.add({ "a": "Message", "ledger_id": "urn:iotdb:ledger:ZBm22eUo" }),
     })
         .then(aws.initialize)
@@ -75,7 +88,7 @@ if (action("send-json")) {
 if (action("process-json")) {
     _.promise.make({
         awsd: awsd,
-        queue_name: "test1",
+        queue_name: "test",
         handle_message: _.promise.denodeify((_self, done) => {
             console.log("+", "MESSAGE", JSON.stringify(_self.json, null, 2));
             done(null, _self);

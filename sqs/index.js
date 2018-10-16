@@ -15,6 +15,7 @@ module.exports = Object.assign(
     require("./change_message_visibility"),
     require("./delete_message"),
     require("./delete_messages"),
+    require("./get_queue_attributes"),
     require("./get_queue_url"),
     require("./initialize"),
     require("./list_queues"),
