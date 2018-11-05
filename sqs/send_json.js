@@ -25,7 +25,6 @@ const send_json = _.promise.make((self, done) => {
     assert.ok(_.is.JSON(self.json), `${method}: self.json must be a JSONable Object`);
     assert.ok(_.is.String(self.queue_url), `${method}: self.queue_url must be a String`);
     assert.ok(_.is.Number(self.delay) || !self.delay, `${method}: self.delay must be a Number or Null`);
-    assert.ok(_.is.String(self.queue_url), `${method}: self.queue_url must be a String`);
 
     const paramd = {
         QueueUrl: self.queue_url,
