@@ -18,11 +18,8 @@ const assert = require("assert");
  *  Requires: self.ecs, 
  *  Produces: self.aws_result, self.task_description
  */
-const describe_task = _.promise.make((self, done) => {
-    const method = "ecs.describe_task";
-
-    assert.ok(self.ecs, `${method}: self.ecs is required`);
-    assert.ok(_.is.String(self.task), `${method}: self.task is required`);
+const describe_task = _.promise((self, done) => {
+    _.promise.validate(self, describe_tasks)
 
     self.ecs.describeTasks({
         cluster: self.cluster,
@@ -41,6 +38,12 @@ const describe_task = _.promise.make((self, done) => {
         done(null, self);
     });
 })
+
+describe_task.method = "ecs.describe_task"
+describe_task.requires = {
+    ecs: _.is.Object,
+    task: _.is.String,
+}
 
 /**
  *  API
