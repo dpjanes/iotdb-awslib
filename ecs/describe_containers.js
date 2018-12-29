@@ -31,7 +31,7 @@ const describe_containers = _.promise((self, done) => {
 
     self.ecs.describeContainerInstances({
         cluster: self.cluster,
-        containers: self.containers.map(c => _.is.String(c) ? c : c.containerInstanceArn),
+        containerInstances: self.containers.map(c => _.is.String(c) ? c : c.containerInstanceArn),
     }, (error, data) => {
         if (error) {
             return done(error);
