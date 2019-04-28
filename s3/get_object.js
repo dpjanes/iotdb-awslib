@@ -10,24 +10,15 @@
 
 "use strict";
 
-const _ = require("iotdb-helpers");
+const _ = require("iotdb-helpers")
 
-const assert = require("assert");
+const assert = require("assert")
 
-const AWS = require("aws-sdk");
+const AWS = require("aws-sdk")
 
 /**
- *  Accepts: 
- *  Produces:
  */
-const get_object = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
-    const method = "s3.get_object";
-
-    assert.ok(self.s3, `${method}: self.s3 is required`);
-    assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`);
-    assert.ok(_.is.String(self.key) || !self.key, `${method}: self.key must be a String or Null`);
-
+const get_object = _.promise((self, done) => {
     self.s3.getObject({
         Bucket: self.bucket,
         Key: self.key,
@@ -53,10 +44,10 @@ const get_object = (_self, done) => {
                 self.document_encoding = null;
             }
         } else {
-            assert(false, `${method}: don't know how to deal with Body of type: ${typeof data.Body}`);
+            assert.ok(false, `${get_object.method}: don't know how to deal with Body of type: ${typeof data.Body}`);
         }
 
-        assert(self.document, `${method}: self.document should have been produced by now`);
+        assert.ok(self.document, `${get_object.method}: self.document should have been produced by now`);
 
         if (data.ContentType) {
             self.document_media_type = data.ContentType;
@@ -64,9 +55,16 @@ const get_object = (_self, done) => {
 
         done(null, self);
     });
+})
+get_object.method = "s3.get_object"
+get_object.requires = {
+    s3: _.is.Object,
+    bucket: _.is.String,
+    key: _.is.String,
 }
 
 /**
  *  API
  */
-exports.get_object = _.promise.denodeify(get_object);
+exports.get_object = get_object
+
