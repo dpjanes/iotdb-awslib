@@ -45,7 +45,7 @@ const help = message => {
     console.log("")
     console.log("S3 URLs look like:")
     console.log("")
-    console.log("  https://test-large.s3.amazonaws.com/")
+    console.log("  https://test-large.s3.amazonaws.com/Attachment-1.jpg")
     console.log("  s3://test-large/Attachment-1.jpg")
 
     process.exit(message ? 1 : 0)
