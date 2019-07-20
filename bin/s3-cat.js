@@ -126,23 +126,6 @@ const _get = _.promise((self, done) => {
         .conditional(ad.json, _json)
         .conditional(!ad.download && !ad.json, _stdout)
 
-        /*
-
-        .make(sd => {
-            // console.log(_sd)
-            if (ad.download) {
-                const name = path.basename(sd.path)
-                fs.writeFileSync(name, _sd.document)
-
-                console.log("+", "downloaded:", name)
-            } else if (ad.json) {
-                process.stdout.write(JSON.stringify(JSON.parse(_sd.document), null, 2))
-                process.stdout.write("\n")
-            } else {
-                process.stdout.write(_sd.document)
-            }
-        })
-        */
         .end(done, self)
 })
 
