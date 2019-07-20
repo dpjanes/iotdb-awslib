@@ -19,17 +19,32 @@ const url = require("url")
  *  Accepts: 
  *  Produces:
  */
-const parse_path = _.promise.make(self => {
-    _.promise.make(self, parse_path)
+const parse_path = _.promise(self => {
+    _.promise.validate(self, parse_path)
 
     const urlp = url.parse(self.path)
-    assert.ok(urlp.protocol === "s3:", `${parse_path.method}: self.path: protocol must be "s3:"`)
-    assert.ok(urlp.hostname.indexOf('.') === -1, `${parse_path.method}: self.path: AWS regions not supported yet`)
+    switch (urlp.protocol) {
+    case "s3:":
+        assert.ok(urlp.hostname.indexOf('.') === -1, `${parse_path.method}: self.path: AWS regions not supported yet`)
 
-    self.key = urlp.pathname.replace(/^\//, '')
-    self.bucket = urlp.hostname
+        self.key = (urlp.pathname || "").replace(/^\//, '')
+        self.bucket = urlp.hostname
+        break
 
-    // require("fs").appendFileSync("/Users/david/S3.txt", self.path + "\n")
+    case "https:":
+        const match = urlp.hostname.match(/^([^.]*)[.]s3[.]amazonaws[.]com$/)
+        if (!match) {
+            assert.ok(false, `${parse_path.method}: don't recognize ${urlp.protocol}//${urlp.hostname}`)
+        }
+
+        self.key = (urlp.pathname || "").replace(/^\//, '')
+        self.bucket = match[1]
+        break
+
+    default:
+        assert.ok(false, `${parse_path.method}: bad protocol=${urlp.protocol}`)
+    }
+
 })
 
 parse_path.method = "s3.parse_path"
