@@ -52,6 +52,9 @@ ad._.forEach(s3_path => {
         })
         .catch(error => {
             console.log("#", _.error.message(error))
+
+            delete error.self
+            console.log(error)
         })
     
 })
