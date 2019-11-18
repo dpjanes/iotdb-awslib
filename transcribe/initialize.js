@@ -19,7 +19,7 @@ const AWS = require("aws-sdk")
 const initialize = _.promise(self => {
     _.promise.validate(self, initialize)
 
-    self.transcribe = new AWS.TranscribeService({
+    self.AWS$transcribe = new AWS.TranscribeService({
         apiVersion: "2017-10-26",
     });
 })
