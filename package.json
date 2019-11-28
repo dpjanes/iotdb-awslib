@@ -12,25 +12,13 @@
     }, 
     "dependencies": {
         "async": "~2.6.1", 
-        "aws-sdk": "~2.574.0", 
-        "iotdb-errors": "~3.1.8", 
-        "iotdb-fs": "~1.1.2", 
-        "iotdb-helpers": "~3.4.2", 
+        "aws-sdk": "~2.580.0", 
+        "iotdb-errors": "~3.1.9", 
+        "iotdb-helpers": "~3.4.3", 
         "mime": "~2.4.4"
     }, 
-    "description": "Pipe-orient programming AWS", 
-    "devDependencies": {
-        "grunt": "~1.0.4", 
-        "grunt-contrib-jshint": "~1.1.0", 
-        "grunt-contrib-nodeunit": "~1.0.0", 
-        "grunt-contrib-uglify": "~3.3.0", 
-        "grunt-contrib-watch": "~1.1.0", 
-        "grunt-jsbeautifier": "~0.2.13", 
-        "jshint-stylish": "~2.2.1", 
-        "load-grunt-tasks": "~3.5.2", 
-        "request": "~2.88.0"
-    }, 
-    "license": "ISC", 
+    "description": "POP wrapper for AWS", 
+    "license": "Apache-2.0", 
     "main": "index.js", 
     "name": "iotdb-awslib", 
     "repository": {
