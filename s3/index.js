@@ -22,7 +22,9 @@
 
 "use strict"
 
-module.exports = Object.assign(
+const _ = require("iotdb-helpers")
+
+module.exports = _.d.compose.deep(
     {},
     require("./bucket.create"),
     require("./bucket.delete"),
@@ -38,7 +40,7 @@ module.exports = Object.assign(
     require("./object.head"),
     require("./object.list"),
     require("./object.put"),
-    require("./path.join.all"),
+    require("./path.build"),
     require("./path.parse"),
     {}
 )

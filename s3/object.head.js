@@ -43,6 +43,9 @@ object.head = _.promise((self, done) => {
         if (data.ContentType) {
             self.document_media_type = data.ContentType
         }
+        if (data.ContentLength) {
+            self.document_length = data.ContentLength
+        }
 
         done(null, self)
     })
@@ -58,6 +61,7 @@ object.head.requires = {
 object.head.produces = {
     aws$result: _.is.Object,
     document_media_type: _.is.String,
+    document_length: _.is.Integer,
 }
 
 /**

@@ -1,5 +1,5 @@
 /**
- *  s3/path.join.all.js
+ *  s3/path.build.all.js
  *
  *  David Janes
  *  IOTDB
@@ -27,19 +27,39 @@ const _ = require("iotdb-helpers")
 /**
  */
 const path = {}
-path.join = {}
-path.join.all = _.promise.make(self => {
-    _.promise.validate(self, path.join.all)
 
-    self.paths = self.paths.map(name => name.startsWith("s3://") ? name : `s3://${self.bucket}/${name}`)
+/**
+ */
+path.build = _.promise.make(self => {
+    _.promise.validate(self, path.build)
+
+    self.paths = key.startsWith("s3://") ? key : `s3://${self.bucket}/${key}`
 })
 
-path.join.all.method = "s3.path.join.all"
-path.join.all.requires = {
+path.build.method = "s3.path.build"
+path.build.requires = {
+    aws$s3: _.is.Object,
+    bucket: _.is.String,
+    key: _.is.String,
+}
+path.build.produces = {
+    path: _.is.String,
+}
+
+/**
+ */
+path.build.all = _.promise.make(self => {
+    _.promise.validate(self, path.build.all)
+
+    self.paths = self.keys.map(key => key.startsWith("s3://") ? key : `s3://${self.bucket}/${key}`)
+})
+
+path.build.all.method = "s3.path.build.all"
+path.build.all.requires = {
     aws$s3: _.is.Object,
     bucket: _.is.String,
 }
-path.join.all.produces = {
+path.build.all.produces = {
     paths: _.is.Array.of.String,
 }
 

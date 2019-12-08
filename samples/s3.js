@@ -31,19 +31,17 @@ const action = name => {
     return action_name === name
 }
 
-if (action("create-bucket")) {
+if (action("bucket.create")) {
     _.promise({
         awsd: awsd,
         bucket: ad.bucket || "consensas-test1",
     })
         .then(aws.initialize)
         .then(aws.s3.initialize)
-        .log("A")
         .then(aws.s3.bucket.create)
-        .log("B")
         .make(sd => console.log("+", "ok", sd.bucket_url)) // .result))
         .catch(_.error.log)
-} else if (action("bucket-exists")) {
+} else if (action("bucket.exists")) {
     _.promise({
         awsd: awsd,
         bucket: ad.bucket || "consensas-test1",
@@ -53,7 +51,7 @@ if (action("create-bucket")) {
         .then(aws.s3.bucket.exists)
         .make(sd => console.log("+", "ok", sd.exists))
         .catch(_.error.log)
-} else if (action("list-buckets")) {
+} else if (action("bucket.list")) {
     _.promise({
         awsd: awsd,
     })
@@ -62,7 +60,7 @@ if (action("create-bucket")) {
         .then(aws.s3.bucket.list)
         .make(sd => console.log("+", "ok", sd.buckets))
         .catch(_.error.log)
-} else if (action("upload-json")) {
+} else if (action("json.put")) {
     _.promise({
         awsd: awsd,
 
@@ -75,9 +73,9 @@ if (action("create-bucket")) {
         .then(aws.initialize)
         .then(aws.s3.initialize)
         .then(aws.s3.json.put)
-        .make(sd => console.log("+", "ok", sd.aws_result))
+        .make(sd => console.log("+", "ok", sd.aws$result))
         .catch(_.error.log)
-} else if (action("upload-document")) {
+} else if (action("object.put")) {
     _.promise({
         awsd: awsd,
 
@@ -88,9 +86,9 @@ if (action("create-bucket")) {
         .then(aws.initialize)
         .then(aws.s3.initialize)
         .then(aws.s3.object.put)
-        .make(sd => console.log("+", "ok", sd.aws_result))
+        .make(sd => console.log("+", "ok", sd.aws$result))
         .catch(_.error.log)
-} else if (action("delete-object")) {
+} else if (action("object.delete")) {
     _.promise({
         awsd: awsd,
 
@@ -100,31 +98,35 @@ if (action("create-bucket")) {
         .then(aws.initialize)
         .then(aws.s3.initialize)
         .then(aws.s3.object.delete)
-        .make(sd => console.log("+", "ok", sd.aws_result))
+        .make(sd => console.log("+", "ok", sd.aws$result))
         .catch(_.error.log)
-} else if (action("list-objects")) {
+} else if (action("object.list")) {
     _.promise({
         awsd: awsd,
         bucket: ad.bucket || "consensas-test1",
-        key: "eLyccgRz",
+        // key: "eLyccgRz",
     })
         .then(aws.initialize)
         .then(aws.s3.initialize)
         .then(aws.s3.object.list)
-        .make(sd => console.log("+", "ok", sd.paths))
+        .make(sd => console.log("+", "keys", sd.keys))
+        .then(aws.s3.path.build.all)
+        .make(sd => console.log("+", "paths", sd.paths))
         .catch(_.error.log)
-} else if (action("list-objects-recursive")) {
+} else if (action("object.list.recursive")) {
     _.promise({
         awsd: awsd,
         bucket: ad.bucket || "consensas-test1",
-        key: "eLyccgRz",
+        // key: "eLyccgRz",
     })
         .then(aws.initialize)
         .then(aws.s3.initialize)
         .then(aws.s3.object.list.recursive)
+        .make(sd => console.log("+", "keys", sd.keys))
+        .then(aws.s3.path.build.all)
         .make(sd => console.log("+", "ok", sd.paths))
         .catch(_.error.log)
-} else if (action("head-object")) {
+} else if (action("object.head")) {
     _.promise({
         awsd: awsd,
         bucket: ad.bucket || "consensas-test1",
@@ -133,9 +135,11 @@ if (action("create-bucket")) {
         .then(aws.initialize)
         .then(aws.s3.initialize)
         .then(aws.s3.object.head)
-        .make(sd => console.log("+", "ok", sd.files))
+        .make(sd => console.log("+", "media_type", sd.document_media_type))
+        .make(sd => console.log("+", "length", sd.document_length))
+        .make(sd => console.log("+", "ok", sd.aws$result))
         .catch(_.error.log)
-} else if (action("object-exists")) {
+} else if (action("object.exists")) {
     _.promise({
         awsd: awsd,
         bucket: ad.bucket || "consensas-test1",
@@ -146,7 +150,7 @@ if (action("create-bucket")) {
         .then(aws.s3.object.exists)
         .make(sd => console.log("+", "ok", sd.exists))
         .catch(_.error.log)
-} else if (action("object-exists-with-path")) {
+} else if (action("object.exists-path")) {
     _.promise({
         awsd: awsd,
         path: "s3://consensas-test1/name.json",
@@ -154,7 +158,7 @@ if (action("create-bucket")) {
         .then(aws.initialize)
         .then(aws.s3.initialize)
         .then(aws.s3.path.parse)
-        .then(aws.s3.exists)
+        .then(aws.s3.object.exists)
         .make(sd => console.log("+", "ok", sd.exists))
         .catch(_.error.log)
 } else if (!action_name) {

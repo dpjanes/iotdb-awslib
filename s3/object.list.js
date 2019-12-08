@@ -42,8 +42,9 @@ const _object_list = recursive => _.promise.make((self, done) => {
     }
 
     const level = split(prefix).length + 1
-    let keys = []
     let token = null
+
+    self.keys = []
 
     const _fetch = () => {
         self.aws$s3.listObjectsV2({
@@ -55,7 +56,7 @@ const _object_list = recursive => _.promise.make((self, done) => {
                 return done(error)
             }
 
-            keys = keys.concat(
+            self.keys = self.keys.concat(
                 data.Contents.map(cd => cd.Key)
                     .filter(name => split(name).length >= level)
                     .map(name => recursive ? name : split(name).slice(0, level).join("/"))
@@ -68,9 +69,6 @@ const _object_list = recursive => _.promise.make((self, done) => {
 
                 return
             }
-
-            self.paths = _.uniq(keys.sort())
-            self.keys = self.paths
 
             done(null, self)
         })
@@ -91,7 +89,6 @@ object.list.accepts = {
 }
 object.list.produces = {
     aws$result: _.is.Object,
-    paths: _.is.Array.of.String,
     keys: _.is.Array.of.String,
 }
 
@@ -104,4 +101,4 @@ object.list.recursive.produces = object.list.produces
 /**
  *  API
  */
-exports.object = exports.object
+exports.object = object
