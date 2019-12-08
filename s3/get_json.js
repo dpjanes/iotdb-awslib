@@ -56,7 +56,7 @@ get_json.requires = {
 }
 get_json.produces = {
     json: _.is.JSON,
-    aws_result: _.is.Object,
+    aws$result: _.is.Object,
 }
 
 /**

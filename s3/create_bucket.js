@@ -24,17 +24,10 @@
 
 const _ = require("iotdb-helpers")
 
-const assert = require("assert")
-
 /**
- *  Accepts: 
- *  Produces:
  */
 const create_bucket = _.promise((self, done) => {
     _.promise.validate(self, create_bucket)
-
-    assert.ok(self.aws$s3, `${method}: self.aws$s3 is required`)
-    assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`)
 
     self.aws$s3.createBucket({
         Bucket: self.bucket,
@@ -44,7 +37,7 @@ const create_bucket = _.promise((self, done) => {
         }
 
         self.bucket_url = `s3:/${data.Location}/`
-        self.aws_result = data
+        self.aws$result = data
 
         done(null, self)
     })
@@ -54,12 +47,14 @@ create_bucket.method = "s3.create_bucket"
 create_bucket.description = ``
 create_bucket.requires = {
     aws$s3: _.is.Object,
-}
-create_bucket.accepts = {
+    bucket: _.is.String,
 }
 create_bucket.produces = {
+    bucket_url: _.is.String,
+    aws$result: _.is.Object,
 }
 create_bucket.params = {
+    bucket: _.p.normal,
 }
 create_bucket.p = _.p(create_bucket)
 

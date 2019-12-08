@@ -24,25 +24,22 @@
 
 const _ = require("iotdb-helpers")
 
-const assert = require("assert")
-const url = require("url")
-
 /**
- *  Requires: self.paths, self.bucket
- *  Produces: self.paths
  */
-const join_paths = _.promise.make((self, done) => {
+const join_paths = _.promise.make(self => {
     _.promise.validate(self, join_paths)
 
-    const method = "s3.join_paths"
-
-    assert.ok(_.is.Array.of.String(self.paths), `${method}: self.paths must be Array of String`)
-    assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be String`)
-
     self.paths = self.paths.map(name => name.startsWith("s3://") ? name : `s3://${self.bucket}/${name}`)
-
-    done(null, self)
 })
+
+join_paths.method = "s3.join_paths"
+join_paths.requires = {
+    aws$s3: _.is.Object,
+    bucket: _.is.String,
+}
+join_paths.produces = {
+    paths: _.is.Array.of.String,
+}
 
 /**
  *  API

@@ -39,7 +39,7 @@ const get_object = _.promise((self, done) => {
             return done(error)
         }
 
-        self.aws_result = data
+        self.aws$result = data
 
         if (_.is.String(data.Body)) {
             self.document = data.Body
@@ -68,11 +68,18 @@ const get_object = _.promise((self, done) => {
         done(null, self)
     })
 })
+
 get_object.method = "s3.get_object"
 get_object.requires = {
     aws$s3: _.is.Object,
     bucket: _.is.String,
     key: _.is.String,
+}
+get_object.produces = {
+    aws$result: _.is.Object,
+    document: [ _.is.String, _.is.Buffer, ],
+    document_encoding: _.is.String,
+    document_media_type: _.is.String,
 }
 
 /**

@@ -24,25 +24,15 @@
 
 const _ = require("iotdb-helpers")
 
-const assert = require("assert")
-
 const logger = require("../logger")(__filename)
 
 /**
- *  Requires: self.aws$s3
- *  Produces:
  */
 const delete_object = _.promise.make((self, done) => {
     _.promise.validate(self, delete_object)
 
-    const method = "s3.delete_object"
-
-    assert.ok(self.aws$s3, `${method}: self.aws$s3 is required`)
-    assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`)
-    assert.ok(_.is.String(self.key) || !self.key, `${method}: self.key must be a String or Null`)
-
     logger.info({
-        method: method,
+        method: delete_object.method,
         bucket: self.bucket,
         key: self.key,
     }, "delete object")
@@ -55,9 +45,21 @@ const delete_object = _.promise.make((self, done) => {
             return done(error)
         }
 
+        self.aws$result = data
+
         done(null, self)
     })
 })
+
+delete_object.method = "s3.delete_object"
+delete_object.requires = {
+    aws$s3: _.is.Object,
+    bucket: _.is.String,
+    key: _.is.String,
+}
+delete_object.produces = {
+    aws$result: _.is.Object,
+}
 
 /**
  *  API

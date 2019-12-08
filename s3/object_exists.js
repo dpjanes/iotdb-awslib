@@ -24,20 +24,10 @@
 
 const _ = require("iotdb-helpers")
 
-const assert = require("assert")
-
 /**
- *  Accepts: 
- *  Produces:
  */
 const object_exists = _.promise.make((self, done) => {
     _.promise.validate(self, object_exists)
-
-    const method = "s3.object_exists"
-
-    assert.ok(self.aws$s3, `${method}: self.aws$s3 is required`)
-    assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`)
-    assert.ok(_.is.String(self.key), `${method}: self.key must be a String`)
 
     self.aws$s3.headObject({
         Bucket: self.bucket,
@@ -56,6 +46,19 @@ const object_exists = _.promise.make((self, done) => {
         return done(error)
     })
 })
+
+object_exists.method = "s3.object_exists"
+object_exists.requires = {
+    aws$s3: _.is.Object,
+    bucket: _.is.String,
+    key: _.is.String,
+}
+object_exists.accepts = {
+}
+object_exists.produces = {
+    aws$result: _.is.Object,
+    exists: _.is.Boolean,
+}
 
 /**
  *  API

@@ -24,25 +24,14 @@
 
 const _ = require("iotdb-helpers")
 
-const assert = require("assert")
-
 const mime = require("mime")
 mime.getType = mime.getType || mime.lookup; // 2.0.3 vs 1.6.0 
 
 /**
- *  Accepts: 
- *  Produces:
  */
 const upload_document = _.promise((self, done) => {
     _.promise.validate(self, upload_document)
 
-    assert.ok(self.aws$s3, `${method}: self.aws$s3 is required`)
-    assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`)
-    assert.ok(_.is.String(self.key), `${method}: self.key must be a String`)
-    assert.ok(_.is.String(self.document) || _.is.Buffer(self.document), `${method}: self.document must be a String or Buffer`)
-    assert.ok(_.is.String(self.document_media_type) || !self.document_media_type, `${method}: self.document_media_type must be a String or Null`)
-    assert.ok(_.is.String(self.document_encoding) || !self.document_encoding, `${method}: self.document_encoding must be a String or Null`)
-    
     const paramd = {
         Bucket: self.bucket,
         Key: self.key,
@@ -51,7 +40,9 @@ const upload_document = _.promise((self, done) => {
         ContentEncoding: self.document_encoding || null,
     }
 
-    if (self.acl_public) {
+    if (self.aws$acl) {
+        paramd.ACL = self.aws$acl
+    } else if (self.aws$acl_public) {
         paramd.ACL = "public-read"
     }
     
@@ -59,6 +50,8 @@ const upload_document = _.promise((self, done) => {
         if (error) {
             return done(error)
         }
+
+        self.aws$result = data
 
         done(null, self)
     })
@@ -68,14 +61,19 @@ upload_document.method = "s3.upload_document"
 upload_document.description = ``
 upload_document.requires = {
     aws$s3: _.is.Object,
+    bucket: _.is.String,
+    key: _.is.String,
+    document: [ _.is.String, _.is.Buffer, ],
 }
 upload_document.accepts = {
+    document_encoding: _.is.String,
+    document_media_type: _.is.String,
+    aws$acl_public: _.is.Boolean,
+    aws$acl: _.is.String,
 }
 upload_document.produces = {
+    aws$result: _.is.Object,
 }
-upload_document.params = {
-}
-upload_document.p = _.p(upload_document)
 
 /**
  *  API

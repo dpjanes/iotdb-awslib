@@ -24,16 +24,10 @@
 
 const _ = require("iotdb-helpers")
 
-const assert = require("assert")
-
 /**
- *  Accepts: 
- *  Produces:
  */
 const list_buckets = _.promise((self, done) => {
     _.promise.validate(self, list_buckets)
-
-    assert.ok(self.aws$s3, `${method}: self.aws$s3 is required`)
 
     self.aws$s3.listBuckets({
     }, (error, data) => {
@@ -42,7 +36,7 @@ const list_buckets = _.promise((self, done) => {
         }
 
         self.buckets = data.Buckets.map(bd => bd.Name)
-        self.aws_result = data
+        self.aws$result = data
 
         done(null, self)
     })
@@ -54,13 +48,10 @@ list_buckets.description = ``
 list_buckets.requires = {
     aws$s3: _.is.Object,
 }
-list_buckets.accepts = {
-}
 list_buckets.produces = {
+    aws$result: _.is.Object,
+    buckets: _.is.Array.of.String,
 }
-list_buckets.params = {
-}
-list_buckets.p = _.p(list_buckets)
 
 /**
  *  API

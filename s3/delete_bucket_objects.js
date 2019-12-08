@@ -24,8 +24,6 @@
 
 const _ = require("iotdb-helpers")
 
-const assert = require("assert")
-
 const logger = require("../logger")(__filename)
 
 /**
@@ -36,16 +34,12 @@ const logger = require("../logger")(__filename)
  *  Obviously very dangerous.
  */
 const delete_bucket_objects = _.promise((self, done) => {
-    _.promise.validate(self, delete_bucket_objects)
-
     const aws = require("..")
 
-    assert.ok(self.aws$s3, `${method}: self.aws$s3 is required`)
-    assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`)
-    assert.ok(_.is.String(self.key), `${method}: self.key must be a String`)
+    _.promise.validate(self, delete_bucket_objects)
 
     logger.info({
-        method: method,
+        method: delete_bucket_objects.method,
         bucket: self.bucket,
         key: self.key,
     }, "delete bucket objects")
@@ -75,7 +69,7 @@ const delete_bucket_objects = _.promise((self, done) => {
                     .then(aws.s3.delete_object)
                     .then(() => {
                         logger.info({
-                            method: method,
+                            method: delete_bucket_objects.method,
                             bucket: sd.bucket,
                             key: sd.key,
                         }, "deleted bucket object")
@@ -85,7 +79,7 @@ const delete_bucket_objects = _.promise((self, done) => {
                     })
                     .catch(error => {
                         logger.error({
-                            method: method,
+                            method: delete_bucket_objects.method,
                             bucket: self.bucket,
                             key: sd.key,
                             error: _.error.message(error),
@@ -109,14 +103,11 @@ delete_bucket_objects.method = "s3.delete_bucket_objects"
 delete_bucket_objects.description = ``
 delete_bucket_objects.requires = {
     aws$s3: _.is.Object,
-}
-delete_bucket_objects.accepts = {
+    bucket: _.is.String,
+    key: _.is.String,
 }
 delete_bucket_objects.produces = {
 }
-delete_bucket_objects.params = {
-}
-delete_bucket_objects.p = _.p(delete_bucket_objects)
 
 /**
  *  API

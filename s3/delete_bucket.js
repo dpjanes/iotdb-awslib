@@ -24,36 +24,29 @@
 
 const _ = require("iotdb-helpers")
 
-const assert = require("assert")
-
 const logger = require("../logger")(__filename)
 
 /**
  *  Accepts: 
  *  Produces:
  *
- *  Delete a Bucket. If the Bucket does not exist,
- *  no error will be reported.
  */
 const delete_bucket = _.promise((self, done) => {
     _.promise.validate(self, delete_bucket)
 
-    assert.ok(self.aws$s3, `${method}: self.aws$s3 is required`)
-    assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`)
-
     logger.warn({
-        method: method,
+        method: delete_bucket.method,
         bucket: self.bucket,
     }, "delete bucket")
 
     self.aws$s3.deleteBucket({
         Bucket: self.bucket,
     }, (error, data) => {
-        self.aws_result = data
+        self.aws$result = data
 
         if (!error) {
             logger.info({
-                method: method,
+                method: delete_bucket.method,
                 bucket: self.bucket,
             }, "deleted bucket")
 
@@ -62,7 +55,7 @@ const delete_bucket = _.promise((self, done) => {
 
         if (error.statusCode === 404) {
             logger.warn({
-                method: method,
+                method: delete_bucket.method,
                 bucket: self.bucket,
             }, "bucket already deleted")
 
@@ -70,7 +63,7 @@ const delete_bucket = _.promise((self, done) => {
         }
 
         logger.error({
-            method: method,
+            method: delete_bucket.method,
             bucket: self.bucket,
             error: _.error.message(error),
         }, "cannot delete bucket")
@@ -80,13 +73,16 @@ const delete_bucket = _.promise((self, done) => {
 })
 
 delete_bucket.method = "s3.delete_bucket"
-delete_bucket.description = ``
+delete_bucket.description = `
+    Delete a Bucket. If the Bucket does not exist, no error will be reported.`
 delete_bucket.requires = {
     aws$s3: _.is.Object,
+    bucket: _.is.String,
 }
 delete_bucket.accepts = {
 }
 delete_bucket.produces = {
+    aws$result: _.is.Object,
 }
 delete_bucket.params = {
 }

@@ -35,12 +35,6 @@ const split = s => s.split("/").filter(s => s.length)
 const list_objects = recursive => _.promise.make((self, done) => {
     _.promise.validate(self, list_objects)
 
-    const method = "s3.list_objects"
-
-    assert.ok(self.aws$s3, `${method}: self.aws$s3 is required`)
-    assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`)
-    assert.ok(_.is.String(self.key) || !self.key, `${method}: self.key must be a String or Null`)
-
     let prefix = ""
     if (self.key) {
         prefix = self.key
@@ -86,6 +80,20 @@ const list_objects = recursive => _.promise.make((self, done) => {
 
     _fetch()
 })
+
+list_objects.method = "s3.list_objects"
+list_objects.requires = {
+    aws$s3: _.is.Object,
+    bucket: _.is.String,
+}
+list_objects.accepts = {
+    key: _.is.String,
+}
+list_objects.produces = {
+    aws$result: _.is.Object,
+    paths: _.is.Array.of.String,
+    keys: _.is.Array.of.String,
+}
 
 /**
  *  API

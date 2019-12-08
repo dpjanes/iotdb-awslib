@@ -24,18 +24,10 @@
 
 const _ = require("iotdb-helpers")
 
-const assert = require("assert")
-
 /**
- *  Accepts: 
- *  Produces:
  */
 const head_object = _.promise((self, done) => {
     _.promise.validate(self, head_object)
-
-    assert.ok(self.aws$s3, `${method}: self.aws$s3 is required`)
-    assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`)
-    assert.ok(_.is.String(self.key) || !self.key, `${method}: self.key must be a String or Null`)
 
     self.aws$s3.headObject({
         Bucket: self.bucket,
@@ -45,7 +37,7 @@ const head_object = _.promise((self, done) => {
             return done(error)
         }
 
-        self.aws_result = data
+        self.aws$result = data
 
         if (data.ContentType) {
             self.document_media_type = data.ContentType
@@ -59,14 +51,13 @@ head_object.method = "s3.head_object"
 head_object.description = ``
 head_object.requires = {
     aws$s3: _.is.Object,
-}
-head_object.accepts = {
+    bucket: _.is.String,
+    key: _.is.String,
 }
 head_object.produces = {
+    aws$result: _.is.Object,
+    document_media_type: _.is.String,
 }
-head_object.params = {
-}
-head_object.p = _.p(head_object)
 
 /**
  *  API

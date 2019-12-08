@@ -24,8 +24,6 @@
 
 const _ = require("iotdb-helpers")
 
-const assert = require("assert")
-
 /**
  */
 const bucket_exists = _.promise((self, done) => {
@@ -53,9 +51,6 @@ const bucket_exists = _.promise((self, done) => {
         .end(done, self, bucket_exists)
 
 /*
-    assert.ok(self.aws$s3, `${bucket_exists.method}: self.aws$s3 is required`)
-    assert.ok(_.is.String(self.bucket), `${bucket_exists.method}: self.bucket must be a String`)
-
     self.aws$s3.getBucketLocation({
         Bucket: self.bucket,
     }, (error, data) => {

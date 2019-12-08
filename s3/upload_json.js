@@ -24,58 +24,51 @@
 
 const _ = require("iotdb-helpers")
 
-const assert = require("assert")
-
 /**
- *  Accepts: 
- *  Produces:
  */
 const upload_json = _.promise((self, done) => {
     _.promise.validate(self, upload_json)
 
-    assert.ok(self.aws$s3, `${method}: self.aws$s3 is required`)
-    assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`)
-    assert.ok(_.is.String(self.key), `${method}: self.key must be a String`)
-    assert.ok(_.is.String(self.document_media_type) || !self.document_media_type, `${method}: self.document_media_type must be a String or Null`)
-    assert.ok(_.is.JSON(self.json), `${method}: self.json must be a JSON document`)
-
-    self.aws$s3.upload({
+    const paramd = {
         Bucket: self.bucket,
         Key: self.key,
         Body: JSON.stringify(self.json, null, 2),
         ContentType: self.document_media_type || "application/json",
-    }, (error, data) => {
+    }
+
+    if (self.aws$acl) {
+        paramd.ACL = self.aws$acl
+    } else if (self.aws$acl_public) {
+        paramd.ACL = "public-read"
+    }
+
+    self.aws$s3.upload(paramd, (error, data) => {
         if (error) {
             return done(error)
         }
 
+        self.aws$result = data
+
         done(null, self)
     })
-
-    /*
-    _.promise(self)
-        .add("wrap$in", {
-            Bucket: self.bucket,
-            Key: self.key,
-            Body: JSON.stringify(self.json, null, 2),
-            ContentType: self.document_media_type || "application/json",
-        })
-        .wrap(s3.upload, "in")
-    */
 })
 
 upload_json.method = "s3.upload_json"
 upload_json.description = ``
 upload_json.requires = {
     aws$s3: _.is.Object,
+    bucket: _.is.String,
+    key: _.is.String,
+    json: _.is.JSON,
 }
 upload_json.accepts = {
+    document_media_type: _.is.String,
+    aws$acl_public: _.is.Boolean,
+    aws$acl: _.is.String,
 }
 upload_json.produces = {
+    aws$result: _.is.Object,
 }
-upload_json.params = {
-}
-upload_json.p = _.p(upload_json)
 
 /**
  *  API
