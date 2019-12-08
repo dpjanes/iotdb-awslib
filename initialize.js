@@ -5,45 +5,63 @@
  *  IOTDB
  *  2017-01-18
  *
- *  Copyright (2013-2017) David Janes
+ *  Copyright (2013-2020) David P. Janes
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
-"use strict";
+"use strict"
 
-const _ = require("iotdb-helpers");
+const _ = require("iotdb-helpers")
 
-const assert = require("assert");
-
-const AWS = require("aws-sdk");
+const AWS = require("aws-sdk")
 
 /**
- *  Accepts: self.awsd
- *  Produces: self.AWS
  */
-const initialize = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
-    const method = "initialize"
-
-    assert.ok(self.awsd, `${method}: self.awsd expected`)
+const initialize = _.promise(self => {
+    _.promise.validate(self, initialize)
 
     if (self.awsd.accessKeyId && self.awsd.secretAccessKey) {
-        AWS.config.credentials = new AWS.Credentials(self.awsd.accessKeyId, self.awsd.secretAccessKey);
+        AWS.config.credentials = new AWS.Credentials(self.awsd.accessKeyId, self.awsd.secretAccessKey)
     } else if (self.awsd.profile) {
         AWS.config.credentials = new AWS.SharedIniFileCredentials({
             profile: self.awsd.profile,
-        });
+        })
     }
 
     if (self.awsd.region) {
-        AWS.config.region = self.awsd.region;
+        AWS.config.region = self.awsd.region
     }
 
-    self.AWS = AWS;
+    self.AWS = AWS
+})
 
-    done(null, self);
+initialize.method = "initialize"
+initialize.description = ``
+initialize.requires = {
+}
+initialize.accepts = {
+    awsd: {
+        profile: _.is.String,
+        accessKeyId: _.is.String,
+        secretAccessKey: _.is.String,
+    },
+}
+initialize.produces = {
+    AWS: _.is.Object,
 }
 
 /**
  *  API
  */
-exports.initialize = _.promise.denodeify(initialize);
+exports.initialize = initialize
