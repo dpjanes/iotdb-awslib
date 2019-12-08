@@ -109,4 +109,4 @@ delete_bucket_objects.p = _.p(delete_bucket_objects)
 /**
  *  API
  */
-exports.delete_bucket_objects = _.promise.denodeify(delete_bucket_objects);
+exports.delete_bucket_objects = delete_bucket_objects

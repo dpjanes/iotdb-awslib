@@ -83,4 +83,4 @@ delete_bucket.p = _.p(delete_bucket)
 /**
  *  API
  */
-exports.delete_bucket = _.promise.denodeify(delete_bucket);
+exports.delete_bucket = delete_bucket
