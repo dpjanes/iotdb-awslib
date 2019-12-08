@@ -20,7 +20,7 @@
  *  limitations under the License.
  */
 
-"use strict";
+"use strict"
 
 const _ = require("iotdb-helpers")
 
@@ -33,28 +33,28 @@ const logger = require("../logger")(__filename)
  *  Produces:
  */
 const delete_object = _.promise.make((self, done) => {
-    const method = "s3.delete_object";
+    const method = "s3.delete_object"
 
-    assert.ok(self.s3, `${method}: self.s3 is required`);
-    assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`);
-    assert.ok(_.is.String(self.key) || !self.key, `${method}: self.key must be a String or Null`);
+    assert.ok(self.s3, `${method}: self.s3 is required`)
+    assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`)
+    assert.ok(_.is.String(self.key) || !self.key, `${method}: self.key must be a String or Null`)
 
     logger.info({
         method: method,
         bucket: self.bucket,
         key: self.key,
-    }, "delete object");
+    }, "delete object")
 
     self.s3.deleteObject({
         Bucket: self.bucket,
         Key: self.key,
     }, (error, data) => {
         if (error) {
-            return done(error);
+            return done(error)
         }
 
-        done(null, self);
-    });
+        done(null, self)
+    })
 })
 
 /**

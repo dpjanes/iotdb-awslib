@@ -20,32 +20,32 @@
  *  limitations under the License.
  */
 
-"use strict";
+"use strict"
 
-const _ = require("iotdb-helpers");
+const _ = require("iotdb-helpers")
 
-const assert = require("assert");
+const assert = require("assert")
 
 /**
  *  Accepts: 
  *  Produces:
  */
 const create_bucket = _.promise((self, done) => {
-    assert.ok(self.s3, `${method}: self.s3 is required`);
-    assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`);
+    assert.ok(self.s3, `${method}: self.s3 is required`)
+    assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`)
 
     self.s3.createBucket({
         Bucket: self.bucket,
     }, (error, data) => {
         if (error) {
-            return done(error);
+            return done(error)
         }
 
-        self.bucket_url = `s3:/${data.Location}/`;
-        self.aws_result = data;
+        self.bucket_url = `s3:/${data.Location}/`
+        self.aws_result = data
 
-        done(null, self);
-    });
+        done(null, self)
+    })
 })
 
 create_bucket.method = "s3.create_bucket"
@@ -64,4 +64,4 @@ create_bucket.p = _.p(create_bucket)
 /**
  *  API
  */
-exports.create_bucket = _.promise.denodeify(create_bucket);
+exports.create_bucket = _.promise.denodeify(create_bucket)

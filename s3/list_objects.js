@@ -20,11 +20,11 @@
  *  limitations under the License.
  */
 
-"use strict";
+"use strict"
 
-const _ = require("iotdb-helpers");
+const _ = require("iotdb-helpers")
 
-const assert = require("assert");
+const assert = require("assert")
 
 const split = s => s.split("/").filter(s => s.length)
 
@@ -33,23 +33,23 @@ const split = s => s.split("/").filter(s => s.length)
  *  Produces: self.paths
  */
 const list_objects = recursive => _.promise.make((self, done) => {
-    const method = "s3.list_objects";
+    const method = "s3.list_objects"
 
-    assert.ok(self.s3, `${method}: self.s3 is required`);
-    assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`);
-    assert.ok(_.is.String(self.key) || !self.key, `${method}: self.key must be a String or Null`);
+    assert.ok(self.s3, `${method}: self.s3 is required`)
+    assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`)
+    assert.ok(_.is.String(self.key) || !self.key, `${method}: self.key must be a String or Null`)
 
-    let prefix = "";
+    let prefix = ""
     if (self.key) {
-        prefix = self.key;
+        prefix = self.key
         if (prefix.match(/[^\/]$/)) {
-            prefix += "/";
+            prefix += "/"
         }
     }
 
-    const level = split(prefix).length + 1;
+    const level = split(prefix).length + 1
     let keys = []
-    let token = null;
+    let token = null
 
     const _fetch = () => {
         self.s3.listObjectsV2({
@@ -58,7 +58,7 @@ const list_objects = recursive => _.promise.make((self, done) => {
             ContinuationToken: token,
         }, (error, data) => {
             if (error) {
-                return done(error);
+                return done(error)
             }
 
             keys = keys.concat(
@@ -69,17 +69,17 @@ const list_objects = recursive => _.promise.make((self, done) => {
 
             if (data.IsTruncated) {
                 assert.ok(data.NextContinuationToken, `${method}: expected a ContinuationToken????`)
-                token = data.NextContinuationToken;
+                token = data.NextContinuationToken
                 process.nextTick(_fetch)
 
-                return;
+                return
             }
 
             self.paths = _.uniq(keys.sort())
-            self.keys = self.paths;
+            self.keys = self.paths
 
-            done(null, self);
-        });
+            done(null, self)
+        })
     }
 
     _fetch()
@@ -88,5 +88,5 @@ const list_objects = recursive => _.promise.make((self, done) => {
 /**
  *  API
  */
-exports.list_objects = list_objects(false);
-exports.list_objects.recursive = list_objects(true);
+exports.list_objects = list_objects(false)
+exports.list_objects.recursive = list_objects(true)

@@ -20,13 +20,13 @@
  *  limitations under the License.
  */
 
-"use strict";
+"use strict"
 
-const _ = require("iotdb-helpers");
+const _ = require("iotdb-helpers")
 
-const assert = require("assert");
+const assert = require("assert")
 
-const logger = require("../logger")(__filename);
+const logger = require("../logger")(__filename)
 
 /**
  *  Accepts: 
@@ -36,18 +36,18 @@ const logger = require("../logger")(__filename);
  *  no error will be reported.
  */
 const delete_bucket = _.promise((self, done) => {
-    assert.ok(self.s3, `${method}: self.s3 is required`);
-    assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`);
+    assert.ok(self.s3, `${method}: self.s3 is required`)
+    assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`)
 
     logger.warn({
         method: method,
         bucket: self.bucket,
-    }, "delete bucket");
+    }, "delete bucket")
 
     self.s3.deleteBucket({
         Bucket: self.bucket,
     }, (error, data) => {
-        self.aws_result = data;
+        self.aws_result = data
 
         if (!error) {
             logger.info({
@@ -55,7 +55,7 @@ const delete_bucket = _.promise((self, done) => {
                 bucket: self.bucket,
             }, "deleted bucket")
 
-            return done(null, self);
+            return done(null, self)
         }
 
         if (error.statusCode === 404) {
@@ -64,7 +64,7 @@ const delete_bucket = _.promise((self, done) => {
                 bucket: self.bucket,
             }, "bucket already deleted")
 
-            return done(null, self);
+            return done(null, self)
         }
 
         logger.error({
@@ -73,8 +73,8 @@ const delete_bucket = _.promise((self, done) => {
             error: _.error.message(error),
         }, "cannot delete bucket")
 
-        return done(error);
-    });
+        return done(error)
+    })
 })
 
 delete_bucket.method = "s3.delete_bucket"

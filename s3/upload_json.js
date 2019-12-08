@@ -20,22 +20,22 @@
  *  limitations under the License.
  */
 
-"use strict";
+"use strict"
 
-const _ = require("iotdb-helpers");
+const _ = require("iotdb-helpers")
 
-const assert = require("assert");
+const assert = require("assert")
 
 /**
  *  Accepts: 
  *  Produces:
  */
 const upload_json = _.promise((self, done) => {
-    assert.ok(self.s3, `${method}: self.s3 is required`);
-    assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`);
-    assert.ok(_.is.String(self.key), `${method}: self.key must be a String`);
-    assert.ok(_.is.String(self.document_media_type) || !self.document_media_type, `${method}: self.document_media_type must be a String or Null`);
-    assert.ok(_.is.JSON(self.json), `${method}: self.json must be a JSON document`);
+    assert.ok(self.s3, `${method}: self.s3 is required`)
+    assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`)
+    assert.ok(_.is.String(self.key), `${method}: self.key must be a String`)
+    assert.ok(_.is.String(self.document_media_type) || !self.document_media_type, `${method}: self.document_media_type must be a String or Null`)
+    assert.ok(_.is.JSON(self.json), `${method}: self.json must be a JSON document`)
 
     self.s3.upload({
         Bucket: self.bucket,
@@ -44,11 +44,11 @@ const upload_json = _.promise((self, done) => {
         ContentType: self.document_media_type || "application/json",
     }, (error, data) => {
         if (error) {
-            return done(error);
+            return done(error)
         }
 
-        done(null, self);
-    });
+        done(null, self)
+    })
 
     /*
     _.promise(self)
@@ -78,4 +78,4 @@ upload_json.p = _.p(upload_json)
 /**
  *  API
  */
-exports.upload_json = _.promise.denodeify(upload_json);
+exports.upload_json = _.promise.denodeify(upload_json)

@@ -20,29 +20,29 @@
  *  limitations under the License.
  */
 
-"use strict";
+"use strict"
 
-const _ = require("iotdb-helpers");
+const _ = require("iotdb-helpers")
 
-const assert = require("assert");
-const url = require("url");
+const assert = require("assert")
+const url = require("url")
 
 /**
  *  Requires: self.paths, self.bucket
  *  Produces: self.paths
  */
 const join_paths = _.promise.make((self, done) => {
-    const method = "s3.join_paths";
+    const method = "s3.join_paths"
 
     assert.ok(_.is.Array.of.String(self.paths), `${method}: self.paths must be Array of String`)
     assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be String`)
 
     self.paths = self.paths.map(name => name.startsWith("s3://") ? name : `s3://${self.bucket}/${name}`)
 
-    done(null, self);
+    done(null, self)
 })
 
 /**
  *  API
  */
-exports.join_paths = join_paths;
+exports.join_paths = join_paths

@@ -20,7 +20,7 @@
  *  limitations under the License.
  */
 
-"use strict";
+"use strict"
 
 module.exports = Object.assign(
     {},
@@ -41,4 +41,4 @@ module.exports = Object.assign(
     require("./upload_document"),
     require("./upload_json"),
     {}
-);
+)

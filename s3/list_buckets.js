@@ -20,30 +20,30 @@
  *  limitations under the License.
  */
 
-"use strict";
+"use strict"
 
-const _ = require("iotdb-helpers");
+const _ = require("iotdb-helpers")
 
-const assert = require("assert");
+const assert = require("assert")
 
 /**
  *  Accepts: 
  *  Produces:
  */
 const list_buckets = _.promise((self, done) => {
-    assert.ok(self.s3, `${method}: self.s3 is required`);
+    assert.ok(self.s3, `${method}: self.s3 is required`)
 
     self.s3.listBuckets({
     }, (error, data) => {
         if (error) {
-            return done(error);
+            return done(error)
         }
 
-        self.buckets = data.Buckets.map(bd => bd.Name);
-        self.aws_result = data;
+        self.buckets = data.Buckets.map(bd => bd.Name)
+        self.aws_result = data
 
-        done(null, self);
-    });
+        done(null, self)
+    })
     
 })
 
@@ -63,4 +63,4 @@ list_buckets.p = _.p(list_buckets)
 /**
  *  API
  */
-exports.list_buckets = _.promise.denodeify(list_buckets);
+exports.list_buckets = _.promise.denodeify(list_buckets)

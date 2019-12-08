@@ -20,11 +20,11 @@
  *  limitations under the License.
  */
 
-"use strict";
+"use strict"
 
-const _ = require("iotdb-helpers");
+const _ = require("iotdb-helpers")
 
-const AWS = require("aws-sdk");
+const AWS = require("aws-sdk")
 
 /**
  */
@@ -33,7 +33,7 @@ const initialize = _.promise(self => {
 
     self.s3 = new AWS.S3({
         apiVersion: '2006-03-01',
-    });
+    })
 })
 
 initialize.method = "s3.initialize"
@@ -48,4 +48,4 @@ initialize.produces = {
 /**
  *  API
  */
-exports.initialize = _.promise.denodeify(initialize);
+exports.initialize = _.promise.denodeify(initialize)

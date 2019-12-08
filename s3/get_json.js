@@ -20,9 +20,9 @@
  *  limitations under the License.
  */
 
-"use strict";
+"use strict"
 
-const _ = require("iotdb-helpers");
+const _ = require("iotdb-helpers")
 
 /**
  */
@@ -38,7 +38,7 @@ const get_json = _.promise((self, done) => {
             if (_.is.Buffer(sd.document)) {
                 sd.json = JSON.parse(sd.document.toString("utf-8"))
             } else {
-                sd.json = JSON.parse(sd.document);
+                sd.json = JSON.parse(sd.document)
             }
         })
         
@@ -60,4 +60,4 @@ get_json.produces = {
 /**
  *  API
  */
-exports.get_json = _.promise.denodeify(get_json);
+exports.get_json = _.promise.denodeify(get_json)

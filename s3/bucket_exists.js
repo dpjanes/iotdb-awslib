@@ -53,24 +53,24 @@ const bucket_exists = _.promise((self, done) => {
         .end(done, self, bucket_exists)
 
 /*
-    assert.ok(self.s3, `${bucket_exists.method}: self.s3 is required`);
-    assert.ok(_.is.String(self.bucket), `${bucket_exists.method}: self.bucket must be a String`);
+    assert.ok(self.s3, `${bucket_exists.method}: self.s3 is required`)
+    assert.ok(_.is.String(self.bucket), `${bucket_exists.method}: self.bucket must be a String`)
 
     self.s3.getBucketLocation({
         Bucket: self.bucket,
     }, (error, data) => {
         if (!error) {
-            self.exists = true;
-            return done(null, self);
+            self.exists = true
+            return done(null, self)
         }
 
         if (error.statusCode === 404) {
-            self.exists = false;
-            return done(null, self);
+            self.exists = false
+            return done(null, self)
         }
 
-        return done(error);
-    });
+        return done(error)
+    })
 */
 })
 
@@ -91,4 +91,4 @@ bucket_exists.p = _.p(bucket_exists)
 /**
  *  API
  */
-exports.bucket_exists = _.promise.denodeify(bucket_exists);
+exports.bucket_exists = _.promise.denodeify(bucket_exists)

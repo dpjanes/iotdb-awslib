@@ -20,7 +20,7 @@
  *  limitations under the License.
  */
 
-"use strict";
+"use strict"
 
 const _ = require("iotdb-helpers")
 
@@ -34,37 +34,37 @@ const get_object = _.promise((self, done) => {
         Key: self.key,
     }, (error, data) => {
         if (error) {
-            return done(error);
+            return done(error)
         }
 
-        self.aws_result = data;
+        self.aws_result = data
 
         if (_.is.String(data.Body)) {
-            self.document = data.Body;
+            self.document = data.Body
 
             if (data.ContentEncoding) {
-                self.document_encoding = data.ContentEncoding;
+                self.document_encoding = data.ContentEncoding
             }
         } else if (_.is.Buffer(data.Body)) {
             if (data.ContentEncoding) {
-                self.document = data.Body.toString(data.ContentEncoding);
-                self.document_encoding = data.ContentEncoding;
+                self.document = data.Body.toString(data.ContentEncoding)
+                self.document_encoding = data.ContentEncoding
             } else {
-                self.document = data.Body;
-                self.document_encoding = null;
+                self.document = data.Body
+                self.document_encoding = null
             }
         } else {
-            assert.ok(false, `${get_object.method}: don't know how to deal with Body of type: ${typeof data.Body}`);
+            assert.ok(false, `${get_object.method}: don't know how to deal with Body of type: ${typeof data.Body}`)
         }
 
-        assert.ok(self.document, `${get_object.method}: self.document should have been produced by now`);
+        assert.ok(self.document, `${get_object.method}: self.document should have been produced by now`)
 
         if (data.ContentType) {
-            self.document_media_type = data.ContentType;
+            self.document_media_type = data.ContentType
         }
 
-        done(null, self);
-    });
+        done(null, self)
+    })
 })
 get_object.method = "s3.get_object"
 get_object.requires = {
