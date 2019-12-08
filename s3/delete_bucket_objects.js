@@ -36,9 +36,11 @@ const logger = require("../logger")(__filename)
  *  Obviously very dangerous.
  */
 const delete_bucket_objects = _.promise((self, done) => {
+    _.promise.validate(self, delete_bucket_objects)
+
     const aws = require("..")
 
-    assert.ok(self.s3, `${method}: self.s3 is required`)
+    assert.ok(self.aws$s3, `${method}: self.aws$s3 is required`)
     assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`)
     assert.ok(_.is.String(self.key), `${method}: self.key must be a String`)
 
@@ -106,7 +108,7 @@ const delete_bucket_objects = _.promise((self, done) => {
 delete_bucket_objects.method = "s3.delete_bucket_objects"
 delete_bucket_objects.description = ``
 delete_bucket_objects.requires = {
-    s3: _.is.Object,
+    aws$s3: _.is.Object,
 }
 delete_bucket_objects.accepts = {
 }

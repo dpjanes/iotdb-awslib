@@ -27,6 +27,8 @@ const _ = require("iotdb-helpers")
 /**
  */
 const get_json = _.promise((self, done) => {
+    _.promise.validate(self, get_json)
+
     const aws = require("..")
 
     _.promise.make(self)
@@ -48,7 +50,7 @@ const get_json = _.promise((self, done) => {
 get_json.method = "s3.get_json"
 get_json.description = ``
 get_json.requires = {
-    s3: _.is.Object,
+    aws$s3: _.is.Object,
     key: _.is.String,
     bucket: _.is.String,
 }
@@ -60,4 +62,4 @@ get_json.produces = {
 /**
  *  API
  */
-exports.get_json = _.promise.denodeify(get_json)
+exports.get_json = get_json

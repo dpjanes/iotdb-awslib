@@ -31,11 +31,13 @@ const assert = require("assert")
  *  Produces:
  */
 const head_object = _.promise((self, done) => {
-    assert.ok(self.s3, `${method}: self.s3 is required`)
+    _.promise.validate(self, head_object)
+
+    assert.ok(self.aws$s3, `${method}: self.aws$s3 is required`)
     assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`)
     assert.ok(_.is.String(self.key) || !self.key, `${method}: self.key must be a String or Null`)
 
-    self.s3.headObject({
+    self.aws$s3.headObject({
         Bucket: self.bucket,
         Key: self.key,
     }, (error, data) => {
@@ -56,7 +58,7 @@ const head_object = _.promise((self, done) => {
 head_object.method = "s3.head_object"
 head_object.description = ``
 head_object.requires = {
-    s3: _.is.Object,
+    aws$s3: _.is.Object,
 }
 head_object.accepts = {
 }
@@ -69,4 +71,4 @@ head_object.p = _.p(head_object)
 /**
  *  API
  */
-exports.head_object = _.promise.denodeify(head_object)
+exports.head_object = head_object

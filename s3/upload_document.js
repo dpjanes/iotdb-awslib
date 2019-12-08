@@ -34,7 +34,9 @@ mime.getType = mime.getType || mime.lookup; // 2.0.3 vs 1.6.0
  *  Produces:
  */
 const upload_document = _.promise((self, done) => {
-    assert.ok(self.s3, `${method}: self.s3 is required`)
+    _.promise.validate(self, upload_document)
+
+    assert.ok(self.aws$s3, `${method}: self.aws$s3 is required`)
     assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`)
     assert.ok(_.is.String(self.key), `${method}: self.key must be a String`)
     assert.ok(_.is.String(self.document) || _.is.Buffer(self.document), `${method}: self.document must be a String or Buffer`)
@@ -53,7 +55,7 @@ const upload_document = _.promise((self, done) => {
         paramd.ACL = "public-read"
     }
     
-    self.s3.upload(paramd, (error, data) => {
+    self.aws$s3.upload(paramd, (error, data) => {
         if (error) {
             return done(error)
         }
@@ -65,7 +67,7 @@ const upload_document = _.promise((self, done) => {
 upload_document.method = "s3.upload_document"
 upload_document.description = ``
 upload_document.requires = {
-    s3: _.is.Object,
+    aws$s3: _.is.Object,
 }
 upload_document.accepts = {
 }
@@ -78,4 +80,4 @@ upload_document.p = _.p(upload_document)
 /**
  *  API
  */
-exports.upload_document = _.promise.denodeify(upload_document)
+exports.upload_document = upload_document

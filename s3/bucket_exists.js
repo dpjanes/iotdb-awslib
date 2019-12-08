@@ -40,7 +40,7 @@ const bucket_exists = _.promise((self, done) => {
                 Bucket: self.bucket,
             }
         })
-        .wrap(self.s3.getBucketLocation.bind(self.s3), "param", "data")
+        .wrap(self.aws$s3.getBucketLocation.bind(self.aws$s3), "param", "data")
         .except(error => {
             if (error.statusCode === 404) {
                 error.self.exists = false
@@ -53,10 +53,10 @@ const bucket_exists = _.promise((self, done) => {
         .end(done, self, bucket_exists)
 
 /*
-    assert.ok(self.s3, `${bucket_exists.method}: self.s3 is required`)
+    assert.ok(self.aws$s3, `${bucket_exists.method}: self.aws$s3 is required`)
     assert.ok(_.is.String(self.bucket), `${bucket_exists.method}: self.bucket must be a String`)
 
-    self.s3.getBucketLocation({
+    self.aws$s3.getBucketLocation({
         Bucket: self.bucket,
     }, (error, data) => {
         if (!error) {
@@ -77,7 +77,7 @@ const bucket_exists = _.promise((self, done) => {
 bucket_exists.method = "s3.bucket_exists"
 bucket_exists.description = ``
 bucket_exists.requires = {
-    s3: _.is.Object,
+    aws$s3: _.is.Object,
     bucket: _.is.String,
 }
 bucket_exists.produces = {
@@ -91,4 +91,4 @@ bucket_exists.p = _.p(bucket_exists)
 /**
  *  API
  */
-exports.bucket_exists = _.promise.denodeify(bucket_exists)
+exports.bucket_exists = bucket_exists

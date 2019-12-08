@@ -32,6 +32,8 @@ const url = require("url")
  *  Produces: self.paths
  */
 const join_paths = _.promise.make((self, done) => {
+    _.promise.validate(self, join_paths)
+
     const method = "s3.join_paths"
 
     assert.ok(_.is.Array.of.String(self.paths), `${method}: self.paths must be Array of String`)

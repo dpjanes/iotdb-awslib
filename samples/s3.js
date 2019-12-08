@@ -38,7 +38,9 @@ if (action("create-bucket")) {
     })
         .then(aws.initialize)
         .then(aws.s3.initialize)
+        .log("A")
         .then(aws.s3.create_bucket)
+        .log("B")
         .make(sd => console.log("+", "ok", sd.bucket_url)) // .result))
         .catch(_.error.log)
 } else if (action("bucket-exists")) {

@@ -31,9 +31,11 @@ const assert = require("assert")
  *  Produces:
  */
 const list_buckets = _.promise((self, done) => {
-    assert.ok(self.s3, `${method}: self.s3 is required`)
+    _.promise.validate(self, list_buckets)
 
-    self.s3.listBuckets({
+    assert.ok(self.aws$s3, `${method}: self.aws$s3 is required`)
+
+    self.aws$s3.listBuckets({
     }, (error, data) => {
         if (error) {
             return done(error)
@@ -50,7 +52,7 @@ const list_buckets = _.promise((self, done) => {
 list_buckets.method = "s3.list_buckets"
 list_buckets.description = ``
 list_buckets.requires = {
-    s3: _.is.Object,
+    aws$s3: _.is.Object,
 }
 list_buckets.accepts = {
 }
@@ -63,4 +65,4 @@ list_buckets.p = _.p(list_buckets)
 /**
  *  API
  */
-exports.list_buckets = _.promise.denodeify(list_buckets)
+exports.list_buckets = list_buckets

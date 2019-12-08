@@ -36,7 +36,9 @@ const logger = require("../logger")(__filename)
  *  no error will be reported.
  */
 const delete_bucket = _.promise((self, done) => {
-    assert.ok(self.s3, `${method}: self.s3 is required`)
+    _.promise.validate(self, delete_bucket)
+
+    assert.ok(self.aws$s3, `${method}: self.aws$s3 is required`)
     assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`)
 
     logger.warn({
@@ -44,7 +46,7 @@ const delete_bucket = _.promise((self, done) => {
         bucket: self.bucket,
     }, "delete bucket")
 
-    self.s3.deleteBucket({
+    self.aws$s3.deleteBucket({
         Bucket: self.bucket,
     }, (error, data) => {
         self.aws_result = data
@@ -80,7 +82,7 @@ const delete_bucket = _.promise((self, done) => {
 delete_bucket.method = "s3.delete_bucket"
 delete_bucket.description = ``
 delete_bucket.requires = {
-    s3: _.is.Object,
+    aws$s3: _.is.Object,
 }
 delete_bucket.accepts = {
 }

@@ -33,9 +33,11 @@ const split = s => s.split("/").filter(s => s.length)
  *  Produces: self.paths
  */
 const list_objects = recursive => _.promise.make((self, done) => {
+    _.promise.validate(self, list_objects)
+
     const method = "s3.list_objects"
 
-    assert.ok(self.s3, `${method}: self.s3 is required`)
+    assert.ok(self.aws$s3, `${method}: self.aws$s3 is required`)
     assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`)
     assert.ok(_.is.String(self.key) || !self.key, `${method}: self.key must be a String or Null`)
 
@@ -52,7 +54,7 @@ const list_objects = recursive => _.promise.make((self, done) => {
     let token = null
 
     const _fetch = () => {
-        self.s3.listObjectsV2({
+        self.aws$s3.listObjectsV2({
             Bucket: self.bucket,
             Prefix: prefix,
             ContinuationToken: token,

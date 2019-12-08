@@ -29,13 +29,15 @@ const assert = require("assert")
 const logger = require("../logger")(__filename)
 
 /**
- *  Requires: self.s3
+ *  Requires: self.aws$s3
  *  Produces:
  */
 const delete_object = _.promise.make((self, done) => {
+    _.promise.validate(self, delete_object)
+
     const method = "s3.delete_object"
 
-    assert.ok(self.s3, `${method}: self.s3 is required`)
+    assert.ok(self.aws$s3, `${method}: self.aws$s3 is required`)
     assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`)
     assert.ok(_.is.String(self.key) || !self.key, `${method}: self.key must be a String or Null`)
 
@@ -45,7 +47,7 @@ const delete_object = _.promise.make((self, done) => {
         key: self.key,
     }, "delete object")
 
-    self.s3.deleteObject({
+    self.aws$s3.deleteObject({
         Bucket: self.bucket,
         Key: self.key,
     }, (error, data) => {

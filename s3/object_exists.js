@@ -31,13 +31,15 @@ const assert = require("assert")
  *  Produces:
  */
 const object_exists = _.promise.make((self, done) => {
+    _.promise.validate(self, object_exists)
+
     const method = "s3.object_exists"
 
-    assert.ok(self.s3, `${method}: self.s3 is required`)
+    assert.ok(self.aws$s3, `${method}: self.aws$s3 is required`)
     assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`)
     assert.ok(_.is.String(self.key), `${method}: self.key must be a String`)
 
-    self.s3.headObject({
+    self.aws$s3.headObject({
         Bucket: self.bucket,
         Key: self.key,
     }, (error, data) => {

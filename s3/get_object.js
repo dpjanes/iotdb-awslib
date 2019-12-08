@@ -29,7 +29,9 @@ const assert = require("assert")
 /**
  */
 const get_object = _.promise((self, done) => {
-    self.s3.getObject({
+    _.promise.validate(self, get_object)
+
+    self.aws$s3.getObject({
         Bucket: self.bucket,
         Key: self.key,
     }, (error, data) => {
@@ -68,7 +70,7 @@ const get_object = _.promise((self, done) => {
 })
 get_object.method = "s3.get_object"
 get_object.requires = {
-    s3: _.is.Object,
+    aws$s3: _.is.Object,
     bucket: _.is.String,
     key: _.is.String,
 }

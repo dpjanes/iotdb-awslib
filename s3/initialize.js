@@ -31,7 +31,7 @@ const AWS = require("aws-sdk")
 const initialize = _.promise(self => {
     _.promise.validate(self, initialize)
 
-    self.s3 = new AWS.S3({
+    self.aws$s3 = new AWS.S3({
         apiVersion: '2006-03-01',
     })
 })
@@ -42,10 +42,10 @@ initialize.requires = {
     AWS: _.is.Dictionary,
 }
 initialize.produces = {
-    s3: _.is.Object,
+    aws$s3: _.is.Object,
 }
 
 /**
  *  API
  */
-exports.initialize = _.promise.denodeify(initialize)
+exports.initialize = initialize
