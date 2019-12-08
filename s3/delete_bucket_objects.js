@@ -25,16 +25,8 @@ const logger = require("../logger")(__filename);
  *  Delete all the objects within a Bucket under self.key
  *  Obviously very dangerous.
  */
-const delete_bucket_objects = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
-    const method = "s3.delete_bucket_objects";
-
-    const aws = {
-        s3: {
-            list_objects: require("./list_objects").list_objects,
-            delete_object: require("./delete_object").delete_object,
-        },
-    }
+const delete_bucket_objects = _.promise((self, done) => {
+    const aws = require("..")
 
     assert.ok(self.s3, `${method}: self.s3 is required`);
     assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`);
@@ -99,7 +91,20 @@ const delete_bucket_objects = (_self, done) => {
             return null;
         })
         .catch(error => counter.decrement(error));
+})
+
+delete_bucket_objects.method = "s3.delete_bucket_objects"
+delete_bucket_objects.description = ``
+delete_bucket_objects.requires = {
+    s3: _.is.Object,
 }
+delete_bucket_objects.accepts = {
+}
+delete_bucket_objects.produces = {
+}
+delete_bucket_objects.params = {
+}
+delete_bucket_objects.p = _.p(delete_bucket_objects)
 
 /**
  *  API

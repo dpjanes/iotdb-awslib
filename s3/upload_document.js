@@ -22,10 +22,7 @@ mime.getType = mime.getType || mime.lookup; // 2.0.3 vs 1.6.0
  *  Accepts: 
  *  Produces:
  */
-const upload_document = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
-    const method = "s3.upload_document";
-
+const upload_document = _.promise((self, done) => {
     assert.ok(self.s3, `${method}: self.s3 is required`);
     assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`);
     assert.ok(_.is.String(self.key), `${method}: self.key must be a String`);
@@ -52,7 +49,20 @@ const upload_document = (_self, done) => {
 
         done(null, self);
     });
+})
+
+upload_document.method = "s3.upload_document"
+upload_document.description = ``
+upload_document.requires = {
+    s3: _.is.Object,
 }
+upload_document.accepts = {
+}
+upload_document.produces = {
+}
+upload_document.params = {
+}
+upload_document.p = _.p(upload_document)
 
 /**
  *  API

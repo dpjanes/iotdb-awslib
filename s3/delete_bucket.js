@@ -25,10 +25,7 @@ const logger = require("../logger")(__filename);
  *  Delete a Bucket. If the Bucket does not exist,
  *  no error will be reported.
  */
-const delete_bucket = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
-    const method = "s3.delete_bucket";
-
+const delete_bucket = _.promise((self, done) => {
     assert.ok(self.s3, `${method}: self.s3 is required`);
     assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`);
 
@@ -68,7 +65,20 @@ const delete_bucket = (_self, done) => {
 
         return done(error);
     });
+})
+
+delete_bucket.method = "s3.delete_bucket"
+delete_bucket.description = ``
+delete_bucket.requires = {
+    s3: _.is.Object,
 }
+delete_bucket.accepts = {
+}
+delete_bucket.produces = {
+}
+delete_bucket.params = {
+}
+delete_bucket.p = _.p(delete_bucket)
 
 /**
  *  API

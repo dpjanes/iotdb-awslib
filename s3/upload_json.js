@@ -20,10 +20,7 @@ const AWS = require("aws-sdk");
  *  Accepts: 
  *  Produces:
  */
-const upload_json = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
-    const method = "s3.upload_json";
-
+const upload_json = _.promise((self, done) => {
     assert.ok(self.s3, `${method}: self.s3 is required`);
     assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`);
     assert.ok(_.is.String(self.key), `${method}: self.key must be a String`);
@@ -42,7 +39,31 @@ const upload_json = (_self, done) => {
 
         done(null, self);
     });
+
+    /*
+    _.promise(self)
+        .add("wrap$in", {
+            Bucket: self.bucket,
+            Key: self.key,
+            Body: JSON.stringify(self.json, null, 2),
+            ContentType: self.document_media_type || "application/json",
+        })
+        .wrap(s3.upload, "in")
+    */
+})
+
+upload_json.method = "s3.upload_json"
+upload_json.description = ``
+upload_json.requires = {
+    s3: _.is.Object,
 }
+upload_json.accepts = {
+}
+upload_json.produces = {
+}
+upload_json.params = {
+}
+upload_json.p = _.p(upload_json)
 
 /**
  *  API

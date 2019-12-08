@@ -38,6 +38,22 @@ if (action("create-bucket")) {
         .catch(error => console.log("#", _.error.message(error)))
 }
 
+if (action("bucket-exists")) {
+    _.promise.make({
+        awsd: awsd,
+        bucket: ad.bucket || "consensas-test1",
+    })
+        .log("E.1")
+        .then(aws.initialize)
+        .log("E.2")
+        .then(aws.s3.initialize)
+        .log("E.3")
+        .then(aws.s3.bucket_exists)
+        .log("E.4")
+        .then(_self => console.log("+", "ok", _self.exists))
+        .catch(error => console.log("#", _.error.message(error)))
+}
+
 // list buckets
 if (action("list-buckets")) {
     _.promise.make({

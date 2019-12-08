@@ -12,38 +12,37 @@
 
 const _ = require("iotdb-helpers");
 
-const assert = require("assert");
-
-const AWS = require("aws-sdk");
-
-const aws = {
-    s3: {
-        get_object: require("./get_object").get_object,
-    },
-}
-
 /**
- *  Accepts: 
- *  Produces:
  */
-const get_json = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
-    const method = "s3.get_json";
+const get_json = _.promise((self, done) => {
+    const aws = require("..")
 
     _.promise.make(self)
+        .validate(get_json)
+
         .then(aws.s3.get_object)
-        .then(sd => {
-            self.aws_result = sd.aws_result;
-
+        // .then(document.to.json)
+        .make(sd => {
             if (_.is.Buffer(sd.document)) {
-                self.json = JSON.parse(sd.document.toString("utf-8"))
+                sd.json = JSON.parse(sd.document.toString("utf-8"))
             } else {
-                self.json = JSON.parse(sd.document);
+                sd.json = JSON.parse(sd.document);
             }
-
-            done(null, self)
         })
-        .catch(done)
+        
+        .end(done, self, get_json)
+})
+
+get_json.method = "s3.get_json"
+get_json.description = ``
+get_json.requires = {
+    s3: _.is.Object,
+    key: _.is.String,
+    bucket: _.is.String,
+}
+get_json.produces = {
+    json: _.is.JSON,
+    aws_result: _.is.Object,
 }
 
 /**

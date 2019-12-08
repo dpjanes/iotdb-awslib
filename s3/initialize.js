@@ -12,25 +12,25 @@
 
 const _ = require("iotdb-helpers");
 
-const assert = require("assert");
-
 const AWS = require("aws-sdk");
 
 /**
- *  Accepts: 
- *  Produces:
  */
-const initialize = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
-    const method = "s3.initialize";
-
-    assert.ok(self.AWS, `${method}: self.AWS is required`);
+const initialize = _.promise(self => {
+    _.promise.validate(self, initialize)
 
     self.s3 = new AWS.S3({
         apiVersion: '2006-03-01',
     });
+})
 
-    done(null, self);
+initialize.method = "s3.initialize"
+initialize.description = ``
+initialize.requires = {
+    AWS: _.is.Dictionary,
+}
+initialize.produces = {
+    s3: _.is.Object,
 }
 
 /**

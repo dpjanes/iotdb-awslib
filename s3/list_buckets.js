@@ -20,10 +20,7 @@ const AWS = require("aws-sdk");
  *  Accepts: 
  *  Produces:
  */
-const list_buckets = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
-    const method = "s3.list_buckets";
-
+const list_buckets = _.promise((self, done) => {
     assert.ok(self.s3, `${method}: self.s3 is required`);
 
     self.s3.listBuckets({
@@ -38,7 +35,20 @@ const list_buckets = (_self, done) => {
         done(null, self);
     });
     
+})
+
+list_buckets.method = "s3.list_buckets"
+list_buckets.description = ``
+list_buckets.requires = {
+    s3: _.is.Object,
 }
+list_buckets.accepts = {
+}
+list_buckets.produces = {
+}
+list_buckets.params = {
+}
+list_buckets.p = _.p(list_buckets)
 
 /**
  *  API

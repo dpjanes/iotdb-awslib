@@ -20,10 +20,7 @@ const AWS = require("aws-sdk");
  *  Accepts: 
  *  Produces:
  */
-const create_bucket = (_self, done) => {
-    const self = _.d.clone.shallow(_self);
-    const method = "s3.create_bucket";
-
+const create_bucket = _.promise((self, done) => {
     assert.ok(self.s3, `${method}: self.s3 is required`);
     assert.ok(_.is.String(self.bucket), `${method}: self.bucket must be a String`);
 
@@ -39,7 +36,20 @@ const create_bucket = (_self, done) => {
 
         done(null, self);
     });
+})
+
+create_bucket.method = "s3.create_bucket"
+create_bucket.description = ``
+create_bucket.requires = {
+    s3: _.is.Object,
 }
+create_bucket.accepts = {
+}
+create_bucket.produces = {
+}
+create_bucket.params = {
+}
+create_bucket.p = _.p(create_bucket)
 
 /**
  *  API
