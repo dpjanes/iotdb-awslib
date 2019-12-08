@@ -26,8 +26,6 @@ const _ = require("iotdb-helpers")
 
 const assert = require("assert")
 
-const AWS = require("aws-sdk")
-
 /**
  */
 const get_object = _.promise((self, done) => {

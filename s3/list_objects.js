@@ -26,8 +26,6 @@ const _ = require("iotdb-helpers");
 
 const assert = require("assert");
 
-const AWS = require("aws-sdk");
-
 const split = s => s.split("/").filter(s => s.length)
 
 /**

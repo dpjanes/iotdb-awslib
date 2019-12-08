@@ -26,7 +26,6 @@ const _ = require("iotdb-helpers");
 
 const assert = require("assert");
 
-const AWS = require("aws-sdk");
 const mime = require("mime");
 mime.getType = mime.getType || mime.lookup; // 2.0.3 vs 1.6.0 
 
