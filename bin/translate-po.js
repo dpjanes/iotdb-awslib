@@ -23,7 +23,7 @@ const AWS = require("aws-sdk");
 const minimist = require('minimist');
 
 const aws = require("../index");
-const awsd = {
+const aws$cfg = {
     profile: "consensas",
     region: "us-east-1",
 }
@@ -35,10 +35,10 @@ const ad = minimist(process.argv.slice(2), {
 const action = (name) => ad._.indexOf(name) > -1;
 
 if (ad.profile) {
-    awsd.profile = ad.profile
+    aws$cfg.profile = ad.profile
 }
 if (ad.region) {
-    awsd.region = ad.region
+    aws$cfg.region = ad.region
 }
 
 /**
@@ -91,7 +91,7 @@ msgstr "${value}"
 })
 
 _.promise.make({
-    awsd: awsd,
+    aws$cfg: aws$cfg,
     paths: ad._,
     language: ad.language,
 })

@@ -21,7 +21,7 @@ const AWS = require("aws-sdk");
 const minimist = require('minimist');
 
 const aws = require("../index");
-const awsd = {
+const aws$cfg = {
     region:'us-east-1',
 
     // profile: "consensas",
@@ -39,10 +39,10 @@ if (ad._.length < 2) {
 const table_name = ad._[0]
 const primary_key = ad._[1]
 
-awsd.region = ad.region || awsd.region;
+aws$cfg.region = ad.region || aws$cfg.region;
 
 _.promise.make({
-    awsd: awsd,
+    aws$cfg: aws$cfg,
     table_name: table_name,
 })
     .then(aws.initialize)

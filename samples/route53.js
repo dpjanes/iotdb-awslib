@@ -19,7 +19,7 @@ const minimist = require('minimist')
 
 const aws = require("../index")
 const config = require("./aws.json")
-const awsd = config.awsd
+const aws$cfg = config.aws$cfg
 
 const _normalize = s => s.replace(/-/g, "_")
 const ad = minimist(process.argv.slice(2));
@@ -29,7 +29,7 @@ const action = name => ad._.indexOf(_normalize(name)) > -1;
 
 if (action("initialize")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
     })
         .then(aws.initialize)
         .then(aws.route53.initialize)
@@ -43,7 +43,7 @@ if (action("initialize")) {
 
 if (action("list_zones")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
     })
         .then(aws.initialize)
         .then(aws.route53.initialize)
@@ -58,7 +58,7 @@ if (action("list_zones")) {
 
 if (action("find_zone")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         zone_name: "consensas.internal.",
         zone_private: null,
     })
@@ -76,7 +76,7 @@ if (action("find_zone")) {
 
 if (action("list_resources")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         zone_name: "consensas.internal.",
         zone_private: null,
         resource_name: "cloud.consensas.internal.",
@@ -96,7 +96,7 @@ if (action("list_resources")) {
 
 if (action("find_resource")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         zone_name: "consensas.internal.",
         zone_private: null,
         resource_name: "cloud.consensas.internal.",
@@ -118,7 +118,7 @@ if (action("find_resource")) {
 
 if (action("create.a")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         zone_name: "consensas.internal.",
         zone_private: null,
     })
@@ -140,7 +140,7 @@ if (action("create.a")) {
 
 if (action("upsert.a")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         zone_name: "consensas.internal.",
         zone_private: null,
     })
@@ -162,7 +162,7 @@ if (action("upsert.a")) {
 
 if (action("delete.a")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         zone_name: "consensas.internal.",
         zone_private: null,
     })

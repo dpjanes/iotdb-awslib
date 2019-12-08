@@ -19,7 +19,7 @@ const path = require("path");
 const minimist = require('minimist');
 
 const aws = require("../index");
-const awsd = {
+const aws$cfg = {
     region:'us-east-1',
 }
 
@@ -101,7 +101,7 @@ const _repeat = self => {
  */
 const monitor_log_group = log_group => {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         log_group: ad._[0],
     })
         .then(aws.initialize)

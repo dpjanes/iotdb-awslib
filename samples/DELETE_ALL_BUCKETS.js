@@ -19,7 +19,7 @@ const minimist = require('minimist');
 
 const aws = require("..")
 const config = require("./aws.json")
-const awsd = config.awsd
+const aws$cfg = config.aws$cfg
 
 const ad = minimist(process.argv.slice(2));
 
@@ -27,7 +27,7 @@ const action = (name) => ad._.indexOf(name) > -1;
 
 if (1) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
     })
         .then(aws.initialize)
         .then(aws.s3.initialize)

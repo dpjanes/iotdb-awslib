@@ -19,7 +19,7 @@ const minimist = require('minimist');
 
 const aws = require("../index");
 const config = require("./aws.json")
-const awsd = config.awsd
+const aws$cfg = config.aws$cfg
 
 const ad = minimist(process.argv.slice(2));
 
@@ -27,7 +27,7 @@ const action = (name) => ad._.indexOf(name) > -1;
 
 if (action("initialize")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
     })
         .then(aws.initialize)
         .then(aws.sns.initialize)
@@ -37,7 +37,7 @@ if (action("initialize")) {
 
 if (action("publish")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         json: {
             "default": _.timestamp.make(),
         },
@@ -54,7 +54,7 @@ if (action("sms")) {
     assert(ad._.length > 1, "a phone number argument is required")
 
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         document: _.timestamp.make(),
         to_phone: `${ad._[1]}`,
     })

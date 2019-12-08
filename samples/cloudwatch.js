@@ -19,7 +19,7 @@ const minimist = require('minimist');
 
 const aws = require("../index");
 const config = require("./aws.json")
-const awsd = config.awsd
+const aws$cfg = config.aws$cfg
 
 const ad = minimist(process.argv.slice(2));
 
@@ -34,7 +34,7 @@ const handle = error => {
 
 if (action("initialize")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
     })
         .then(aws.initialize)
         .then(aws.cloudwatch.initialize)
@@ -46,7 +46,7 @@ if (action("initialize")) {
 
 if (action("log-groups")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
     })
         .then(aws.initialize)
         .then(aws.cloudwatch.initialize)
@@ -60,7 +60,7 @@ if (action("log-groups")) {
 
 if (action("log-streams")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         log_group: "website",
     })
         .then(aws.initialize)
@@ -75,7 +75,7 @@ if (action("log-streams")) {
 
 if (action("log-events")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         log_group: "website",
         log_stream: "2017/12/15/11/14/10",
     })

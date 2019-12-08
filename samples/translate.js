@@ -19,7 +19,7 @@ const minimist = require('minimist')
 
 const aws = require("../index")
 const config = require("./aws.json")
-const awsd = config.awsd
+const aws$cfg = config.aws$cfg
 
 const _normalize = s => s.replace(/-/g, "_")
 const ad = minimist(process.argv.slice(2));
@@ -29,7 +29,7 @@ const action = name => ad._.indexOf(_normalize(name)) > -1;
 
 if (action("initialize")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
     })
         .then(aws.initialize)
         .then(aws.translate.initialize)
@@ -43,7 +43,7 @@ if (action("initialize")) {
 
 if (action("translate")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         document: "Hello, World",
         language: "zh",
     })

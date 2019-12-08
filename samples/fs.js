@@ -19,7 +19,7 @@ const minimist = require("minimist")
 
 const aws = require("../index")
 const config = require("./aws.json")
-const awsd = config.awsd
+const aws$cfg = config.aws$cfg
 
 const ad = minimist(process.argv.slice(2))
 
@@ -30,7 +30,7 @@ const default_path = ad.path || `s3://${config.bucket}/`
 
 if (action("list")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         path: default_path,
     })
         .then(aws.initialize)
@@ -44,7 +44,7 @@ if (action("list")) {
 
 if (action("list-recursive")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         path: default_path,
     })
         .then(aws.initialize)
@@ -58,7 +58,7 @@ if (action("list-recursive")) {
 
 if (action("write")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
     })
         .then(aws.initialize)
         .then(aws.s3.initialize)
@@ -72,7 +72,7 @@ if (action("write")) {
 
 if (action("remove")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
     })
         .then(aws.initialize)
         .then(aws.s3.initialize)

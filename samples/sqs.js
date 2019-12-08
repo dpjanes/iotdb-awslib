@@ -19,7 +19,7 @@ const minimist = require('minimist');
 
 const aws = require("../index");
 const config = require("./aws.json")
-const awsd = config.awsd
+const aws$cfg = config.aws$cfg
 
 const ad = minimist(process.argv.slice(2));
 
@@ -27,7 +27,7 @@ const action = (name) => ad._.indexOf(name) > -1;
 
 if (action("initialize")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
     })
         .then(aws.initialize)
         .then(aws.sqs.initialize)
@@ -37,7 +37,7 @@ if (action("initialize")) {
 
 if (action("list-queues")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
     })
         .then(aws.initialize)
         .then(aws.sqs.initialize)
@@ -48,7 +48,7 @@ if (action("list-queues")) {
 
 if (action("get-queue-attributes")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         queue_name: "test",
     })
         .then(aws.initialize)
@@ -61,7 +61,7 @@ if (action("get-queue-attributes")) {
 
 if (action("get-queue-url")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         queue_name: "test",
     })
         .then(aws.initialize)
@@ -73,7 +73,7 @@ if (action("get-queue-url")) {
 
 if (action("send-json")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         queue_name: "test",
         json: _.timestamp.add({ "a": "Message", "ledger_id": "urn:iotdb:ledger:ZBm22eUo" }),
     })
@@ -87,7 +87,7 @@ if (action("send-json")) {
 
 if (action("process-json")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         queue_name: "test",
         handle_message: _.promise.denodeify((_self, done) => {
             console.log("+", "MESSAGE", JSON.stringify(_self.json, null, 2));

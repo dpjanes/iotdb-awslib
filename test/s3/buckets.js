@@ -17,7 +17,7 @@ const assert = require("assert");
 const Q = require("q");
 
 const aws = require("../../index");
-const awsd = {}
+const aws$cfg = {}
 
 describe("s3", function() {
     this.timeout(10 * 1000);
@@ -26,7 +26,7 @@ describe("s3", function() {
         const bucket_name = "iotdb-awslib-" + _.id.uuid.v4();
         it("works", function(done) {
             Q({
-                aws: awsd,
+                aws: aws$cfg,
                 bucket: bucket_name,
             })
                 .then(aws.initialize)

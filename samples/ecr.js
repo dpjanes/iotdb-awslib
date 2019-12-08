@@ -21,7 +21,7 @@ const minimist = require('minimist')
 
 const aws = require("../index")
 const config = require("./aws.json")
-const awsd = config.awsd
+const aws$cfg = config.aws$cfg
 
 const _normalize = s => s.replace(/-/g, "_")
 const ad = minimist(process.argv.slice(2));
@@ -31,7 +31,7 @@ const action = name => ad._.indexOf(_normalize(name)) > -1;
 
 if (action("initialize")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
     })
         .then(aws.initialize)
         .then(aws.ecr.initialize)
@@ -45,7 +45,7 @@ if (action("initialize")) {
 
 if (action("repository.list")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
     })
         .then(aws.initialize)
         .then(aws.ecr.initialize)
@@ -60,7 +60,7 @@ if (action("repository.list")) {
 
 if (action("repository.get_by_name")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         name: "consensas/redis",
     })
         .then(aws.initialize)
@@ -76,7 +76,7 @@ if (action("repository.get_by_name")) {
 
 if (action("repository.create")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         name: "consensas/test-xxx",
     })
         .then(aws.initialize)
@@ -92,7 +92,7 @@ if (action("repository.create")) {
 
 if (action("repository.delete")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         name: "consensas/test-xxx",
     })
         .then(aws.initialize)

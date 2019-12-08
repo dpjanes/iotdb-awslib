@@ -17,7 +17,7 @@ const assert = require("assert");
 const Q = require("q");
 
 const aws = require("../../index");
-const awsd = {
+const aws$cfg = {
     "profile": "consensas"
 }
 
@@ -29,7 +29,7 @@ describe("s3", function() {
     describe("object.list", function() {
         it("works", function(done) {
             Q({
-                aws: awsd,
+                aws: aws$cfg,
                 bucket: bucket_name,
             })
                 .then(aws.initialize)

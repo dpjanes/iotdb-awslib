@@ -19,7 +19,7 @@ const minimist = require('minimist');
 
 const aws = require("../index");
 const config = require("./aws.json")
-const awsd = config.awsd
+const aws$cfg = config.aws$cfg
 
 const ad = minimist(process.argv.slice(2));
 
@@ -37,7 +37,7 @@ const SHARD = "shardId-000000000000";
 
 if (action("initialize")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
     })
         .then(aws.initialize)
         .then(aws.kinesis.initialize)
@@ -49,7 +49,7 @@ if (action("initialize")) {
 
 if (action("list-streams")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
     })
         .then(aws.initialize)
         .then(aws.kinesis.initialize)
@@ -62,7 +62,7 @@ if (action("list-streams")) {
 
 if (action("describe-stream")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         stream: STREAM,
     })
         .then(aws.initialize)
@@ -76,7 +76,7 @@ if (action("describe-stream")) {
 
 if (action("send-json")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         stream: STREAM,
         json: _.timestamp.add({ "a": "Message", "ledger_id": "urn:iotdb:ledger:ZBm22eUo" }),
     })
@@ -91,7 +91,7 @@ if (action("send-json")) {
 
 if (action("get-shard-iterator")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         stream: STREAM,
         shard: SHARD,
     })
@@ -107,7 +107,7 @@ if (action("get-shard-iterator")) {
 
 if (action("get-records")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         stream: STREAM,
         shard: SHARD,
     })
@@ -126,7 +126,7 @@ if (action("get-records")) {
 if (action("get-jsons")) {
     const fetch = pager => {
         _.promise.make({
-            awsd: awsd,
+            aws$cfg: aws$cfg,
             stream: STREAM,
             pager: pager,
         })
@@ -148,7 +148,7 @@ if (action("get-jsons")) {
 
 if (action("get-jsons-all")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         stream: STREAM,
     })
         .then(aws.initialize)

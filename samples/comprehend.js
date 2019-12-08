@@ -21,7 +21,7 @@ const minimist = require('minimist')
 
 const aws = require("../index")
 const config = require("./aws.json")
-const awsd = config.awsd
+const aws$cfg = config.aws$cfg
 
 const _normalize = s => s.replace(/-/g, "_")
 const ad = minimist(process.argv.slice(2));
@@ -31,7 +31,7 @@ const action = name => ad._.indexOf(_normalize(name)) > -1;
 
 if (action("initialize")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
     })
         .then(aws.initialize)
         .then(aws.comprehend.initialize)
@@ -45,7 +45,7 @@ if (action("initialize")) {
 
 if (action("sentiment")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         document: fs.fs.readFileSync(path.join(__dirname, "data", "bbc_congo.txt"), "utf-8"),
     })
         .then(aws.initialize)
@@ -63,7 +63,7 @@ if (action("sentiment")) {
 
 if (action("entities")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         document: fs.fs.readFileSync(path.join(__dirname, "data", "bbc_congo.txt"), "utf-8"),
     })
         .then(aws.initialize)

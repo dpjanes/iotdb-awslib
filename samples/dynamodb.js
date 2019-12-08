@@ -20,7 +20,7 @@ const minimist = require('minimist');
 
 const aws = require("../index");
 const config = require("./aws.json")
-const awsd = config.awsd
+const aws$cfg = config.aws$cfg
 
 const ad = minimist(process.argv.slice(2));
 
@@ -36,7 +36,7 @@ if (ad.help) {
 
 if (action("initialize")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
     })
         .then(aws.initialize)
         .then(aws.dynamodb.initialize)
@@ -46,7 +46,7 @@ if (action("initialize")) {
 
 if (action("create-table")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         table_name: "movies",
         partition_key: "#year",
         sort_key: "title",
@@ -61,7 +61,7 @@ if (action("create-table")) {
 
 if (action("load-table")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         table_name: "movies",
     })
         .then(aws.initialize)
@@ -81,7 +81,7 @@ if (action("load-table")) {
 
 if (action("create-table-wait")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         table_name: "movies",
         partition_key: "#year",
         sort_key: "title",
@@ -97,7 +97,7 @@ if (action("create-table-wait")) {
 
 if (action("delete-table")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         table_name: "movies",
     })
         .then(aws.initialize)
@@ -109,7 +109,7 @@ if (action("delete-table")) {
 
 if (action("put")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         table_name: "movies",
         json: {
             year: 1999,
@@ -126,7 +126,7 @@ if (action("put")) {
 
 if (action("replace-fail")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         table_name: "movies",
         query: {
             year: 1999,
@@ -147,7 +147,7 @@ if (action("replace-fail")) {
 
 if (action("get")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         table_name: "movies",
         query: {
             year: 1999,
@@ -163,7 +163,7 @@ if (action("get")) {
 
 if (action("query-simple")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         table_name: "movies",
         query: {
             year: 1999,
@@ -182,7 +182,7 @@ if (action("query-simple")) {
  */
 if (action("query-range")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         table_name: "movies",
         query: {
             year: [ "!=", 1999, ],
@@ -198,7 +198,7 @@ if (action("query-range")) {
 
 if (action("scan-simple")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         table_name: "movies",
         query: {
             title: "The Matrix",
@@ -215,7 +215,7 @@ if (action("scan-simple")) {
 if (action("page-all")) {
     const _run = pager => {
         _.promise.make({
-            awsd: awsd,
+            aws$cfg: aws$cfg,
             table_name: "movies",
             query_limit: 5,
             pager: pager,
@@ -244,7 +244,7 @@ if (action("page-all")) {
 if (action("page-scan")) {
     const _run = pager => {
         _.promise.make({
-            awsd: awsd,
+            aws$cfg: aws$cfg,
             table_name: "movies",
             query_limit: 5,
             pager: pager,
@@ -275,7 +275,7 @@ if (action("page-scan")) {
 if (action("page-query")) {
     const _run = pager => {
         _.promise.make({
-            awsd: awsd,
+            aws$cfg: aws$cfg,
             table_name: "movies",
             query_limit: 5,
             pager: pager,
@@ -304,7 +304,7 @@ if (action("page-query")) {
 
 if (action("promise-page-query")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         table_name: "movies",
         query_limit: 5,
         query: {

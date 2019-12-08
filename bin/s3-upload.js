@@ -21,7 +21,7 @@ const AWS = require("aws-sdk")
 const minimist = require("minimist")
 
 const aws = require("../index")
-const awsd = {
+const aws$cfg = {
 }
 
 const ad = minimist(process.argv.slice(2), {
@@ -57,7 +57,7 @@ if (ad._.length < 2) {
 }
 
 if (ad.profile) {
-    awsd.profile = ad.profile
+    aws$cfg.profile = ad.profile
 }
 
 /**
@@ -117,7 +117,7 @@ if (ad._.length === 2) {
 }
 
 _.promise({
-    awsd: awsd,
+    aws$cfg: aws$cfg,
     uploads: uploads,
 })
     .then(aws.initialize)

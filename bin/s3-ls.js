@@ -21,7 +21,7 @@ const AWS = require("aws-sdk")
 const minimist = require('minimist')
 
 const aws = require("../index")
-const awsd = {
+const aws$cfg = {
 }
 
 const ad = minimist(process.argv.slice(2), {
@@ -30,14 +30,14 @@ const ad = minimist(process.argv.slice(2), {
 })
 
 if (ad.profile) {
-    awsd.profile = ad.profile
+    aws$cfg.profile = ad.profile
 }
 
 const action = (name) => ad._.indexOf(name) > -1;
 
 ad._.forEach(s3_path => {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         path: s3_path,
         recursive: ad.recursive,
     })

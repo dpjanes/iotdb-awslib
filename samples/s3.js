@@ -19,7 +19,7 @@ const minimist = require('minimist')
 
 const aws = require("../index")
 const config = require("./aws.json")
-const awsd = config.awsd
+const aws$cfg = config.aws$cfg
 
 const ad = minimist(process.argv.slice(2))
 const action_name = ad._[0]
@@ -33,7 +33,7 @@ const action = name => {
 
 if (action("bucket.create")) {
     _.promise({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         bucket: ad.bucket || "consensas-test1",
     })
         .then(aws.initialize)
@@ -43,7 +43,7 @@ if (action("bucket.create")) {
         .catch(_.error.log)
 } else if (action("bucket.exists")) {
     _.promise({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         bucket: ad.bucket || "consensas-test1",
     })
         .then(aws.initialize)
@@ -53,7 +53,7 @@ if (action("bucket.create")) {
         .catch(_.error.log)
 } else if (action("bucket.list")) {
     _.promise({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
     })
         .then(aws.initialize)
         .then(aws.s3.initialize)
@@ -62,7 +62,7 @@ if (action("bucket.create")) {
         .catch(_.error.log)
 } else if (action("json.put")) {
     _.promise({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
 
         bucket: ad.bucket || "consensas-test1",
         key: ad.key || "name.json",
@@ -77,7 +77,7 @@ if (action("bucket.create")) {
         .catch(_.error.log)
 } else if (action("object.put")) {
     _.promise({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
 
         bucket: ad.bucket || "consensas-test1",
         key: "test.txt",
@@ -90,7 +90,7 @@ if (action("bucket.create")) {
         .catch(_.error.log)
 } else if (action("object.delete")) {
     _.promise({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
 
         bucket: ad.bucket || "consensas-test1",
         key: "test.txt",
@@ -102,7 +102,7 @@ if (action("bucket.create")) {
         .catch(_.error.log)
 } else if (action("object.list")) {
     _.promise({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         bucket: ad.bucket || "consensas-test1",
         // key: "eLyccgRz",
     })
@@ -115,7 +115,7 @@ if (action("bucket.create")) {
         .catch(_.error.log)
 } else if (action("object.list.recursive")) {
     _.promise({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         bucket: ad.bucket || "consensas-test1",
         // key: "eLyccgRz",
     })
@@ -128,7 +128,7 @@ if (action("bucket.create")) {
         .catch(_.error.log)
 } else if (action("object.head")) {
     _.promise({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         bucket: ad.bucket || "consensas-test1",
         key: ad.key || "name.jsonx",
     })
@@ -141,7 +141,7 @@ if (action("bucket.create")) {
         .catch(_.error.log)
 } else if (action("object.exists")) {
     _.promise({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         bucket: ad.bucket || "consensas-test1",
         key: ad.key || "name.json",
     })
@@ -152,7 +152,7 @@ if (action("bucket.create")) {
         .catch(_.error.log)
 } else if (action("object.exists-path")) {
     _.promise({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
         path: "s3://consensas-test1/name.json",
     })
         .then(aws.initialize)

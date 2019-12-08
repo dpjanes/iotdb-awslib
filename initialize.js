@@ -31,16 +31,16 @@ const AWS = require("aws-sdk")
 const initialize = _.promise(self => {
     _.promise.validate(self, initialize)
 
-    if (self.awsd.accessKeyId && self.awsd.secretAccessKey) {
-        AWS.config.credentials = new AWS.Credentials(self.awsd.accessKeyId, self.awsd.secretAccessKey)
-    } else if (self.awsd.profile) {
+    if (self.aws$cfg.accessKeyId && self.aws$cfg.secretAccessKey) {
+        AWS.config.credentials = new AWS.Credentials(self.aws$cfg.accessKeyId, self.aws$cfg.secretAccessKey)
+    } else if (self.aws$cfg.profile) {
         AWS.config.credentials = new AWS.SharedIniFileCredentials({
-            profile: self.awsd.profile,
+            profile: self.aws$cfg.profile,
         })
     }
 
-    if (self.awsd.region) {
-        AWS.config.region = self.awsd.region
+    if (self.aws$cfg.region) {
+        AWS.config.region = self.aws$cfg.region
     }
 
     self.AWS = AWS
@@ -51,7 +51,7 @@ initialize.description = ``
 initialize.requires = {
 }
 initialize.accepts = {
-    awsd: {
+    aws$cfg: {
         profile: _.is.String,
         accessKeyId: _.is.String,
         secretAccessKey: _.is.String,

@@ -19,7 +19,7 @@ const minimist = require('minimist');
 
 const aws = require("../index");
 const config = require("./aws.json")
-const awsd = config.awsd
+const aws$cfg = config.aws$cfg
 
 const ad = minimist(process.argv.slice(2));
 
@@ -27,7 +27,7 @@ const action = (name) => ad._.indexOf(name) > -1;
 
 if (action("initialize")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
     })
         .then(aws.initialize)
         .then(aws.ses.initialize)
@@ -37,7 +37,7 @@ if (action("initialize")) {
 
 if (action("send")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
 
         from: "david@consensas.com",
         to: "davidjanes@davidjanes.com",
@@ -53,7 +53,7 @@ if (action("send")) {
 
 if (action("send-html")) {
     _.promise.make({
-        awsd: awsd,
+        aws$cfg: aws$cfg,
 
         from: "david@consensas.com",
         tos: [ "davidjanes@davidjanes.com", "ryan@consensas.com", ],
