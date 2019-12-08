@@ -1,9 +1,9 @@
 /**
- *  s3/upload_json.js
+ *  s3/object.delete.js
  *
  *  David Janes
  *  IOTDB
- *  2017-01-18
+ *  2017-01-19
  *
  *  Copyright (2013-2020) David P. Janes
  *
@@ -24,25 +24,24 @@
 
 const _ = require("iotdb-helpers")
 
+const logger = require("../logger")(__filename)
+
 /**
  */
-const upload_json = _.promise((self, done) => {
-    _.promise.validate(self, upload_json)
+const object = {}
+object.delete = _.promise.make((self, done) => {
+    _.promise.validate(self, object.delete)
 
-    const paramd = {
+    logger.info({
+        method: object.delete.method,
+        bucket: self.bucket,
+        key: self.key,
+    }, "delete object")
+
+    self.aws$s3.deleteObject({
         Bucket: self.bucket,
         Key: self.key,
-        Body: JSON.stringify(self.json, null, 2),
-        ContentType: self.document_media_type || "application/json",
-    }
-
-    if (self.aws$acl) {
-        paramd.ACL = self.aws$acl
-    } else if (self.aws$acl_public) {
-        paramd.ACL = "public-read"
-    }
-
-    self.aws$s3.upload(paramd, (error, data) => {
+    }, (error, data) => {
         if (error) {
             return done(error)
         }
@@ -53,24 +52,17 @@ const upload_json = _.promise((self, done) => {
     })
 })
 
-upload_json.method = "s3.upload_json"
-upload_json.description = ``
-upload_json.requires = {
+object.delete.method = "s3.object.delete"
+object.delete.requires = {
     aws$s3: _.is.Object,
     bucket: _.is.String,
     key: _.is.String,
-    json: _.is.JSON,
 }
-upload_json.accepts = {
-    document_media_type: _.is.String,
-    aws$acl_public: _.is.Boolean,
-    aws$acl: _.is.String,
-}
-upload_json.produces = {
+object.delete.produces = {
     aws$result: _.is.Object,
 }
 
 /**
  *  API
  */
-exports.upload_json = upload_json
+exports.object = object

@@ -1,5 +1,5 @@
 /**
- *  s3/get_object.js
+ *  s3/object.get.js
  *
  *  David Janes
  *  IOTDB
@@ -28,8 +28,9 @@ const assert = require("assert")
 
 /**
  */
-const get_object = _.promise((self, done) => {
-    _.promise.validate(self, get_object)
+const object = {}
+object.get = _.promise((self, done) => {
+    _.promise.validate(self, object.get)
 
     self.aws$s3.getObject({
         Bucket: self.bucket,
@@ -56,10 +57,10 @@ const get_object = _.promise((self, done) => {
                 self.document_encoding = null
             }
         } else {
-            assert.ok(false, `${get_object.method}: don't know how to deal with Body of type: ${typeof data.Body}`)
+            assert.ok(false, `${object.get.method}: don't know how to deal with Body of type: ${typeof data.Body}`)
         }
 
-        assert.ok(self.document, `${get_object.method}: self.document should have been produced by now`)
+        assert.ok(self.document, `${object.get.method}: self.document should have been produced by now`)
 
         if (data.ContentType) {
             self.document_media_type = data.ContentType
@@ -69,13 +70,13 @@ const get_object = _.promise((self, done) => {
     })
 })
 
-get_object.method = "s3.get_object"
-get_object.requires = {
+object.get.method = "s3.object.get"
+object.get.requires = {
     aws$s3: _.is.Object,
     bucket: _.is.String,
     key: _.is.String,
 }
-get_object.produces = {
+object.get.produces = {
     aws$result: _.is.Object,
     document: [ _.is.String, _.is.Buffer, ],
     document_encoding: _.is.String,
@@ -85,5 +86,4 @@ get_object.produces = {
 /**
  *  API
  */
-exports.get_object = get_object
-
+exports.object = object

@@ -39,7 +39,7 @@ if (action("create-bucket")) {
         .then(aws.initialize)
         .then(aws.s3.initialize)
         .log("A")
-        .then(aws.s3.create_bucket)
+        .then(aws.s3.bucket.create)
         .log("B")
         .make(sd => console.log("+", "ok", sd.bucket_url)) // .result))
         .catch(_.error.log)
@@ -50,7 +50,7 @@ if (action("create-bucket")) {
     })
         .then(aws.initialize)
         .then(aws.s3.initialize)
-        .then(aws.s3.bucket_exists)
+        .then(aws.s3.bucket.exists)
         .make(sd => console.log("+", "ok", sd.exists))
         .catch(_.error.log)
 } else if (action("list-buckets")) {
@@ -59,7 +59,7 @@ if (action("create-bucket")) {
     })
         .then(aws.initialize)
         .then(aws.s3.initialize)
-        .then(aws.s3.list_buckets)
+        .then(aws.s3.bucket.list)
         .make(sd => console.log("+", "ok", sd.buckets))
         .catch(_.error.log)
 } else if (action("upload-json")) {
@@ -74,7 +74,7 @@ if (action("create-bucket")) {
     })
         .then(aws.initialize)
         .then(aws.s3.initialize)
-        .then(aws.s3.upload_json)
+        .then(aws.s3.json.put)
         .make(sd => console.log("+", "ok", sd.aws_result))
         .catch(_.error.log)
 } else if (action("upload-document")) {
@@ -87,7 +87,7 @@ if (action("create-bucket")) {
     })
         .then(aws.initialize)
         .then(aws.s3.initialize)
-        .then(aws.s3.upload_document)
+        .then(aws.s3.object.put)
         .make(sd => console.log("+", "ok", sd.aws_result))
         .catch(_.error.log)
 } else if (action("delete-object")) {
@@ -99,7 +99,7 @@ if (action("create-bucket")) {
     })
         .then(aws.initialize)
         .then(aws.s3.initialize)
-        .then(aws.s3.delete_object)
+        .then(aws.s3.object.delete)
         .make(sd => console.log("+", "ok", sd.aws_result))
         .catch(_.error.log)
 } else if (action("list-objects")) {
@@ -110,7 +110,7 @@ if (action("create-bucket")) {
     })
         .then(aws.initialize)
         .then(aws.s3.initialize)
-        .then(aws.s3.list_objects)
+        .then(aws.s3.object.list)
         .make(sd => console.log("+", "ok", sd.paths))
         .catch(_.error.log)
 } else if (action("list-objects-recursive")) {
@@ -121,7 +121,7 @@ if (action("create-bucket")) {
     })
         .then(aws.initialize)
         .then(aws.s3.initialize)
-        .then(aws.s3.list_objects.recursive)
+        .then(aws.s3.object.list.recursive)
         .make(sd => console.log("+", "ok", sd.paths))
         .catch(_.error.log)
 } else if (action("head-object")) {
@@ -132,7 +132,7 @@ if (action("create-bucket")) {
     })
         .then(aws.initialize)
         .then(aws.s3.initialize)
-        .then(aws.s3.head_object)
+        .then(aws.s3.object.head)
         .make(sd => console.log("+", "ok", sd.files))
         .catch(_.error.log)
 } else if (action("object-exists")) {
@@ -143,7 +143,7 @@ if (action("create-bucket")) {
     })
         .then(aws.initialize)
         .then(aws.s3.initialize)
-        .then(aws.s3.object_exists)
+        .then(aws.s3.object.exists)
         .make(sd => console.log("+", "ok", sd.exists))
         .catch(_.error.log)
 } else if (action("object-exists-with-path")) {
@@ -153,7 +153,7 @@ if (action("create-bucket")) {
     })
         .then(aws.initialize)
         .then(aws.s3.initialize)
-        .then(aws.s3.parse_path)
+        .then(aws.s3.path.parse)
         .then(aws.s3.exists)
         .make(sd => console.log("+", "ok", sd.exists))
         .catch(_.error.log)

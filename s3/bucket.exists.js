@@ -1,5 +1,5 @@
 /**
- *  s3/bucket_exists.js
+ *  s3/bucket.exists.js
  *
  *  David Janes
  *  IOTDB
@@ -26,11 +26,12 @@ const _ = require("iotdb-helpers")
 
 /**
  */
-const bucket_exists = _.promise((self, done) => {
-    _.promise.validate(self, bucket_exists)
+const bucket = {}
+bucket.exists = _.promise((self, done) => {
+    _.promise.validate(self, bucket.exists)
 
     _.promise(self)
-        .validate(bucket_exists)
+        .validate(bucket.exists)
 
         .make(sd => {
             sd.exists = true
@@ -48,7 +49,7 @@ const bucket_exists = _.promise((self, done) => {
             throw error
         })
 
-        .end(done, self, bucket_exists)
+        .end(done, self, bucket.exists)
 
 /*
     self.aws$s3.getBucketLocation({
@@ -69,21 +70,21 @@ const bucket_exists = _.promise((self, done) => {
 */
 })
 
-bucket_exists.method = "s3.bucket_exists"
-bucket_exists.description = ``
-bucket_exists.requires = {
+bucket.exists.method = "s3.bucket.exists"
+bucket.exists.description = ``
+bucket.exists.requires = {
     aws$s3: _.is.Object,
     bucket: _.is.String,
 }
-bucket_exists.produces = {
+bucket.exists.produces = {
     exists: _.is.Boolean,
 }
-bucket_exists.params = {
+bucket.exists.params = {
     bucket: _.is.String,
 }
-bucket_exists.p = _.p(bucket_exists)
+bucket.exists.p = _.p(bucket.exists)
 
 /**
  *  API
  */
-exports.bucket_exists = bucket_exists
+exports.bucket = bucket

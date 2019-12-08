@@ -1,9 +1,9 @@
 /**
- *  s3/join_paths.js
+ *  s3/bucket.create.js
  *
  *  David Janes
  *  IOTDB
- *  2017-12-27
+ *  2017-01-18
  *
  *  Copyright (2013-2020) David P. Janes
  *
@@ -26,22 +26,40 @@ const _ = require("iotdb-helpers")
 
 /**
  */
-const join_paths = _.promise.make(self => {
-    _.promise.validate(self, join_paths)
+const bucket = {}
+bucket.create = _.promise((self, done) => {
+    _.promise.validate(self, bucket.create)
 
-    self.paths = self.paths.map(name => name.startsWith("s3://") ? name : `s3://${self.bucket}/${name}`)
+    self.aws$s3.createBucket({
+        Bucket: self.bucket,
+    }, (error, data) => {
+        if (error) {
+            return done(error)
+        }
+
+        self.bucket_url = `s3:/${data.Location}/`
+        self.aws$result = data
+
+        done(null, self)
+    })
 })
 
-join_paths.method = "s3.join_paths"
-join_paths.requires = {
+bucket.create.method = "s3.bucket.create"
+bucket.create.description = ``
+bucket.create.requires = {
     aws$s3: _.is.Object,
     bucket: _.is.String,
 }
-join_paths.produces = {
-    paths: _.is.Array.of.String,
+bucket.create.produces = {
+    bucket_url: _.is.String,
+    aws$result: _.is.Object,
 }
+bucket.create.params = {
+    bucket: _.p.normal,
+}
+bucket.create.p = _.p(bucket.create)
 
 /**
  *  API
  */
-exports.join_paths = join_paths
+exports.bucket = bucket

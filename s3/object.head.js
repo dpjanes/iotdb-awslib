@@ -1,5 +1,5 @@
 /**
- *  s3/create_bucket.js
+ *  s3/object.head.js
  *
  *  David Janes
  *  IOTDB
@@ -26,39 +26,41 @@ const _ = require("iotdb-helpers")
 
 /**
  */
-const create_bucket = _.promise((self, done) => {
-    _.promise.validate(self, create_bucket)
+const object = {}
+object.head = _.promise((self, done) => {
+    _.promise.validate(self, object.head)
 
-    self.aws$s3.createBucket({
+    self.aws$s3.headObject({
         Bucket: self.bucket,
+        Key: self.key,
     }, (error, data) => {
         if (error) {
             return done(error)
         }
 
-        self.bucket_url = `s3:/${data.Location}/`
         self.aws$result = data
+
+        if (data.ContentType) {
+            self.document_media_type = data.ContentType
+        }
 
         done(null, self)
     })
 })
 
-create_bucket.method = "s3.create_bucket"
-create_bucket.description = ``
-create_bucket.requires = {
+object.head.method = "s3.object.head"
+object.head.description = ``
+object.head.requires = {
     aws$s3: _.is.Object,
     bucket: _.is.String,
+    key: _.is.String,
 }
-create_bucket.produces = {
-    bucket_url: _.is.String,
+object.head.produces = {
     aws$result: _.is.Object,
+    document_media_type: _.is.String,
 }
-create_bucket.params = {
-    bucket: _.p.normal,
-}
-create_bucket.p = _.p(create_bucket)
 
 /**
  *  API
  */
-exports.create_bucket = create_bucket
+exports.object = object

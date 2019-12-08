@@ -1,5 +1,5 @@
 /**
- *  s3/delete_bucket.js
+ *  s3/bucket.delete.js
  *
  *  David Janes
  *  IOTDB
@@ -31,11 +31,12 @@ const logger = require("../logger")(__filename)
  *  Produces:
  *
  */
-const delete_bucket = _.promise((self, done) => {
-    _.promise.validate(self, delete_bucket)
+const bucket = {}
+bucket.delete = _.promise((self, done) => {
+    _.promise.validate(self, bucket.delete)
 
     logger.warn({
-        method: delete_bucket.method,
+        method: bucket.delete.method,
         bucket: self.bucket,
     }, "delete bucket")
 
@@ -46,7 +47,7 @@ const delete_bucket = _.promise((self, done) => {
 
         if (!error) {
             logger.info({
-                method: delete_bucket.method,
+                method: bucket.delete.method,
                 bucket: self.bucket,
             }, "deleted bucket")
 
@@ -55,7 +56,7 @@ const delete_bucket = _.promise((self, done) => {
 
         if (error.statusCode === 404) {
             logger.warn({
-                method: delete_bucket.method,
+                method: bucket.delete.method,
                 bucket: self.bucket,
             }, "bucket already deleted")
 
@@ -63,7 +64,7 @@ const delete_bucket = _.promise((self, done) => {
         }
 
         logger.error({
-            method: delete_bucket.method,
+            method: bucket.delete.method,
             bucket: self.bucket,
             error: _.error.message(error),
         }, "cannot delete bucket")
@@ -72,23 +73,23 @@ const delete_bucket = _.promise((self, done) => {
     })
 })
 
-delete_bucket.method = "s3.delete_bucket"
-delete_bucket.description = `
+bucket.delete.method = "s3.bucket.delete"
+bucket.delete.description = `
     Delete a Bucket. If the Bucket does not exist, no error will be reported.`
-delete_bucket.requires = {
+bucket.delete.requires = {
     aws$s3: _.is.Object,
     bucket: _.is.String,
 }
-delete_bucket.accepts = {
+bucket.delete.accepts = {
 }
-delete_bucket.produces = {
+bucket.delete.produces = {
     aws$result: _.is.Object,
 }
-delete_bucket.params = {
+bucket.delete.params = {
 }
-delete_bucket.p = _.p(delete_bucket)
+bucket.delete.p = _.p(bucket.delete)
 
 /**
  *  API
  */
-exports.delete_bucket = delete_bucket
+exports.bucket = bucket

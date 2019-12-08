@@ -1,9 +1,9 @@
 /**
- *  s3/get_json.js
+ *  s3/bucket.list.js
  *
  *  David Janes
  *  IOTDB
- *  2017-01-19
+ *  2017-01-18
  *
  *  Copyright (2013-2020) David P. Janes
  *
@@ -26,40 +26,35 @@ const _ = require("iotdb-helpers")
 
 /**
  */
-const get_json = _.promise((self, done) => {
-    _.promise.validate(self, get_json)
+const bucket = {}
+bucket.list = _.promise((self, done) => {
+    _.promise.validate(self, bucket.list)
 
-    const aws = require("..")
+    self.aws$s3.listBuckets({
+    }, (error, data) => {
+        if (error) {
+            return done(error)
+        }
 
-    _.promise.make(self)
-        .validate(get_json)
+        self.buckets = data.Buckets.map(bd => bd.Name)
+        self.aws$result = data
 
-        .then(aws.s3.get_object)
-        // .then(document.to.json)
-        .make(sd => {
-            if (_.is.Buffer(sd.document)) {
-                sd.json = JSON.parse(sd.document.toString("utf-8"))
-            } else {
-                sd.json = JSON.parse(sd.document)
-            }
-        })
-        
-        .end(done, self, get_json)
+        done(null, self)
+    })
+    
 })
 
-get_json.method = "s3.get_json"
-get_json.description = ``
-get_json.requires = {
+bucket.list.method = "s3.bucket.list"
+bucket.list.description = ``
+bucket.list.requires = {
     aws$s3: _.is.Object,
-    key: _.is.String,
-    bucket: _.is.String,
 }
-get_json.produces = {
-    json: _.is.JSON,
+bucket.list.produces = {
     aws$result: _.is.Object,
+    buckets: _.is.Array.of.String,
 }
 
 /**
  *  API
  */
-exports.get_json = get_json
+exports.bucket = bucket

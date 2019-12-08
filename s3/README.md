@@ -15,7 +15,7 @@ Promise / Pipe-oriented-programming for AWS S3
         })
             .then(aws.initialize)
             .then(aws.s3.initialize)
-            .then(aws.s3.list_buckets)
+            .then(aws.s3.bucket.list)
             .then(_self => {
                 _self.buckets
                     .filter(bucket => bucket.startsWith("ledger-"))
@@ -24,8 +24,8 @@ Promise / Pipe-oriented-programming for AWS S3
 
                         Q(_self)
                             .then(sd => _.d.add(sd, "bucket", bucket))
-                            .then(aws.s3.delete_bucket_objects)
-                            .then(aws.s3.delete_bucket)
+                            .then(aws.s3.bucket.object.deletes)
+                            .then(aws.s3.bucket.delete)
                             .catch(error => console.log("#", _.error.message(error)))
                     })
             })

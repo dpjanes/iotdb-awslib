@@ -1,5 +1,5 @@
 /**
- *  s3/parse_path.js
+ *  s3/path.parse.js
  *
  *  David Janes
  *  IOTDB
@@ -31,13 +31,14 @@ const url = require("url")
  *  Accepts: 
  *  Produces:
  */
-const parse_path = _.promise(self => {
-    _.promise.validate(self, parse_path)
+const path = {}
+path.parse = _.promise(self => {
+    _.promise.validate(self, path.parse)
 
     const urlp = url.parse(self.path)
     switch (urlp.protocol) {
     case "s3:":
-        assert.ok(urlp.hostname.indexOf('.') === -1, `${parse_path.method}: self.path: AWS regions not supported yet`)
+        assert.ok(urlp.hostname.indexOf('.') === -1, `${path.parse.method}: self.path: AWS regions not supported yet`)
 
         self.key = (urlp.pathname || "").replace(/^\//, '')
         self.bucket = urlp.hostname
@@ -46,7 +47,7 @@ const parse_path = _.promise(self => {
     case "https:":
         const match = urlp.hostname.match(/^([^.]*)[.]s3[.]amazonaws[.]com$/)
         if (!match) {
-            assert.ok(false, `${parse_path.method}: don't recognize ${urlp.protocol}//${urlp.hostname}`)
+            assert.ok(false, `${path.parse.method}: don't recognize ${urlp.protocol}//${urlp.hostname}`)
         }
 
         self.key = (urlp.pathname || "").replace(/^\//, '')
@@ -54,18 +55,18 @@ const parse_path = _.promise(self => {
         break
 
     default:
-        assert.ok(false, `${parse_path.method}: bad protocol=${urlp.protocol}`)
+        assert.ok(false, `${path.parse.method}: bad protocol=${urlp.protocol}`)
     }
 
 })
 
-parse_path.method = "s3.parse_path"
-parse_path.requires = {
+path.parse.method = "s3.path.parse"
+path.parse.requires = {
     path: _.is.String,
 }
-parse_path.accepts = {
+path.parse.accepts = {
 }
-parse_path.produces = {
+path.parse.produces = {
     key: _.is.String,
     bucket: _.is.String,
 }
@@ -73,4 +74,4 @@ parse_path.produces = {
 /**
  *  API
  */
-exports.parse_path = parse_path
+exports.path = path

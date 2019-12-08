@@ -22,7 +22,7 @@ const awsd = {}
 describe("s3", function() {
     this.timeout(10 * 1000);
 
-    describe("create_bucket / bucket_exists / delete_bucket (with duplicate calls)", function() {
+    describe("bucket.create / bucket.exists / bucket.delete (with duplicate calls)", function() {
         const bucket_name = "iotdb-awslib-" + _.id.uuid.v4();
         it("works", function(done) {
             Q({
@@ -31,11 +31,11 @@ describe("s3", function() {
             })
                 .then(aws.initialize)
                 .then(aws.s3.initialize)
-                .then(aws.s3.create_bucket)
-                .then(aws.s3.create_bucket)
-                .then(aws.s3.bucket_exists)
-                .then(aws.s3.delete_bucket)
-                .then(aws.s3.delete_bucket)
+                .then(aws.s3.bucket.create)
+                .then(aws.s3.bucket.create)
+                .then(aws.s3.bucket.exists)
+                .then(aws.s3.bucket.delete)
+                .then(aws.s3.bucket.delete)
                 .then(inner_self => {
                     assert.deepEqual(inner_self.bucket_url, `s3://${bucket_name}/`)
                     assert.deepEqual(inner_self.exists, true);

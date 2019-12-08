@@ -1,5 +1,5 @@
 /**
- *  s3/delete_bucket_objects.js
+ *  s3/bucket.delete.objects.js
  *
  *  David Janes
  *  IOTDB
@@ -33,13 +33,15 @@ const logger = require("../logger")(__filename)
  *  Delete all the objects within a Bucket under self.key
  *  Obviously very dangerous.
  */
-const delete_bucket_objects = _.promise((self, done) => {
+const bucket = {}
+bucket.delete = {}
+bucket.delete.objects = _.promise((self, done) => {
     const aws = require("..")
 
-    _.promise.validate(self, delete_bucket_objects)
+    _.promise.validate(self, bucket.delete.objects)
 
     logger.info({
-        method: delete_bucket_objects.method,
+        method: bucket.delete.objects.method,
         bucket: self.bucket,
         key: self.key,
     }, "delete bucket objects")
@@ -55,7 +57,7 @@ const delete_bucket_objects = _.promise((self, done) => {
 
     _.promise.make(self)
         .then(sd => _.d.add(sd, "recursive", true))
-        .then(aws.s3.list_objects)
+        .then(aws.s3.object.list)
         .then(_sd => {
             counter.increment()
 
@@ -66,10 +68,10 @@ const delete_bucket_objects = _.promise((self, done) => {
                 counter.increment()
 
                 _.promise.make(sd)
-                    .then(aws.s3.delete_object)
+                    .then(aws.s3.object.delete)
                     .then(() => {
                         logger.info({
-                            method: delete_bucket_objects.method,
+                            method: bucket.delete.objects.method,
                             bucket: sd.bucket,
                             key: sd.key,
                         }, "deleted bucket object")
@@ -79,7 +81,7 @@ const delete_bucket_objects = _.promise((self, done) => {
                     })
                     .catch(error => {
                         logger.error({
-                            method: delete_bucket_objects.method,
+                            method: bucket.delete.objects.method,
                             bucket: self.bucket,
                             key: sd.key,
                             error: _.error.message(error),
@@ -99,17 +101,17 @@ const delete_bucket_objects = _.promise((self, done) => {
         .catch(error => counter.decrement(error))
 })
 
-delete_bucket_objects.method = "s3.delete_bucket_objects"
-delete_bucket_objects.description = ``
-delete_bucket_objects.requires = {
+bucket.delete.objects.method = "s3.bucket.delete.objects"
+bucket.delete.objects.description = ``
+bucket.delete.objects.requires = {
     aws$s3: _.is.Object,
     bucket: _.is.String,
     key: _.is.String,
 }
-delete_bucket_objects.produces = {
+bucket.delete.objects.produces = {
 }
 
 /**
  *  API
  */
-exports.delete_bucket_objects = delete_bucket_objects
+exports.bucket = bucket

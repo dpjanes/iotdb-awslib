@@ -1,5 +1,5 @@
 /**
- *  s3/list_objects.js
+ *  s3/object.list.js
  *
  *  David Janes
  *  IOTDB
@@ -29,11 +29,9 @@ const assert = require("assert")
 const split = s => s.split("/").filter(s => s.length)
 
 /**
- *  Requires: self.bucket, self.key
- *  Produces: self.paths
  */
-const list_objects = recursive => _.promise.make((self, done) => {
-    _.promise.validate(self, list_objects)
+const _object_list = recursive => _.promise.make((self, done) => {
+    _.promise.validate(self, object.list)
 
     let prefix = ""
     if (self.key) {
@@ -81,22 +79,29 @@ const list_objects = recursive => _.promise.make((self, done) => {
     _fetch()
 })
 
-list_objects.method = "s3.list_objects"
-list_objects.requires = {
+const object = {}
+object.list = _object_list(false)
+object.list.method = "s3.object.list"
+object.list.requires = {
     aws$s3: _.is.Object,
     bucket: _.is.String,
 }
-list_objects.accepts = {
+object.list.accepts = {
     key: _.is.String,
 }
-list_objects.produces = {
+object.list.produces = {
     aws$result: _.is.Object,
     paths: _.is.Array.of.String,
     keys: _.is.Array.of.String,
 }
 
+object.list.recursive = _object_list(true)
+object.list.recursive.method = "s3.object.list.recursive"
+object.list.recursive.requires = object.list.requires
+object.list.recursive.accepts = object.list.accepts
+object.list.recursive.produces = object.list.produces
+
 /**
  *  API
  */
-exports.list_objects = list_objects(false)
-exports.list_objects.recursive = list_objects(true)
+exports.object = exports.object

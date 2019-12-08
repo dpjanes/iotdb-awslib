@@ -1,9 +1,9 @@
 /**
- *  s3/head_object.js
+ *  s3/json.get.js
  *
  *  David Janes
  *  IOTDB
- *  2017-01-18
+ *  2017-01-19
  *
  *  Copyright (2013-2020) David P. Janes
  *
@@ -26,40 +26,41 @@ const _ = require("iotdb-helpers")
 
 /**
  */
-const head_object = _.promise((self, done) => {
-    _.promise.validate(self, head_object)
+const json = {}
+json.get = _.promise((self, done) => {
+    _.promise.validate(self, json.get)
 
-    self.aws$s3.headObject({
-        Bucket: self.bucket,
-        Key: self.key,
-    }, (error, data) => {
-        if (error) {
-            return done(error)
-        }
+    const aws = require("..")
 
-        self.aws$result = data
+    _.promise.make(self)
+        .validate(json.get)
 
-        if (data.ContentType) {
-            self.document_media_type = data.ContentType
-        }
-
-        done(null, self)
-    })
+        .then(aws.s3.object.get)
+        // .then(document.to.json)
+        .make(sd => {
+            if (_.is.Buffer(sd.document)) {
+                sd.json = JSON.parse(sd.document.toString("utf-8"))
+            } else {
+                sd.json = JSON.parse(sd.document)
+            }
+        })
+        
+        .end(done, self, json.get)
 })
 
-head_object.method = "s3.head_object"
-head_object.description = ``
-head_object.requires = {
+json.get.method = "s3.json.get"
+json.get.description = ``
+json.get.requires = {
     aws$s3: _.is.Object,
-    bucket: _.is.String,
     key: _.is.String,
+    bucket: _.is.String,
 }
-head_object.produces = {
+json.get.produces = {
+    json: _.is.JSON,
     aws$result: _.is.Object,
-    document_media_type: _.is.String,
 }
 
 /**
  *  API
  */
-exports.head_object = head_object
+exports.json = json

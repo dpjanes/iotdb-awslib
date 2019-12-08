@@ -1,9 +1,9 @@
 /**
- *  s3/list_buckets.js
+ *  s3/path.join.all.js
  *
  *  David Janes
  *  IOTDB
- *  2017-01-18
+ *  2017-12-27
  *
  *  Copyright (2013-2020) David P. Janes
  *
@@ -26,34 +26,24 @@ const _ = require("iotdb-helpers")
 
 /**
  */
-const list_buckets = _.promise((self, done) => {
-    _.promise.validate(self, list_buckets)
+const path = {}
+path.join = {}
+path.join.all = _.promise.make(self => {
+    _.promise.validate(self, path.join.all)
 
-    self.aws$s3.listBuckets({
-    }, (error, data) => {
-        if (error) {
-            return done(error)
-        }
-
-        self.buckets = data.Buckets.map(bd => bd.Name)
-        self.aws$result = data
-
-        done(null, self)
-    })
-    
+    self.paths = self.paths.map(name => name.startsWith("s3://") ? name : `s3://${self.bucket}/${name}`)
 })
 
-list_buckets.method = "s3.list_buckets"
-list_buckets.description = ``
-list_buckets.requires = {
+path.join.all.method = "s3.path.join.all"
+path.join.all.requires = {
     aws$s3: _.is.Object,
+    bucket: _.is.String,
 }
-list_buckets.produces = {
-    aws$result: _.is.Object,
-    buckets: _.is.Array.of.String,
+path.join.all.produces = {
+    paths: _.is.Array.of.String,
 }
 
 /**
  *  API
  */
-exports.list_buckets = list_buckets
+exports.path = path

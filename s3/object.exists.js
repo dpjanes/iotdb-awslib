@@ -1,5 +1,5 @@
 /**
- *  s3/object_exists.js
+ *  s3/object.exists.js
  *
  *  David Janes
  *  IOTDB
@@ -26,8 +26,9 @@ const _ = require("iotdb-helpers")
 
 /**
  */
-const object_exists = _.promise.make((self, done) => {
-    _.promise.validate(self, object_exists)
+const object = {}
+object.exists = _.promise.make((self, done) => {
+    _.promise.validate(self, object.exists)
 
     self.aws$s3.headObject({
         Bucket: self.bucket,
@@ -47,15 +48,15 @@ const object_exists = _.promise.make((self, done) => {
     })
 })
 
-object_exists.method = "s3.object_exists"
-object_exists.requires = {
+object.exists.method = "s3.object.exists"
+object.exists.requires = {
     aws$s3: _.is.Object,
     bucket: _.is.String,
     key: _.is.String,
 }
-object_exists.accepts = {
+object.exists.accepts = {
 }
-object_exists.produces = {
+object.exists.produces = {
     aws$result: _.is.Object,
     exists: _.is.Boolean,
 }
@@ -63,4 +64,4 @@ object_exists.produces = {
 /**
  *  API
  */
-exports.object_exists = object_exists
+exports.object = object

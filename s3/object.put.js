@@ -1,5 +1,5 @@
 /**
- *  s3/upload_document.js
+ *  s3/object.put.js
  *
  *  David Janes
  *  IOTDB
@@ -29,8 +29,9 @@ mime.getType = mime.getType || mime.lookup; // 2.0.3 vs 1.6.0
 
 /**
  */
-const upload_document = _.promise((self, done) => {
-    _.promise.validate(self, upload_document)
+const object = {}
+object.put = _.promise((self, done) => {
+    _.promise.validate(self, object.put)
 
     const paramd = {
         Bucket: self.bucket,
@@ -57,25 +58,25 @@ const upload_document = _.promise((self, done) => {
     })
 })
 
-upload_document.method = "s3.upload_document"
-upload_document.description = ``
-upload_document.requires = {
+object.put.method = "s3.object.put"
+object.put.description = ``
+object.put.requires = {
     aws$s3: _.is.Object,
     bucket: _.is.String,
     key: _.is.String,
     document: [ _.is.String, _.is.Buffer, ],
 }
-upload_document.accepts = {
+object.put.accepts = {
     document_encoding: _.is.String,
     document_media_type: _.is.String,
     aws$acl_public: _.is.Boolean,
     aws$acl: _.is.String,
 }
-upload_document.produces = {
+object.put.produces = {
     aws$result: _.is.Object,
 }
 
 /**
  *  API
  */
-exports.upload_document = upload_document
+exports.object = object

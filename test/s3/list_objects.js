@@ -1,5 +1,5 @@
 /**
- *  list_objects.js
+ *  object.list.js
  *
  *  David Janes
  *  IOTDB
@@ -26,7 +26,7 @@ describe("s3", function() {
 
     const bucket_name = "consensas-test1";
 
-    describe("list_objects", function() {
+    describe("object.list", function() {
         it("works", function(done) {
             Q({
                 aws: awsd,
@@ -34,7 +34,7 @@ describe("s3", function() {
             })
                 .then(aws.initialize)
                 .then(aws.s3.initialize)
-                .then(aws.s3.bucket_exists)
+                .then(aws.s3.bucket.exists)
                 .then(inner_self => {
                     assert.deepEqual(inner_self.exists, true);
                     done(null);
