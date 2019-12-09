@@ -28,7 +28,6 @@ module.exports = _.d.compose.deep(
     {},
     require("./bucket.create"),
     require("./bucket.delete"),
-    require("./bucket.delete.objects"),
     require("./bucket.exists"),
     require("./bucket.list"),
     require("./initialize"),
@@ -44,3 +43,5 @@ module.exports = _.d.compose.deep(
     require("./path.parse"),
     {}
 )
+
+module.exports.bucket.delete.objects = require("./bucket.delete.objects").bucket.delete.objects

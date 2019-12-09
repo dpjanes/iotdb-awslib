@@ -46,59 +46,13 @@ bucket.delete.objects = _.promise((self, done) => {
         key: self.key,
     }, "delete bucket objects")
 
-    const counter = _.counter(error => {
-        if (error) {
-            done(error)
-        } else {
-            done(null, _self)
-        }
-    })
-    counter.increment()
-
-    _.promise.make(self)
-        .then(sd => _.d.add(sd, "recursive", true))
+    _.promise(self)
         .then(aws.s3.object.list)
-        .then(_sd => {
-            counter.increment()
-
-            _sd.keys.forEach(key => {
-                const sd = _.d.clone.shallow(_sd)
-                sd.key = key
-
-                counter.increment()
-
-                _.promise.make(sd)
-                    .then(aws.s3.object.delete)
-                    .then(() => {
-                        logger.info({
-                            method: bucket.delete.objects.method,
-                            bucket: sd.bucket,
-                            key: sd.key,
-                        }, "deleted bucket object")
-
-                        counter.decrement()
-                        return null
-                    })
-                    .catch(error => {
-                        logger.error({
-                            method: bucket.delete.objects.method,
-                            bucket: self.bucket,
-                            key: sd.key,
-                            error: _.error.message(error),
-                        }, "unexpected error deleting bucket objects")
-
-                        counter.decrement(); // ignoring error
-                    })
-            })
-
-            counter.decrement()
-            return null
+        .each({
+            method: aws.s3.object.delete,
+            inputs: "keys:key",
         })
-        .then(() => {
-            counter.decrement()
-            return null
-        })
-        .catch(error => counter.decrement(error))
+        .end(done, self)
 })
 
 bucket.delete.objects.method = "s3.bucket.delete.objects"
@@ -110,6 +64,11 @@ bucket.delete.objects.requires = {
 }
 bucket.delete.objects.produces = {
 }
+bucket.delete.objects.params = {
+    bucket: _.p.normal,
+    key: "",
+}
+bucket.delete.objects.p = _.p(bucket.delete.objects)
 
 /**
  *  API
