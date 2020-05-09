@@ -212,6 +212,37 @@ _load.params = {
 }
 _load.p = _.p(_load)
 
+/**
+ */
+const _translate = _.promise((self, done) => {
+    _.promise(self)
+        .validate(_translate)
+
+        .add("nd/cstr:document")
+        .conditional(sd => !_.is.Empty(sd.document), aws.translate.translate)
+        .make(sd => {
+            if (sd.document) {
+                sd.nd.tstr = sd.document
+            }
+
+            // console.log("-", sd.nd.cstr, "-->", sd.nd.tstr)
+        })
+
+        .end(done, self, _translate)
+})
+
+_translate.method = "_translate"
+_translate.description = ``
+_translate.requires = {
+    nd: {
+        cstr: _.is.String,
+    },
+}
+_translate.accepts = {
+}
+_translate.produces = {
+    nd: _.is.Dictionary,
+}
 
 /**
  */
@@ -237,9 +268,10 @@ _.promise({
             })
         })
     })
-    // .then(_output)
 
     .then(_load.p(ad.translate))
+
+    // get things to be translated
     .make(sd => {
         sd.nds = []
 
@@ -248,17 +280,45 @@ _.promise({
 
             _.mapObject(trdd, (trd, msgid) => {
                 if (!trd.msgstr && sd.originald[msgid]) {
-                    sd.nds.push({
-                        msgid: msgid,
-                        msgstr: sd.originald[msgid],
+                    sd.originald[msgid].forEach(cstr => {
+                        sd.nds.push({
+                            msgid: msgid,
+                            cstr: cstr,
+                        })
                     })
                 }
             })
         })
-
-        console.log("NEED", sd.nds)
     })
-    // .then(_output)
+
+    // do translations
+    .each({
+        method: _translate,
+        inputs: "nds:nd",
+    })
+
+    // add back translated stuff
+    .make(sd => {
+        const ndd = {}
+        sd.nds
+            .filter(nd => nd.tstr)
+            .forEach(nd => {
+                ndd[nd.msgid] = ndd[nd.msgid] || []
+                ndd[nd.msgid].push(nd.tstr)
+            })
+
+        _.mapObject(sd.tpo.translations, (trdd, msgcstr) => {
+            let first = true
+
+            _.mapObject(trdd, (trd, msgid) => {
+                if (!trd.msgstr && ndd[msgid]) {
+                    trd.msgstr = ndd[msgid]
+                }
+            })
+        })
+
+    })
+    .then(_output)
 
     .make(sd => {
         // console.log(sd.originald)
