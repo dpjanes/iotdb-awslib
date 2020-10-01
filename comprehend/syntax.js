@@ -1,9 +1,9 @@
 /**
- *  comprehend/sentiment.js
+ *  comprehend/syntax.js
  *
  *  David Janes
  *  IOTDB
- *  2018-04-18
+ *  2020-09-30
  *
  *  Copyright (2013-2018) David Janes
  */
@@ -14,45 +14,43 @@ const _ = require("iotdb-helpers")
 
 /**
  */
-const sentiment = _.promise((self, done) => {
-    _.promise.validate(self, sentiment)
+const syntax = _.promise((self, done) => {
+    _.promise.validate(self, syntax)
 
-    self.aws$comprehend.detectSentiment({
+    self.aws$comprehend.detectSyntax({
         LanguageCode: self.from_language || "en",
         Text: self.document,
     }, (error, data) => {
         if (error) {
-            return done(error)
+            return done(error);
         }
 
         self.aws$result = data
-        self.sentiment = data.Sentiment
-        self.score = data.SentimentScore
+        self.tokens = data.SyntaxTokens
 
         done(null, self)
-    })
+    });
 })
 
-sentiment.method = "comprehend.sentiment"
-sentiment.description = ``
-sentiment.requires = {
+syntax.method = "comprehend.syntax"
+syntax.description = ``
+syntax.requires = {
     aws$comprehend: _.is.Object,
     document: _.is.String,
 }
-sentiment.accepts = {
+syntax.accepts = {
     from_language: _.is.String,
 }
-sentiment.produces = {
+syntax.produces = {
     tokens: _.is.Array.of.Dictionary,
     aws$result: _.is.Object,
-    score: _.is.Number,
 }
-sentiment.params = {
+syntax.params = {
     document: _.is.String,
 }
-sentiment.p = _.p(sentiment)
+syntax.p = _.p(syntax)
 
 /**
  *  API
  */
-exports.sentiment = sentiment
+exports.syntax = syntax;

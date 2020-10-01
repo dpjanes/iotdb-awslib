@@ -8,29 +8,32 @@
  *  Copyright (2013-2018) David Janes
  */
 
-"use strict";
+"use strict"
 
-const _ = require("iotdb-helpers");
+const _ = require("iotdb-helpers")
 
-const assert = require("assert");
-
-const AWS = require("aws-sdk");
+const AWS = require("aws-sdk")
 
 /**
- *  Accepts: N/A
- *  Produces: self.translate
  */
 const initialize = _.promise.make(self => {
-    const method = "translate.initialize";
+    _.promise.validate(self, initialize)
 
-    assert.ok(self.AWS, `${method}: self.AWS is required`);
-
-    self.comprehend = new AWS.Comprehend({
+    self.aws$comprehend = new AWS.Comprehend({
         apiVersion: "2017-11-27",
     });
 })
 
+initialize.method = "comprehend.initialize"
+initialize.description = ``
+initialize.requires = {
+    AWS: _.is.Dictionary,
+}
+initialize.produces = {
+    aws$comprehend: _.is.Object,
+}
+
 /**
  *  API
  */
-exports.initialize = initialize;
+exports.initialize = initialize

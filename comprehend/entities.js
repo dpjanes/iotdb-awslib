@@ -8,43 +8,49 @@
  *  Copyright (2013-2018) David Janes
  */
 
-"use strict";
+"use strict"
 
-const _ = require("iotdb-helpers");
-
-const assert = require("assert");
+const _ = require("iotdb-helpers")
 
 /**
- *  Requires: self.comprehend, self.document
- *  Produces: self.aws_result, self.document
  */
-const entities = _.promise.make((self, done) => {
-    const method = "comprehend.entities";
+const entities = _.promise((self, done) => {
+    _.promise.validate(self, entities)
 
-    assert.ok(self.comprehend, `${method}: self.comprehend is required`);
-    assert.ok(_.is.String(self.document), `${method}: self.document must be a String`);
-    assert.ok(_.is.String(self.from_language) || _.is.Nullish(self.from_language), 
-        `${method}: self.from_language must be a String or Null`);
-
-    self.comprehend.detectEntities({
+    self.aws$comprehend.detectEntities({
         LanguageCode: self.from_language || "en",
         Text: self.document,
     }, (error, data) => {
         if (error) {
-            return done(error);
+            return done(error)
         }
 
-        assert.ok(data)
-        assert.ok(data.Entities)
-
-        self.aws_result = data;
+        self.aws$result = data
         self.entities = data.Entities
 
-        done(null, self);
-    });
+        done(null, self)
+    })
 })
+
+entities.method = "comprehend.entities"
+entities.description = ``
+entities.requires = {
+    aws$comprehend: _.is.Object,
+    document: _.is.String,
+}
+entities.accepts = {
+    from_language: _.is.String,
+}
+entities.produces = {
+    tokens: _.is.Array.of.Dictionary,
+    aws$result: _.is.Object,
+}
+entities.params = {
+    document: _.is.String,
+}
+entities.p = _.p(entities)
 
 /**
  *  API
  */
-exports.entities = entities;
+exports.entities = entities

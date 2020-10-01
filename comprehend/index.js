@@ -15,5 +15,6 @@ module.exports = Object.assign(
     require("./entities"),
     require("./initialize"),
     require("./sentiment"),
+    require("./syntax"),
     {}
 );

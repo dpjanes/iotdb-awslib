@@ -46,7 +46,7 @@ object.put = _.promise((self, done) => {
     } else if (self.aws$acl_public) {
         paramd.ACL = "public-read"
     }
-    
+
     self.aws$s3.upload(paramd, (error, data) => {
         if (error) {
             return done(error)

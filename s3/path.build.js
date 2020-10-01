@@ -33,7 +33,7 @@ const path = {}
 path.build = _.promise.make(self => {
     _.promise.validate(self, path.build)
 
-    self.paths = key.startsWith("s3://") ? key : `s3://${self.bucket}/${key}`
+    self.path = key.startsWith("s3://") ? key : `s3://${self.bucket}/${key}`
 })
 
 path.build.method = "s3.path.build"
