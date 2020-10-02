@@ -81,7 +81,7 @@ if (action("initialize")) {
         .then(aws.comprehend.initialize)
         .then(aws.comprehend.entities)
         .make(sd => {
-            console.log("+", "ok", sd.entities)
+            console.log("+", "ok", sd.tokens)
         })
         .catch(error => {
             console.log("#", _.error.message(error))

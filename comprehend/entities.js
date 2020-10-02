@@ -14,22 +14,34 @@ const _ = require("iotdb-helpers")
 
 /**
  */
+const _token = d => ({
+    document: d.Text,
+    token: "entity",
+    start: d.BeginOffset,
+    end: d.EndOffset,
+
+    tag: d.Type,
+    score: d.Score,
+})
+
+/**
+ */
 const entities = _.promise((self, done) => {
-    _.promise.validate(self, entities)
+    _.promise(self)
+        .validate(entities)
 
-    self.aws$comprehend.detectEntities({
-        LanguageCode: self.from_language || "en",
-        Text: self.document,
-    }, (error, data) => {
-        if (error) {
-            return done(error)
-        }
+        .make(sd => {
+            sd.in = {
+                LanguageCode: sd.from_language || "en",
+                Text: sd.document,
+            }
+        })
+        .wrap(self.aws$comprehend.detectEntities.bind(self.aws$comprehend), "in", "aws$result")
+        .make(sd => {
+            sd.tokens = sd.aws$result.Entities.map(_token)
+        })
 
-        self.aws$result = data
-        self.entities = data.Entities
-
-        done(null, self)
-    })
+        .end(done, self, entities)
 })
 
 entities.method = "comprehend.entities"
