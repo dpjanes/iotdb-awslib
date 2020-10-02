@@ -14,22 +14,34 @@ const _ = require("iotdb-helpers")
 
 /**
  */
+const _token = d => ({
+    document: d.Text,
+    token: "pos",
+    start: d.BeginOffset,
+    end: d.EndOffset,
+
+    tag: d.PartOfSpeech.Tag,
+    score: d.PartOfSpeech.Score,
+})
+
+/**
+ */
 const syntax = _.promise((self, done) => {
-    _.promise.validate(self, syntax)
+    _.promise(self)
+        .validate(syntax)
 
-    self.aws$comprehend.detectSyntax({
-        LanguageCode: self.from_language || "en",
-        Text: self.document,
-    }, (error, data) => {
-        if (error) {
-            return done(error);
-        }
+        .make(sd => {
+            sd.in = {
+                LanguageCode: sd.from_language || "en",
+                Text: sd.document,
+            }
+        })
+        .wrap(self.aws$comprehend.detectSyntax.bind(self.aws$comprehend), "in", "aws$result")
+        .make(sd => {
+            sd.tokens = sd.aws$result.SyntaxTokens.map(_token)
+        })
 
-        self.aws$result = data
-        self.tokens = data.SyntaxTokens
-
-        done(null, self)
-    });
+        .end(done, self, syntax)
 })
 
 syntax.method = "comprehend.syntax"
@@ -46,11 +58,50 @@ syntax.produces = {
     aws$result: _.is.Object,
 }
 syntax.params = {
-    document: _.is.String,
+    document: _.p.normal,
 }
 syntax.p = _.p(syntax)
 
 /**
+ */
+const syntax_batch = _.promise((self, done) => {
+    _.promise(self)
+        .validate(syntax)
+
+        .make(sd => {
+            sd.in = {
+                LanguageCode: sd.from_language || "en",
+                TextList: sd.documents,
+            }
+        })
+        .wrap(self.aws$comprehend.detectSyntax.bind(self.aws$comprehend), "in", "aws$result")
+        .make(sd => {
+            sd.tokenss = sd.aws$result.ResultList.map(d => d.SyntaxTokens.map(_tokem))
+        })
+
+        .end(done, self, syntax)
+})
+
+syntax_batch.method = "comprehend.syntax.batch"
+syntax_batch.description = ``
+syntax_batch.requires = {
+    aws$comprehend: _.is.Object,
+    documents: _.is.Array.of.String,
+}
+syntax_batch.accepts = {
+    from_language: _.is.String,
+}
+syntax_batch.produces = {
+    tokenss: _.is.Array.of.Dictionary,
+    aws$result: _.is.Object,
+}
+syntax_batch.params = {
+    documents: _.p.normal,
+}
+syntax_batch.p = _.p(syntax_batch)
+
+/**
  *  API
  */
-exports.syntax = syntax;
+exports.syntax = syntax
+exports.syntax.batch = syntax_batch
