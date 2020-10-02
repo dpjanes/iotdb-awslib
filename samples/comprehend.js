@@ -64,7 +64,29 @@ if (action("initialize")) {
         .then(aws.comprehend.initialize)
         .then(aws.comprehend.sentiment)
         .make(sd => {
-            console.log("+", "ok", sd.score)
+            console.log("+", "ok", sd.token)
+        })
+        .catch(error => {
+            console.log("#", _.error.message(error))
+            delete error.self
+            console.log(error)
+        })
+} else if (action("sentiment.batch")) {
+    _.promise({
+        aws$cfg: aws$cfg,
+        path: ad.path,
+        documents: [
+            "John Smith called Lady MacBardle two times yesterday",
+            "I love that new pair of shoes",
+            "I hate Mondays",
+        ],
+    })
+        .then(fs.read.utf8)
+        .then(aws.initialize)
+        .then(aws.comprehend.initialize)
+        .then(aws.comprehend.sentiment.batch)
+        .make(sd => {
+            console.log("+", "ok", sd.tokens)
         })
         .catch(error => {
             console.log("#", _.error.message(error))
