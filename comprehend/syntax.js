@@ -66,7 +66,7 @@ syntax.p = _.p(syntax)
  */
 const syntax_batch = _.promise((self, done) => {
     _.promise(self)
-        .validate(syntax)
+        .validate(syntax_batch)
 
         .make(sd => {
             sd.in = {
@@ -74,12 +74,12 @@ const syntax_batch = _.promise((self, done) => {
                 TextList: sd.documents,
             }
         })
-        .wrap(self.aws$comprehend.detectSyntax.bind(self.aws$comprehend), "in", "aws$result")
+        .wrap(self.aws$comprehend.batchDetectSyntax.bind(self.aws$comprehend), "in", "aws$result")
         .make(sd => {
-            sd.tokenss = sd.aws$result.ResultList.map(d => d.SyntaxTokens.map(_tokem))
+            sd.tokenss = sd.aws$result.ResultList.map(d => d.SyntaxTokens.map(_token))
         })
 
-        .end(done, self, syntax)
+        .end(done, self, syntax_batch)
 })
 
 syntax_batch.method = "comprehend.syntax.batch"
@@ -92,7 +92,7 @@ syntax_batch.accepts = {
     from_language: _.is.String,
 }
 syntax_batch.produces = {
-    tokenss: _.is.Array.of.Dictionary,
+    tokenss: _.is.Array,
     aws$result: _.is.Object,
 }
 syntax_batch.params = {

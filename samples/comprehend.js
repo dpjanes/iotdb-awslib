@@ -71,6 +71,25 @@ if (action("initialize")) {
             delete error.self
             console.log(error)
         })
+} else if (action("entities.batch")) {
+    _.promise({
+        aws$cfg: aws$cfg,
+        documents: [
+            "John Smith called Lady MacBardle two times yesterday",
+            "See Spot run"
+        ],
+    })
+        .then(aws.initialize)
+        .then(aws.comprehend.initialize)
+        .then(aws.comprehend.entities.batch)
+        .make(sd => {
+            console.log("+", "ok", sd.tokenss)
+        })
+        .catch(error => {
+            console.log("#", _.error.message(error))
+            delete error.self
+            console.log(error)
+        })
 } else if (action("entities")) {
     _.promise({
         aws$cfg: aws$cfg,
@@ -82,6 +101,25 @@ if (action("initialize")) {
         .then(aws.comprehend.entities)
         .make(sd => {
             console.log("+", "ok", sd.tokens)
+        })
+        .catch(error => {
+            console.log("#", _.error.message(error))
+            delete error.self
+            console.log(error)
+        })
+} else if (action("syntax.batch")) {
+    _.promise({
+        aws$cfg: aws$cfg,
+        documents: [
+            "John Smith called Lady MacBardle two times yesterday",
+            "See Spot run"
+        ],
+    })
+        .then(aws.initialize)
+        .then(aws.comprehend.initialize)
+        .then(aws.comprehend.syntax.batch)
+        .make(sd => {
+            console.log("+", "ok", sd.tokenss)
         })
         .catch(error => {
             console.log("#", _.error.message(error))

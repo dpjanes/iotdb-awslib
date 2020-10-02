@@ -63,6 +63,45 @@ entities.params = {
 entities.p = _.p(entities)
 
 /**
+ */
+const entities_batch = _.promise((self, done) => {
+    _.promise(self)
+        .validate(entities_batch)
+
+        .make(sd => {
+            sd.in = {
+                LanguageCode: sd.from_language || "en",
+                TextList: sd.documents,
+            }
+        })
+        .wrap(self.aws$comprehend.batchDetectEntities.bind(self.aws$comprehend), "in", "aws$result")
+        .make(sd => {
+            sd.tokenss = sd.aws$result.ResultList.map(d => d.Entities.map(_token))
+        })
+
+        .end(done, self, entities_batch)
+})
+
+entities_batch.method = "comprehend.entities.batch"
+entities_batch.description = ``
+entities_batch.requires = {
+    aws$comprehend: _.is.Object,
+    documents: _.is.Array.of.String,
+}
+entities_batch.accepts = {
+    from_language: _.is.String,
+}
+entities_batch.produces = {
+    tokenss: _.is.Array,
+    aws$result: _.is.Object,
+}
+entities_batch.params = {
+    documents: _.p.normal,
+}
+entities_batch.p = _.p(entities_batch)
+
+/**
  *  API
  */
 exports.entities = entities
+exports.entities.batch = entities_batch
