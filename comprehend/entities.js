@@ -27,6 +27,8 @@ const _token = d => ({
 /**
  */
 const entities = _.promise((self, done) => {
+    _.promise.validate(self, entities)
+
     _.promise(self)
         .validate(entities)
 
