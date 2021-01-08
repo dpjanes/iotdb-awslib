@@ -14,7 +14,6 @@ const _ = require("iotdb-helpers");
 
 const assert = require("assert");
 
-const async = require("async");
 
 /**
  *  Accepts: self.sqs, self.message, self.queue_url
@@ -22,6 +21,7 @@ const async = require("async");
  */
 const requeue_messages = _.promise.make((self, done) => {
     const method = "sqs.requeue_messages";
+    const async = require("async");
 
     assert.ok(self.sqs, `${method}: self.sqs is required`);
     assert.ok(_.is.String(self.queue_url), `${method}: self.queue_url must be a String`);

@@ -11,7 +11,6 @@
         "url": "https://github.com/dpjanes/iotdb-awslib/issues"
     }, 
     "dependencies": {
-        "async": "~3.2.0", 
         "aws-sdk": "~2.824.0", 
         "iotdb-errors": "^3.1.9", 
         "iotdb-helpers": "^3.5.4", 
